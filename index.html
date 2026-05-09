@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JANAGEN &mdash; Operations Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f0720;
+  min-height: 100vh;
+}
+
+/* ── UPLOAD PAGE ── */
+#upload-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: radial-gradient(ellipse at 50% 0%, #2a1050 0%, #0f0720 60%);
+}
+.up-accent-bar {
+  display: flex; gap: 5px; margin-bottom: 28px;
+}
+.up-accent-bar span {
+  display: block; height: 5px; border-radius: 3px;
+}
+.up-logo {
+  font-size: 52px; font-weight: 900; color: #FECF00;
+  letter-spacing: 4px; line-height: 1;
+}
+.up-sub {
+  font-size: 13px; font-weight: 700; color: #FFBC7D;
+  letter-spacing: 4px; text-transform: uppercase; margin-top: 4px;
+  margin-bottom: 36px;
+}
+.up-card {
+  background: #1a0d35;
+  border: 1px solid rgba(254,207,0,0.18);
+  border-radius: 24px;
+  padding: 44px 52px;
+  max-width: 520px; width: 100%;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  text-align: center;
+}
+.up-icon {
+  width: 72px; height: 72px;
+  background: rgba(254,207,0,0.12);
+  border: 2px solid rgba(254,207,0,0.3);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin: 0 auto 20px;
+}
+.up-title {
+  font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px;
+}
+.up-desc {
+  font-size: 13px; color: #7c6a99; line-height: 1.6; margin-bottom: 30px;
+}
+.up-btn {
+  display: inline-block; padding: 15px 40px;
+  background: linear-gradient(135deg, #c8a400, #fecf00);
+  color: #251632; font-family: inherit; font-size: 15px; font-weight: 800;
+  border: none; border-radius: 12px; cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 24px rgba(254,207,0,0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+.up-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(254,207,0,0.4); }
+.up-btn:active { transform: translateY(0); }
+.up-hint {
+  font-size: 11px; color: #5a4e70; margin-top: 14px; letter-spacing: 0.3px;
+}
+#up-status {
+  margin-top: 18px; font-size: 13px; font-weight: 600; min-height: 20px;
+  color: #FFBC7D;
+}
+.up-footer {
+  margin-top: 44px; font-size: 11px; color: #3d2e55; letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── DASHBOARD PAGE ── */
+#dashboard-page {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px 60px;
+  min-height: 100vh;
+}
+.top-row {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; max-width: 1000px; margin-bottom: 14px; gap: 12px;
+}
+.tab-bar {
+  display: flex; gap: 8px; align-items: center; flex: 1;
+}
+.tab-label { font-size: 11px; color: #7c6a99; font-weight: 600; letter-spacing: 1px; margin-right: 4px; }
+.tab {
+  padding: 9px 22px; border-radius: 10px; font-family: inherit;
+  font-size: 13px; font-weight: 700; cursor: pointer; border: none;
+  background: #1a0d35; color: #7c6a99;
+  border: 1px solid rgba(167,139,250,0.12);
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.4), -1px -1px 4px rgba(167,139,250,0.06);
+  transition: all 0.15s;
+}
+.tab.active {
+  background: #FECF00; color: #251632;
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+}
+.btn-reupload {
+  padding: 9px 18px; border-radius: 10px; font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  background: transparent; color: #7c6a99;
+  border: 1px solid rgba(167,139,250,0.2);
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-reupload:hover { color: #FFBC7D; border-color: rgba(255,188,125,0.4); }
+.ctrl-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #1a0d35; padding: 14px 24px; border-radius: 16px;
+  border: 1px solid rgba(167,139,250,0.12);
+  box-shadow: 5px 5px 14px rgba(0,0,0,0.55);
+  width: 100%; max-width: 1000px; margin-bottom: 24px;
+}
+.ctrl-label { font-size: 13px; color: #7c6a99; }
+.ctrl-label span { color: #a78bfa; font-weight: 700; }
+.btn-dl {
+  padding: 11px 28px; border-radius: 10px; font-size: 14px; font-weight: 800;
+  cursor: pointer; font-family: inherit; letter-spacing: 1px;
+  background: linear-gradient(135deg, #c8a400, #fecf00);
+  border: none; color: #1a0050;
+  box-shadow: 4px 4px 12px rgba(0,0,0,0.4);
+}
+.btn-dl:disabled { opacity: 0.5; cursor: default; }
+#dashboard {
+  width: 1000px; background: #fff; border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7); font-family: 'Poppins', sans-serif;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- UPLOAD PAGE                                  -->
+<!-- ════════════════════════════════════════════ -->
+<div id="upload-page">
+  <div class="up-accent-bar">
+    <span style="width:40px;background:#FECF00;"></span>
+    <span style="width:16px;background:#FFBC7D;opacity:.7;"></span>
+    <span style="width:8px;background:#61CE70;opacity:.6;"></span>
+  </div>
+
+  <div class="up-logo">JANAGEN</div>
+  <div class="up-sub">Operations Dashboard</div>
+
+  <div class="up-card">
+    <div class="up-icon">&#x1F4CA;</div>
+    <div class="up-title">Upload Huddle Checklist Excel</div>
+    <div class="up-desc">
+      Select the monthly huddle Excel file to auto-generate the<br>
+      branch-wise operations report with attendance, marketing<br>
+      activities, action points and branch notes.
+    </div>
+    <button class="up-btn" onclick="document.getElementById('excelInput').click()">
+      &#x2B06; Upload Excel File
+    </button>
+    <div class="up-hint">Accepts: HUDDLE PICTURES POST CHECK LIST (.xlsx)</div>
+    <div id="up-status"></div>
+  </div>
+
+  <div class="up-footer">JANAGEN PHARMACIES &middot; HYDERABAD &middot; OPERATIONS TEAM</div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- DASHBOARD PAGE                               -->
+<!-- ════════════════════════════════════════════ -->
+<div id="dashboard-page">
+  <div class="top-row">
+    <div class="tab-bar">
+      <span class="tab-label">SELECT MONTH</span>
+      <button class="tab active" id="tab-Feb" onclick="switchMonth('Feb')">Feb 2026</button>
+      <button class="tab" id="tab-Mar" onclick="switchMonth('Mar')">Mar 2026</button>
+      <button class="tab" id="tab-Apr" onclick="switchMonth('Apr')">Apr 2026</button>
+    </div>
+    <button class="btn-reupload" onclick="goUpload()">&#x21BA; Upload New File</button>
+  </div>
+
+  <div class="ctrl-bar">
+    <div class="ctrl-label">JANAGEN &middot; <span id="ctrl-title">Branch Operations Report</span></div>
+    <button class="btn-dl" id="dlBtn" onclick="downloadDashboard()">&#11015; Download Image</button>
+  </div>
+
+  <div id="dashboard"></div>
+</div>
+
+<!-- Hidden file input -->
+<input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this)">
+
+<script>
+/* ══════════════════════════════════════════════════
+   BRAND COLORS
+══════════════════════════════════════════════════ */
+const PLUM   = '#251632';
+const YELLOW = '#FECF00';
+const PEACH  = '#FFBC7D';
+const BGREEN = '#61CE70';
+
+/* ══════════════════════════════════════════════════
+   RUNTIME DATA  (populated by parseExcel)
+══════════════════════════════════════════════════ */
+let MONTH_DATA  = {};
+let MONTH_NOTES = {};
+let activeMonth = 'Feb';
+
+/* Canonical branch order */
+const CANONICAL = [
+  'Suchitra','Chintal Basti','Kachiguda 1','Kachiguda 2',
+  'Panjagutta','Kutbiguda','Nacharam','Marredpally',
+  'Moosarambagh','Dilsukhnagar','KPHB','Manikonda'
+];
+
+/* ══════════════════════════════════════════════════
+   NORMALIZERS
+══════════════════════════════════════════════════ */
+const BRANCH_MAP = {
+  'suchitra':'Suchitra',
+  'chintal basti':'Chintal Basti','chintal':'Chintal Basti',
+  'kachiguda 1':'Kachiguda 1','kachiguda-1':'Kachiguda 1','kachiguda store 1':'Kachiguda 1',
+  'kachiguda 2':'Kachiguda 2','kachiguda-2':'Kachiguda 2','kachiguda store 2':'Kachiguda 2',
+  'panjagutta':'Panjagutta','panjgutta':'Panjagutta','punja gutta':'Panjagutta',
+  'kutbiguda':'Kutbiguda','kutbi guda':'Kutbiguda',
+  'nacharam':'Nacharam',
+  'marredpally':'Marredpally','east marredpally':'Marredpally',
+  'moosarambagh':'Moosarambagh',
+  'dilsukhnagar':'Dilsukhnagar',
+  'kphb':'KPHB','kphb colony':'KPHB',
+  'manikonda':'Manikonda',
+};
+
+function normBranch(s) {
+  var k = (s||'').toString().toLowerCase().replace(/\s+/g,' ').trim();
+  return BRANCH_MAP[k] || null;
+}
+
+function normMonth(s) {
+  s = (s||'').toString().trim().toLowerCase();
+  if (s.startsWith('feb')) return 'Feb';
+  if (s.startsWith('mar')) return 'Mar';
+  if (s.startsWith('apr')) return 'Apr';
+  return null;
+}
+
+function parseNum(v) {
+  var n = parseFloat(v);
+  return isNaN(n) ? 0 : Math.round(n);
+}
+
+function cleanNote(s) {
+  s = (s||'').toString().trim();
+  var low = s.toLowerCase();
+  if (!s || low === 'na' || low === 'n/a' || low === 'nil' || low === 'none' || low === '-') return null;
+  return s.length > 100 ? s.substring(0, 100) + '...' : s;
+}
+
+/* ══════════════════════════════════════════════════
+   EXCEL PARSER
+══════════════════════════════════════════════════ */
+function handleFile(input) {
+  var file = input.files[0];
+  input.value = '';
+  if (!file) return;
+
+  var status = document.getElementById('up-status');
+  status.style.color = '#FFBC7D';
+  status.textContent = 'Reading file, please wait...';
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = new Uint8Array(e.target.result);
+      var wb   = XLSX.read(data, { type: 'array' });
+
+      parseExcel(wb);
+
+      document.getElementById('upload-page').style.display   = 'none';
+      document.getElementById('dashboard-page').style.display = 'flex';
+      activeMonth = 'Feb';
+      ['Feb','Mar','Apr'].forEach(function(x) {
+        document.getElementById('tab-' + x).classList.toggle('active', x === 'Feb');
+      });
+      render('Feb');
+      status.textContent = '';
+    } catch(err) {
+      status.style.color = '#e53935';
+      status.textContent = 'Error reading file: ' + err.message;
+    }
+  };
+  reader.onerror = function() {
+    status.style.color = '#e53935';
+    status.textContent = 'Could not read file. Please try again.';
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseExcel(wb) {
+  /* ── Init accumulators ── */
+  var huddleCounts = {};
+  var notesAcc     = {};
+  var mkData       = {};
+
+  CANONICAL.forEach(function(b) {
+    huddleCounts[b] = { Feb:0, Mar:0, Apr:0 };
+    mkData[b]       = {
+      Feb:{ calls:0,flyers:0,stickers:0,reviews:0 },
+      Mar:{ calls:0,flyers:0,stickers:0,reviews:0 },
+      Apr:{ calls:0,flyers:0,stickers:0,reviews:0 },
+    };
+    notesAcc[b] = {
+      Feb:{ problems:[], actions:[], remarks:[] },
+      Mar:{ problems:[], actions:[], remarks:[] },
+      Apr:{ problems:[], actions:[], remarks:[] },
+    };
+  });
+
+  /* ── HUDDLE DETAILS INCHARGE ──
+     col indices (0-based):
+       0  Branch Name
+       2  Month
+       8  Remarks (Excess/Expiry/Damage) → problems
+       13 Marketing Remarks               → remarks
+       21 Action Point 1                  → actions
+       23 Action Point 2                  → actions
+  ── */
+  var ws = wb.Sheets['HUDDLE DETAILS INCHARGE'];
+  if (!ws) throw new Error('"HUDDLE DETAILS INCHARGE" sheet not found in this file.');
+
+  var rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    var branch = normBranch(row[0]);
+    var month  = normMonth(row[2]);
+    if (!branch || !month) continue;
+
+    /* Count huddle row */
+    huddleCounts[branch][month]++;
+
+    /* Collect notes (avoid duplicates per branch-month) */
+    var nd = notesAcc[branch][month];
+    var prob = cleanNote(row[8]);
+    var ap1  = cleanNote(row[21]);
+    var ap2  = cleanNote(row[23]);
+    var rem  = cleanNote(row[13]);
+
+    if (prob && nd.problems.indexOf(prob) < 0) nd.problems.push(prob);
+    if (ap1  && nd.actions.indexOf(ap1)   < 0) nd.actions.push(ap1);
+    if (ap2  && nd.actions.indexOf(ap2)   < 0) nd.actions.push(ap2);
+    if (rem  && nd.remarks.indexOf(rem)   < 0) nd.remarks.push(rem);
+  }
+
+  /* Cap Dilsukhnagar April at 13 (raw data has 15 due to re-entries) */
+  if (huddleCounts['Dilsukhnagar']['Apr'] > 13) huddleCounts['Dilsukhnagar']['Apr'] = 13;
+
+  /* ── Sheet4 (Marketing) ──
+     col indices (0-based):
+       0  Branch (carry-forward)
+       1  Month
+       2  Calls   3  Flyers   4  Stickers   5  Reviews
+  ── */
+  var ws4 = wb.Sheets['Sheet4'];
+  if (ws4) {
+    var rows4 = XLSX.utils.sheet_to_json(ws4, { header:1, defval:'' });
+    var curBranch4 = '';
+    for (var j = 1; j < rows4.length; j++) {
+      var r4 = rows4[j];
+      var bRaw = (r4[0]||'').toString().trim();
+      if (bRaw) {
+        var nb = normBranch(bRaw);
+        if (nb) curBranch4 = nb;
+      }
+      var m4 = normMonth(r4[1]);
+      if (!curBranch4 || !m4) continue;
+      var mk = mkData[curBranch4][m4];
+      mk.calls    += parseNum(r4[2]);
+      mk.flyers   += parseNum(r4[3]);
+      mk.stickers += parseNum(r4[4]);
+      mk.reviews  += parseNum(r4[5]);
+    }
+  }
+
+  /* ── Build MONTH_DATA & MONTH_NOTES ── */
+  var MONTHS = ['Feb','Mar','Apr'];
+  var LABELS = { Feb:'February 2026', Mar:'March 2026', Apr:'April 2026' };
+
+  MONTH_DATA  = {};
+  MONTH_NOTES = {};
+
+  MONTHS.forEach(function(m) {
+    var hasMarketing = CANONICAL.some(function(b) {
+      var mk = mkData[b][m];
+      return mk.calls + mk.flyers + mk.stickers + mk.reviews > 0;
+    });
+
+    MONTH_DATA[m] = {
+      label: LABELS[m],
+      maxH:  13,
+      marketingNote: hasMarketing ? LABELS[m] : LABELS[m] + ' (marketing data not yet reported)',
+      branches: CANONICAL.map(function(b) {
+        var mk = mkData[b][m];
+        return {
+          name:     b,
+          huddles:  Math.min(huddleCounts[b][m], 13),
+          calls:    mk.calls,
+          flyers:   mk.flyers,
+          stickers: mk.stickers,
+          reviews:  mk.reviews,
+        };
+      })
+    };
+
+    MONTH_NOTES[m] = CANONICAL.map(function(b) {
+      var nd = notesAcc[b][m];
+      return {
+        name:     b,
+        problems: nd.problems.slice(0, 5),
+        actions:  nd.actions.slice(0, 6),
+        remarks:  nd.remarks.slice(0, 4),
+      };
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   GO BACK TO UPLOAD
+══════════════════════════════════════════════════ */
+function goUpload() {
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('upload-page').style.display    = 'flex';
+}
+
+/* ══════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════ */
+function perfBarColor(p)  { return p===100 ? BGREEN : p>=85 ? YELLOW : p>=77 ? PEACH : '#e53935'; }
+function perfTextColor(p) { return p===100 ? '#1a5e20' : p>=85 ? '#7a5f00' : p>=77 ? '#7a4000' : '#c62828'; }
+
+/* ══════════════════════════════════════════════════
+   SWITCH MONTH
+══════════════════════════════════════════════════ */
+function switchMonth(m) {
+  activeMonth = m;
+  ['Feb','Mar','Apr'].forEach(function(x) {
+    document.getElementById('tab-' + x).classList.toggle('active', x === m);
+  });
+  render(m);
+}
+
+/* ══════════════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════════════ */
+function render(m) {
+  var md       = MONTH_DATA[m];
+  var notes    = MONTH_NOTES[m];
+  var branches = md.branches;
+  var maxH     = md.maxH;
+
+  var totals = branches.reduce(function(acc, b) {
+    acc.huddles  += b.huddles;
+    acc.calls    += b.calls;
+    acc.flyers   += b.flyers;
+    acc.stickers += b.stickers;
+    acc.reviews  += b.reviews;
+    return acc;
+  }, { huddles:0, calls:0, flyers:0, stickers:0, reviews:0 });
+
+  var overallPct   = Math.round(totals.huddles / (branches.length * maxH) * 100);
+  var hasMarketing = totals.calls + totals.flyers + totals.stickers + totals.reviews > 0;
+
+  document.getElementById('ctrl-title').textContent = 'Branch Operations Report — ' + md.label;
+
+  /* KPI cards */
+  var kpis = [
+    { label:'TOTAL HUDDLES',      val: totals.huddles,                                              sub: branches.length + ' branches · ' + md.label },
+    { label:'CALLS MADE',         val: hasMarketing ? totals.calls.toLocaleString()    : '—',  sub: md.marketingNote },
+    { label:'FLYERS DISTRIBUTED', val: hasMarketing ? totals.flyers.toLocaleString()   : '—',  sub: md.marketingNote },
+    { label:'GOOGLE REVIEWS',     val: hasMarketing ? totals.reviews.toLocaleString()  : '—',  sub: md.marketingNote },
+  ];
+  var kpiHtml = kpis.map(function(k) {
+    return '<div style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(37,22,50,0.13);border:1px solid #ede8f5;">' +
+      '<div style="background:' + PLUM + ';padding:10px 16px;"><div style="font-size:9px;font-weight:700;color:' + PEACH + ';letter-spacing:1.5px;text-transform:uppercase;">' + k.label + '</div></div>' +
+      '<div style="padding:16px 16px 14px;text-align:center;">' +
+        '<div style="font-size:30px;font-weight:900;color:' + PLUM + ';line-height:1;">' + k.val + '</div>' +
+        '<div style="font-size:10px;color:#999;margin-top:5px;">' + k.sub + '</div>' +
+        '<div style="width:36px;height:3px;background:' + YELLOW + ';margin:10px auto 0;border-radius:2px;"></div>' +
+      '</div></div>';
+  }).join('');
+
+  /* Huddle rows sorted by % */
+  var sortedByHuddle = branches.slice().sort(function(a,b) { return b.huddles - a.huddles; });
+  var huddleRows = sortedByHuddle.map(function(b) {
+    var pct = Math.round(b.huddles / maxH * 100);
+    var fc  = perfBarColor(pct);
+    var tc  = perfTextColor(pct);
+    return '<div style="display:grid;grid-template-columns:140px 1fr 70px 80px;align-items:center;padding:10px 18px;border-bottom:1px solid #f3eef8;">' +
+      '<div style="font-size:11.5px;font-weight:700;color:' + PLUM + ';">' + b.name + '</div>' +
+      '<div style="background:#ede8f5;height:10px;border-radius:5px;overflow:hidden;margin:0 10px;">' +
+        '<div style="width:' + pct + '%;height:100%;background:' + fc + ';border-radius:5px;"></div>' +
+      '</div>' +
+      '<div style="font-size:12px;font-weight:800;color:' + tc + ';text-align:center;">' + pct + '%</div>' +
+      '<div style="font-size:11px;color:#999;text-align:right;">' + b.huddles + '/' + maxH + ' days</div>' +
+    '</div>';
+  }).join('');
+
+  /* Marketing table rows */
+  var mkSorted = branches.slice().sort(function(a,b) {
+    return (b.calls+b.flyers+b.stickers+b.reviews) - (a.calls+a.flyers+a.stickers+a.reviews);
+  });
+  var dash = '—';
+  var mktRows = mkSorted.map(function(b, i) {
+    var total = b.calls + b.flyers + b.stickers + b.reviews;
+    var bg = i % 2 === 0 ? '#fff' : '#faf8ff';
+    return '<tr style="background:' + bg + ';">' +
+      '<td style="padding:9px 14px;font-size:11.5px;font-weight:700;color:' + PLUM + ';border-bottom:1px solid #f0ecf8;">' + b.name + '</td>' +
+      '<td style="padding:9px 14px;font-size:12px;font-weight:600;color:#1565c0;text-align:center;border-bottom:1px solid #f0ecf8;">' + (b.calls||dash) + '</td>' +
+      '<td style="padding:9px 14px;font-size:12px;font-weight:600;color:#e65100;text-align:center;border-bottom:1px solid #f0ecf8;">' + (b.flyers||dash) + '</td>' +
+      '<td style="padding:9px 14px;font-size:12px;font-weight:600;color:#2e7d32;text-align:center;border-bottom:1px solid #f0ecf8;">' + (b.stickers||dash) + '</td>' +
+      '<td style="padding:9px 14px;font-size:12px;font-weight:600;color:#7b1fa2;text-align:center;border-bottom:1px solid #f0ecf8;">' + (b.reviews||dash) + '</td>' +
+      '<td style="padding:9px 14px;font-size:12px;font-weight:800;color:' + (total>0?PLUM:'#bbb') + ';text-align:center;border-bottom:1px solid #f0ecf8;">' + (total>0?total.toLocaleString():dash) + '</td>' +
+    '</tr>';
+  }).join('');
+
+  /* Top 3 marketing branches */
+  var top3 = branches.slice()
+    .filter(function(b){ return b.calls+b.flyers+b.stickers+b.reviews>0; })
+    .sort(function(a,b){ return (b.calls+b.flyers+b.stickers+b.reviews)-(a.calls+a.flyers+a.stickers+a.reviews); })
+    .slice(0,3);
+  var rankStyle = [
+    { bg:YELLOW, color:PLUM,   numColor:'#7a5f00' },
+    { bg:PLUM,   color:'#fff', numColor:PLUM      },
+    { bg:PEACH,  color:PLUM,   numColor:'#7a4000' },
+  ];
+  var top3Html = top3.length > 0
+    ? top3.map(function(b,i) {
+        var total = b.calls+b.flyers+b.stickers+b.reviews;
+        var rs = rankStyle[i];
+        return '<div style="background:#faf8ff;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin:12px 14px 0;border:1px solid #ede8f5;">' +
+          '<div style="width:44px;height:44px;border-radius:50%;background:' + rs.bg + ';display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:' + rs.color + ';flex-shrink:0;">' + (i+1) + '</div>' +
+          '<div style="flex:1;">' +
+            '<div style="font-size:14px;font-weight:800;color:' + PLUM + ';">' + b.name + '</div>' +
+            '<div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">' +
+              '<span style="font-size:10.5px;color:#1565c0;font-weight:600;">Calls: ' + b.calls + '</span>' +
+              '<span style="font-size:10.5px;color:#e65100;font-weight:600;">Flyers: ' + b.flyers + '</span>' +
+              '<span style="font-size:10.5px;color:#2e7d32;font-weight:600;">Stickers: ' + b.stickers + '</span>' +
+              '<span style="font-size:10.5px;color:#7b1fa2;font-weight:600;">Reviews: ' + b.reviews + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:22px;font-weight:900;color:' + rs.numColor + ';">' + total + '</div>' +
+        '</div>';
+      }).join('')
+    : '<div style="padding:24px;text-align:center;color:#bbb;font-size:12px;">Marketing data not yet reported for this month</div>';
+
+  /* Branch notes cards */
+  var notesHtml = notes.map(function(n) {
+    var pi = n.problems.map(function(p){ return '<li style="font-size:10.5px;color:#b71c1c;line-height:1.55;margin-bottom:3px;">' + p + '</li>'; }).join('');
+    var ai = n.actions.map(function(a){  return '<li style="font-size:10.5px;color:' + PLUM + ';line-height:1.55;margin-bottom:3px;">' + a + '</li>'; }).join('');
+    var ri = n.remarks.map(function(r){  return '<li style="font-size:10.5px;color:#7a4000;line-height:1.55;margin-bottom:3px;">' + r + '</li>'; }).join('');
+    var hp = n.problems.length > 0;
+    var hr = n.remarks.length > 0;
+    var ha = n.actions.length > 0;
+    var noData = !hp && !ha && !hr;
+    return '<div style="background:#fff;border-radius:12px;border:1px solid #ede8f5;overflow:hidden;box-shadow:0 2px 10px rgba(37,22,50,0.09);">' +
+      '<div style="background:' + PLUM + ';padding:9px 14px;display:flex;align-items:center;justify-content:space-between;">' +
+        '<div style="font-size:11px;font-weight:800;color:#fff;letter-spacing:1.2px;text-transform:uppercase;">' + n.name + '</div>' +
+        '<div style="width:18px;height:3px;background:' + YELLOW + ';border-radius:2px;"></div>' +
+      '</div>' +
+      '<div style="padding:12px 14px;">' +
+        (noData ? '<div style="font-size:11px;color:#ccc;text-align:center;padding:12px 0;">No notes recorded</div>' : '') +
+        (hp ? '<div style="margin-bottom:10px;"><div style="font-size:8.5px;font-weight:800;letter-spacing:1.2px;color:#b71c1c;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;"><div style="width:7px;height:7px;background:#b71c1c;border-radius:50%;"></div>PROBLEMS / ISSUES</div><ul style="padding-left:14px;margin:0;">' + pi + '</ul></div>' : '') +
+        (ha ? '<div style="margin-bottom:' + (hr?'10px':'0') + ';"><div style="font-size:8.5px;font-weight:800;letter-spacing:1.2px;color:' + PLUM + ';text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;"><div style="width:7px;height:7px;background:' + YELLOW + ';border-radius:50%;"></div>ACTION POINTS</div><ul style="padding-left:14px;margin:0;">' + ai + '</ul></div>' : '') +
+        (hr ? '<div><div style="font-size:8.5px;font-weight:800;letter-spacing:1.2px;color:#7a4000;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;"><div style="width:7px;height:7px;background:' + PEACH + ';border-radius:50%;"></div>NOTES / REMARKS</div><ul style="padding-left:14px;margin:0;">' + ri + '</ul></div>' : '') +
+      '</div></div>';
+  }).join('');
+
+  /* Marketing totals row */
+  var tCalls    = hasMarketing ? totals.calls.toLocaleString()    : dash;
+  var tFlyers   = hasMarketing ? totals.flyers.toLocaleString()   : dash;
+  var tStickers = hasMarketing ? totals.stickers.toLocaleString() : dash;
+  var tReviews  = hasMarketing ? totals.reviews.toLocaleString()  : dash;
+  var tTotal    = hasMarketing ? (totals.calls+totals.flyers+totals.stickers+totals.reviews).toLocaleString() : dash;
+
+  /* ── ASSEMBLE ── */
+  document.getElementById('dashboard').innerHTML =
+    '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">' +
+
+    // HEADER
+    '<div style="background:' + PLUM + ';padding:28px 44px 24px;text-align:center;">' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:6px;">' +
+        '<div style="display:flex;gap:4px;">' +
+          '<div style="width:8px;height:24px;background:' + YELLOW + ';clip-path:polygon(0 0,60% 0,100% 50%,60% 100%,0 100%,40% 50%);"></div>' +
+          '<div style="width:8px;height:24px;background:' + PEACH + ';opacity:.7;clip-path:polygon(0 0,60% 0,100% 50%,60% 100%,0 100%,40% 50%);"></div>' +
+        '</div>' +
+        '<div style="font-size:42px;font-weight:900;color:' + YELLOW + ';letter-spacing:3px;line-height:1;">TOGETHER WE ACHIEVE</div>' +
+        '<div style="display:flex;gap:4px;">' +
+          '<div style="width:8px;height:24px;background:' + PEACH + ';opacity:.7;clip-path:polygon(40% 0,100% 0,60% 50%,100% 100%,40% 100%,0 50%);"></div>' +
+          '<div style="width:8px;height:24px;background:' + YELLOW + ';clip-path:polygon(40% 0,100% 0,60% 50%,100% 100%,40% 100%,0 50%);"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px;">' +
+        '<div style="background:' + YELLOW + ';color:' + PLUM + ';padding:8px 24px;border-radius:8px;font-size:12px;font-weight:800;letter-spacing:2px;">BRANCH OPERATIONS REPORT</div>' +
+        '<div style="border:1.5px solid rgba(254,207,0,0.4);padding:8px 18px;border-radius:8px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);">' + md.label.toUpperCase() + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    // KPI CARDS
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 36px 18px;">' + kpiHtml + '</div>' +
+
+    // HUDDLE BANNER
+    '<div style="margin:0 36px 20px;background:' + PLUM + ';border-radius:12px;padding:17px 28px;display:flex;align-items:center;justify-content:center;gap:20px;">' +
+      '<div style="width:40px;height:40px;background:rgba(254,207,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(254,207,0,0.4);font-size:20px;flex-shrink:0;">&#x1F91D;</div>' +
+      '<div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:2px;">OVERALL HUDDLE COMPLETION</div>' +
+      '<div style="width:1px;height:26px;background:rgba(254,207,0,0.3);"></div>' +
+      '<div style="font-size:38px;font-weight:900;color:' + YELLOW + ';">' + overallPct + '%</div>' +
+      '<div style="font-size:13px;color:rgba(255,188,125,0.85);">' + totals.huddles + ' / ' + (branches.length * maxH) + ' sessions</div>' +
+    '</div>' +
+
+    // MAIN GRID
+    '<div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;padding:0 36px 20px;">' +
+      '<div style="background:#fff;border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 12px rgba(37,22,50,0.09);">' +
+        '<div style="background:' + PLUM + ';padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;">Huddle Attendance — ' + md.label + '</div>' +
+        '<div style="display:grid;grid-template-columns:140px 1fr 70px 80px;padding:8px 18px;font-size:9px;font-weight:700;color:#b0a0c0;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid #f3eef8;">' +
+          '<div>Branch</div><div style="margin:0 10px;">Attendance</div><div style="text-align:center;">%</div><div style="text-align:right;">Sessions</div>' +
+        '</div>' +
+        huddleRows +
+        '<div style="display:flex;gap:16px;padding:10px 18px;border-top:1px solid #f3eef8;background:#faf8ff;">' +
+          '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#555;"><div style="width:10px;height:10px;border-radius:50%;background:' + BGREEN + ';"></div>100%</div>' +
+          '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#555;"><div style="width:10px;height:10px;border-radius:50%;background:' + YELLOW + ';"></div>85–99%</div>' +
+          '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#555;"><div style="width:10px;height:10px;border-radius:50%;background:' + PEACH + ';"></div>77–84%</div>' +
+          '<div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#555;"><div style="width:10px;height:10px;border-radius:50%;background:#e53935;"></div>&lt;77%</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:#fff;border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 12px rgba(37,22,50,0.09);">' +
+        '<div style="background:' + PLUM + ';padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;">Top Marketing Branches</div>' +
+        top3Html +
+        '<div style="padding:14px 14px 4px;font-size:10px;color:#bbb;text-align:center;">Ranked by total activity (Calls + Flyers + Stickers + Reviews)</div>' +
+        '<div style="height:12px;"></div>' +
+      '</div>' +
+    '</div>' +
+
+    // MARKETING TABLE
+    '<div style="margin:0 36px 26px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 12px rgba(37,22,50,0.09);">' +
+      '<div style="background:' + PLUM + ';padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;">Marketing Activities — ' + md.label + '</div>' +
+      '<table style="width:100%;border-collapse:collapse;">' +
+        '<thead><tr style="background:#faf8ff;">' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:#888;letter-spacing:1px;text-align:left;border-bottom:2px solid #ede8f5;">BRANCH</th>' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:#1565c0;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">CALLS</th>' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:#e65100;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">FLYERS</th>' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:#2e7d32;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">STICKERS</th>' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:#7b1fa2;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">REVIEWS</th>' +
+          '<th style="padding:10px 14px;font-size:9.5px;font-weight:700;color:' + PLUM + ';letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">TOTAL</th>' +
+        '</tr></thead>' +
+        '<tbody>' + mktRows + '</tbody>' +
+        '<tfoot><tr style="background:' + PLUM + ';">' +
+          '<td style="padding:10px 14px;font-size:12px;font-weight:800;color:' + YELLOW + ';border-top:2px solid #362048;">TOTAL</td>' +
+          '<td style="padding:10px 14px;font-size:12px;font-weight:800;color:#fff;text-align:center;border-top:2px solid #362048;">' + tCalls + '</td>' +
+          '<td style="padding:10px 14px;font-size:12px;font-weight:800;color:#fff;text-align:center;border-top:2px solid #362048;">' + tFlyers + '</td>' +
+          '<td style="padding:10px 14px;font-size:12px;font-weight:800;color:#fff;text-align:center;border-top:2px solid #362048;">' + tStickers + '</td>' +
+          '<td style="padding:10px 14px;font-size:12px;font-weight:800;color:#fff;text-align:center;border-top:2px solid #362048;">' + tReviews + '</td>' +
+          '<td style="padding:10px 14px;font-size:13px;font-weight:900;color:' + YELLOW + ';text-align:center;border-top:2px solid #362048;">' + tTotal + '</td>' +
+        '</tr></tfoot>' +
+      '</table>' +
+    '</div>' +
+
+    // NOTES
+    '<div style="margin:0 36px 26px;">' +
+      '<div style="background:' + PLUM + ';padding:13px 18px;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff;text-transform:uppercase;border-radius:14px 14px 0 0;display:flex;align-items:center;justify-content:space-between;">' +
+        '<span>Branch Issues, Action Points &amp; Notes — ' + md.label + '</span>' +
+        '<div style="width:32px;height:3px;background:' + YELLOW + ';border-radius:2px;"></div>' +
+      '</div>' +
+      '<div style="background:#faf8ff;padding:10px 16px;border-left:4px solid ' + YELLOW + ';margin-bottom:14px;">' +
+        '<div style="font-size:10px;color:#555;line-height:1.6;">' +
+          '<span style="display:inline-block;width:9px;height:9px;background:#b71c1c;border-radius:50%;margin-right:5px;vertical-align:middle;"></span><strong style="color:#b71c1c;">Problems</strong>&nbsp;&nbsp;' +
+          '<span style="display:inline-block;width:9px;height:9px;background:' + YELLOW + ';border-radius:50%;margin-right:5px;vertical-align:middle;"></span><strong style="color:' + PLUM + ';">Action Points</strong>&nbsp;&nbsp;' +
+          '<span style="display:inline-block;width:9px;height:9px;background:' + PEACH + ';border-radius:50%;margin-right:5px;vertical-align:middle;"></span><strong style="color:#7a4000;">Notes / Remarks</strong>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">' + notesHtml + '</div>' +
+    '</div>' +
+
+    // FOOTER
+    '<div style="margin:0 36px 36px;background:' + PLUM + ';border-radius:14px;padding:20px 28px;display:flex;align-items:center;gap:16px;">' +
+      '<div style="width:50px;height:50px;background:rgba(254,207,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(254,207,0,0.35);flex-shrink:0;font-size:22px;">&#x1F4C8;</div>' +
+      '<div>' +
+        '<div style="font-size:17px;font-weight:900;color:' + YELLOW + ';">THANK YOU TEAM!</div>' +
+        '<div style="font-size:12px;color:rgba(255,188,125,0.85);margin-top:2px;">Great effort across all branches — let\'s keep building momentum!</div>' +
+      '</div>' +
+      '<div style="margin-left:auto;text-align:right;">' +
+        '<div style="font-size:22px;font-weight:900;color:' + YELLOW + ';letter-spacing:3px;">JANAGEN</div>' +
+        '<div style="font-size:9px;color:rgba(255,188,125,0.6);letter-spacing:2px;">PHARMACIES · HYDERABAD</div>' +
+      '</div>' +
+    '</div>' +
+
+    '</div>';
+}
+
+/* ══════════════════════════════════════════════════
+   DOWNLOAD
+══════════════════════════════════════════════════ */
+async function downloadDashboard() {
+  var btn = document.getElementById('dlBtn');
+  btn.textContent = 'Generating...'; btn.disabled = true;
+
+  try {
+    var src  = document.getElementById('dashboard');
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:absolute;left:0;top:0;width:1000px;background:#fff;z-index:-9999;pointer-events:none;';
+    wrap.innerHTML = src.innerHTML;
+    document.body.appendChild(wrap);
+
+    Array.from(wrap.querySelectorAll('*')).concat([wrap]).forEach(function(el) {
+      el.style.overflow  = 'visible';
+      el.style.maxHeight = 'none';
+    });
+
+    await document.fonts.ready;
+    await new Promise(function(r){ setTimeout(r, 300); });
+
+    var canvas = await html2canvas(wrap, {
+      scale: 2, useCORS: true, allowTaint: true,
+      backgroundColor: '#fff', logging: false,
+      width: wrap.offsetWidth, height: wrap.offsetHeight,
+      windowWidth: wrap.offsetWidth, windowHeight: wrap.offsetHeight,
+    });
+
+    document.body.removeChild(wrap);
+
+    var label = MONTH_DATA[activeMonth].label.replace(' ', '-');
+    var link  = document.createElement('a');
+    link.download = 'JANAGEN-Operations-' + label + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(e) {
+    alert('Download failed: ' + e.message);
+  }
+
+  btn.innerHTML = '&#11015; Download Image'; btn.disabled = false;
+}
+</script>
+</body>
+</html>
