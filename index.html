@@ -10,1024 +10,865 @@
 <style>
 :root {
   --plum:   #251632;
+  --plum2:  #362048;
   --yellow: #FECF00;
   --peach:  #FFBC7D;
   --green:  #61CE70;
+  --bg:     #07031a;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   font-family: 'Poppins', sans-serif;
-  background: #07031a;
-  background-image:
-    radial-gradient(ellipse at 15% 40%, rgba(55,20,90,0.5) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 10%, rgba(30,10,65,0.6) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 90%, rgba(20,5,50,0.4) 0%, transparent 50%);
+  background: var(--bg);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* ════════════════════════════════════════
-   PAGE SYSTEM
-════════════════════════════════════════ */
-.page { display: none; min-height: 100vh; flex-direction: column; align-items: center; }
-.page.active { display: flex; }
+/* ─── ANIMATED BG ─────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 15% 25%, rgba(120,40,200,.14) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 10%, rgba(254,207,0,.06)  0%, transparent 40%),
+    radial-gradient(ellipse at 60% 80%, rgba(55,20,90,.20)   0%, transparent 50%),
+    linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.012) 1px, transparent 1px);
+  background-size: 100% 100%,100% 100%,100% 100%,44px 44px,44px 44px;
+}
 
-/* ════════════════════════════════════════
+/* ─── PAGE SYSTEM ─────────────────── */
+.page { display:none; min-height:100vh; flex-direction:column; align-items:center; position:relative; z-index:1; }
+.page.active { display:flex; }
+
+/* ══════════════════════════════════════════════
    UPLOAD PAGE
-════════════════════════════════════════ */
-#pg-upload {
-  justify-content: center;
-  padding: 60px 20px;
+══════════════════════════════════════════════ */
+#pg-upload { justify-content:center; padding:60px 20px; gap:0; }
+
+.up-eyebrow {
+  display:flex; align-items:center; gap:8px; margin-bottom:30px;
+  font-size:10px; font-weight:700; letter-spacing:3px; color:rgba(255,188,125,.5);
+  text-transform:uppercase;
 }
-.up-brand { text-align: center; margin-bottom: 40px; }
-.up-brand-name {
-  font-size: 56px; font-weight: 900; letter-spacing: 5px;
-  background: linear-gradient(135deg, #FECF00 0%, #ffdf66 50%, #FECF00 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  line-height: 1;
+.up-eyebrow::before,.up-eyebrow::after {
+  content:''; display:block; height:1px; width:30px;
+  background:rgba(255,188,125,.25);
 }
-.up-brand-sub {
-  font-size: 11px; font-weight: 700; letter-spacing: 5px; color: #FFBC7D;
-  text-transform: uppercase; margin-top: 8px; opacity: 0.7;
+
+.up-logo-text {
+  font-size:64px; font-weight:900; letter-spacing:6px; line-height:1;
+  background: linear-gradient(135deg,#ffe066 0%,#FECF00 40%,#ffbc33 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  text-align:center;
 }
+.up-tagline {
+  font-size:11.5px; font-weight:600; letter-spacing:5px; color:rgba(255,188,125,.55);
+  text-transform:uppercase; text-align:center; margin-top:6px; margin-bottom:44px;
+}
+
 .up-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(20px);
-  border-radius: 28px;
-  padding: 50px 52px 44px;
-  max-width: 480px; width: 100%;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
-  text-align: center;
+  width:100%; max-width:460px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:28px; padding:44px 44px 38px;
+  box-shadow:0 32px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
 }
-.up-drop-zone {
-  border: 2px dashed rgba(254,207,0,0.25);
-  border-radius: 16px;
-  padding: 36px 28px;
-  margin-bottom: 24px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.up-zone {
+  border:2px dashed rgba(254,207,0,.2); border-radius:18px;
+  padding:40px 24px; text-align:center; cursor:pointer; margin-bottom:22px;
+  transition:all .25s ease; position:relative; overflow:hidden;
 }
-.up-drop-zone:hover { border-color: rgba(254,207,0,0.6); background: rgba(254,207,0,0.04); }
-.up-drop-icon { font-size: 42px; margin-bottom: 12px; }
-.up-drop-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-.up-drop-hint { font-size: 12px; color: #5a4e6e; }
-.up-btn {
-  width: 100%; padding: 16px;
-  background: linear-gradient(135deg, #c8a400 0%, #fecf00 50%, #ffe066 100%);
-  color: var(--plum); font-family: inherit; font-size: 15px; font-weight: 800;
-  border: none; border-radius: 14px; cursor: pointer; letter-spacing: 1px;
-  box-shadow: 0 8px 28px rgba(254,207,0,0.35);
-  transition: all 0.2s ease;
+.up-zone::before {
+  content:''; position:absolute; inset:0; border-radius:16px;
+  background:radial-gradient(circle at 50% 50%,rgba(254,207,0,.06),transparent 70%);
+  opacity:0; transition:.3s;
 }
-.up-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(254,207,0,0.45); }
-.up-format { font-size: 11px; color: #3d2e55; margin-top: 14px; }
-#up-status { margin-top: 16px; font-size: 13px; font-weight: 600; min-height: 18px; }
+.up-zone:hover { border-color:rgba(254,207,0,.5); }
+.up-zone:hover::before { opacity:1; }
+.up-zone-icon {
+  width:60px; height:60px; margin:0 auto 14px;
+  background:rgba(254,207,0,.1); border:1px solid rgba(254,207,0,.18);
+  border-radius:16px; display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+}
+.up-zone-title { font-size:15px; font-weight:700; color:#fff; margin-bottom:5px; }
+.up-zone-sub   { font-size:11.5px; color:#4d3e66; }
 
-/* ════════════════════════════════════════
+.up-cta {
+  width:100%; padding:16px; border:none; border-radius:14px; cursor:pointer;
+  font-family:inherit; font-size:14px; font-weight:800; letter-spacing:.8px;
+  background:linear-gradient(135deg,#c8a400,#fecf00 50%,#ffe566);
+  color:var(--plum);
+  box-shadow:0 8px 30px rgba(254,207,0,.3), 0 2px 8px rgba(0,0,0,.2);
+  transition:all .2s ease;
+}
+.up-cta:hover { transform:translateY(-2px); box-shadow:0 12px 38px rgba(254,207,0,.42); }
+.up-hint { text-align:center; font-size:10.5px; color:#322444; margin-top:14px; letter-spacing:.3px; }
+#up-status { text-align:center; min-height:18px; margin-top:14px; font-size:12.5px; font-weight:600; }
+
+/* ══════════════════════════════════════════════
    MODE SELECTION PAGE
-════════════════════════════════════════ */
-#pg-mode {
-  justify-content: center;
-  padding: 60px 20px;
+══════════════════════════════════════════════ */
+#pg-mode { justify-content:center; padding:60px 20px; }
+
+.mode-pill-badge {
+  display:inline-flex; align-items:center; gap:8px; padding:7px 18px;
+  background:rgba(97,206,112,.1); border:1px solid rgba(97,206,112,.22);
+  border-radius:40px; font-size:11px; font-weight:700; color:#61CE70;
+  margin-bottom:40px; letter-spacing:.3px;
 }
-.mode-success {
-  display: flex; align-items: center; gap: 10px;
-  background: rgba(97,206,112,0.1); border: 1px solid rgba(97,206,112,0.25);
-  border-radius: 40px; padding: 8px 20px;
-  font-size: 12px; font-weight: 600; color: #61CE70;
-  margin-bottom: 44px; letter-spacing: 0.3px;
-}
-.mode-heading {
-  font-size: 28px; font-weight: 900; color: #fff; text-align: center;
-  margin-bottom: 8px;
-}
-.mode-subhead {
-  font-size: 13px; color: #5a4e6e; text-align: center; margin-bottom: 48px;
-}
-.mode-cards {
-  display: flex; gap: 20px; max-width: 700px; width: 100%;
-}
+.mode-h { font-size:32px; font-weight:900; color:#fff; text-align:center; margin-bottom:8px; }
+.mode-sh { font-size:13px; color:#4d3e66; text-align:center; margin-bottom:50px; }
+
+.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:680px; width:100%; }
+
 .mode-card {
-  flex: 1; cursor: pointer;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 24px; padding: 36px 28px;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative; overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  cursor:pointer; border-radius:26px; padding:38px 32px 34px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.065);
+  box-shadow:0 10px 40px rgba(0,0,0,.28);
+  transition:all .28s cubic-bezier(.4,0,.2,1);
+  position:relative; overflow:hidden;
+  --mx:50%; --my:50%;
 }
-.mode-card::before {
-  content: ''; position: absolute; inset: 0; border-radius: 24px;
-  background: linear-gradient(135deg, rgba(254,207,0,0.06) 0%, transparent 60%);
-  opacity: 0; transition: opacity 0.25s;
+.mode-card::after {
+  content:''; position:absolute; inset:0; border-radius:inherit;
+  background:radial-gradient(circle at var(--mx) var(--my), rgba(254,207,0,.1), transparent 55%);
+  opacity:0; transition:opacity .28s; pointer-events:none;
 }
-.mode-card:hover { transform: translateY(-6px); border-color: rgba(254,207,0,0.3); box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(254,207,0,0.15); }
-.mode-card:hover::before { opacity: 1; }
-.mode-card-icon {
-  width: 64px; height: 64px; border-radius: 18px; margin-bottom: 20px;
-  display: flex; align-items: center; justify-content: center; font-size: 28px;
-}
-.mode-card-icon.yellow { background: rgba(254,207,0,0.12); border: 1px solid rgba(254,207,0,0.2); }
-.mode-card-icon.peach  { background: rgba(255,188,125,0.12); border: 1px solid rgba(255,188,125,0.2); }
-.mode-card-title { font-size: 21px; font-weight: 900; color: #fff; margin-bottom: 8px; }
-.mode-card-desc  { font-size: 12.5px; color: #6e5e88; line-height: 1.7; margin-bottom: 22px; }
-.mode-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.mode-tag {
-  padding: 4px 11px; border-radius: 20px; font-size: 10px; font-weight: 700;
-  letter-spacing: 0.5px;
-}
-.mode-tag.y { background: rgba(254,207,0,0.12); color: #FECF00; border: 1px solid rgba(254,207,0,0.2); }
-.mode-tag.p { background: rgba(255,188,125,0.12); color: #FFBC7D; border: 1px solid rgba(255,188,125,0.2); }
-.mode-card-arrow {
-  position: absolute; bottom: 28px; right: 28px;
-  font-size: 20px; color: rgba(255,255,255,0.15); transition: all 0.2s;
-}
-.mode-card:hover .mode-card-arrow { color: var(--yellow); transform: translate(3px,-3px); }
+.mode-card:hover { transform:translateY(-7px); border-color:rgba(254,207,0,.25); box-shadow:0 24px 64px rgba(0,0,0,.4),0 0 0 1px rgba(254,207,0,.12); }
+.mode-card:hover::after { opacity:1; }
 
-/* ════════════════════════════════════════
-   APP PAGE
-════════════════════════════════════════ */
-#pg-app { padding: 0 20px 60px; align-items: center; }
+.mc-num {
+  font-size:88px; font-weight:900; position:absolute; top:-10px; right:16px;
+  opacity:.04; line-height:1; color:#fff; letter-spacing:-4px; user-select:none;
+}
+.mc-icon {
+  width:58px; height:58px; border-radius:16px; margin-bottom:22px;
+  display:flex; align-items:center; justify-content:center; font-size:26px;
+}
+.mc-icon.y { background:rgba(254,207,0,.12); border:1px solid rgba(254,207,0,.2); }
+.mc-icon.p { background:rgba(255,188,125,.12); border:1px solid rgba(255,188,125,.2); }
+.mc-title { font-size:22px; font-weight:900; color:#fff; margin-bottom:8px; }
+.mc-desc  { font-size:12px; color:#5a4a72; line-height:1.75; margin-bottom:24px; }
+.mc-tags  { display:flex; gap:6px; flex-wrap:wrap; }
+.mc-tag   { padding:4px 11px; border-radius:20px; font-size:9.5px; font-weight:700; letter-spacing:.5px; }
+.mc-tag.y { background:rgba(254,207,0,.1); color:#FECF00; border:1px solid rgba(254,207,0,.18); }
+.mc-tag.p { background:rgba(255,188,125,.1); color:#FFBC7D; border:1px solid rgba(255,188,125,.18); }
+.mc-arrow { position:absolute; bottom:28px; right:28px; font-size:18px; color:rgba(255,255,255,.1); transition:all .25s; }
+.mode-card:hover .mc-arrow { color:var(--yellow); transform:translate(3px,-3px); }
 
-.app-topbar {
-  width: 100%; max-width: 1040px;
-  display: flex; align-items: center; gap: 12px;
-  padding: 20px 0 16px;
+/* ══════════════════════════════════════════════
+   APP CHROME
+══════════════════════════════════════════════ */
+#pg-app { padding:0 20px 64px; align-items:center; }
+
+.app-bar {
+  width:100%; max-width:1060px;
+  display:flex; align-items:center; gap:12px; padding:22px 0 18px;
 }
-.app-logo {
-  font-size: 20px; font-weight: 900; letter-spacing: 2px;
-  color: var(--yellow); flex-shrink: 0; margin-right: 4px;
+.app-wordmark {
+  display:flex; flex-direction:column;
+  font-size:21px; font-weight:900; letter-spacing:2.5px; color:var(--yellow);
+  line-height:1; flex-shrink:0; margin-right:6px;
 }
-.app-logo span { color: rgba(255,188,125,0.6); font-size: 11px; font-weight: 500; letter-spacing: 0; display: block; line-height: 1; }
-.topbar-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.app-wordmark small {
+  font-size:8.5px; font-weight:600; color:rgba(255,188,125,.45);
+  letter-spacing:3px; text-transform:uppercase; margin-top:2px;
+}
+.vdiv { width:1px; height:30px; background:rgba(255,255,255,.05); flex-shrink:0; }
 .mode-toggle {
-  display: flex; gap: 4px;
-  background: rgba(255,255,255,0.04); border-radius: 12px; padding: 4px;
-  border: 1px solid rgba(255,255,255,0.06);
+  display:flex; gap:3px; padding:4px;
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+  border-radius:13px;
 }
-.mode-pill {
-  padding: 7px 16px; border-radius: 9px; font-size: 12px; font-weight: 700;
-  cursor: pointer; border: none; font-family: inherit; background: transparent;
-  color: #5a4e6e; transition: all 0.18s; letter-spacing: 0.3px;
+.mpill {
+  padding:7px 18px; border-radius:10px; font-size:11.5px; font-weight:700;
+  cursor:pointer; border:none; font-family:inherit;
+  background:transparent; color:#4d3e66; transition:all .18s; letter-spacing:.3px;
 }
-.mode-pill.active { background: var(--yellow); color: var(--plum); }
-.spacer { flex: 1; }
-.topbar-btn {
-  padding: 8px 18px; border-radius: 10px; font-size: 12px; font-weight: 700;
-  cursor: pointer; font-family: inherit; border: 1px solid rgba(255,255,255,0.08);
-  background: transparent; color: #5a4e6e; transition: all 0.18s;
+.mpill.active { background:var(--yellow); color:var(--plum); }
+.spacer { flex:1; }
+.ghost-btn {
+  padding:8px 18px; border-radius:10px; font-size:11.5px; font-weight:700;
+  cursor:pointer; font-family:inherit;
+  border:1px solid rgba(255,255,255,.07); background:transparent; color:#4d3e66;
+  transition:all .18s;
 }
-.topbar-btn:hover { color: #FFBC7D; border-color: rgba(255,188,125,0.3); }
-.btn-download {
-  padding: 9px 22px; border-radius: 10px; font-size: 12px; font-weight: 800;
-  cursor: pointer; font-family: inherit; letter-spacing: 0.5px;
-  background: linear-gradient(135deg, #c8a400, #fecf00);
-  border: none; color: var(--plum);
-  box-shadow: 0 4px 16px rgba(254,207,0,0.3);
-  transition: all 0.18s;
+.ghost-btn:hover { color:var(--peach); border-color:rgba(255,188,125,.28); }
+.dl-btn {
+  padding:9px 24px; border-radius:10px; font-size:12px; font-weight:800;
+  cursor:pointer; font-family:inherit; letter-spacing:.5px;
+  background:linear-gradient(135deg,#c8a400,#fecf00);
+  border:none; color:var(--plum);
+  box-shadow:0 4px 18px rgba(254,207,0,.28);
+  transition:all .18s;
 }
-.btn-download:hover { box-shadow: 0 6px 22px rgba(254,207,0,0.4); transform: translateY(-1px); }
-.btn-download:disabled { opacity: 0.5; cursor: default; transform: none; }
+.dl-btn:hover { transform:translateY(-1px); box-shadow:0 7px 24px rgba(254,207,0,.38); }
+.dl-btn:disabled { opacity:.45; transform:none; cursor:default; }
 
-/* Tab rows */
-.tab-row {
-  width: 100%; max-width: 1040px;
-  display: flex; gap: 6px; align-items: center;
-  margin-bottom: 8px;
+.tab-strip { width:100%; max-width:1060px; display:flex; align-items:center; gap:7px; margin-bottom:7px; }
+.strip-lbl { font-size:9px; font-weight:800; letter-spacing:2px; color:#302040; text-transform:uppercase; width:54px; flex-shrink:0; }
+.tpill {
+  padding:8px 22px; border-radius:11px; font-size:12px; font-weight:700;
+  cursor:pointer; border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.025); color:#4d3e66;
+  font-family:inherit; transition:all .18s; white-space:nowrap;
 }
-.tab-row-label {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #3d2e55;
-  text-transform: uppercase; width: 56px; flex-shrink: 0;
+.tpill:hover { color:#8b75b0; border-color:rgba(255,255,255,.1); }
+.tpill.on {
+  background:var(--plum); color:#fff;
+  border-color:rgba(254,207,0,.25);
+  box-shadow:0 0 0 1px rgba(254,207,0,.12), 0 4px 14px rgba(37,22,50,.4);
 }
-.tab-pill {
-  padding: 8px 20px; border-radius: 10px; font-size: 12px; font-weight: 700;
-  cursor: pointer; border: 1px solid rgba(255,255,255,0.07);
-  background: rgba(255,255,255,0.03); color: #5a4e6e;
-  font-family: inherit; transition: all 0.18s; white-space: nowrap;
-}
-.tab-pill:hover { color: #9d8fbf; border-color: rgba(255,255,255,0.12); }
-.tab-pill.active { background: var(--plum); color: #fff; border-color: rgba(254,207,0,0.3); box-shadow: 0 0 0 1px rgba(254,207,0,0.15); }
-.tab-pill.week-pill { font-size: 11px; padding: 7px 14px; }
-.tab-pill.week-pill .wk-num { font-size: 13px; font-weight: 900; display: block; line-height: 1.1; }
-.tab-pill.week-pill .wk-range { font-size: 9px; font-weight: 500; opacity: 0.6; display: block; }
-.tab-pill.week-pill.active .wk-range { opacity: 0.75; }
+.wpill { font-size:10.5px; padding:7px 15px; }
+.wpill .wn  { font-size:12.5px; font-weight:900; display:block; line-height:1.2; }
+.wpill .wr  { font-size:8.5px; font-weight:500; opacity:.55; display:block; }
+.wpill.on .wr { opacity:.7; }
 
-/* Dashboard area */
-.ctrl-strip {
-  width: 100%; max-width: 1040px;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 20px; margin-bottom: 20px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;
+.info-strip {
+  width:100%; max-width:1060px;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:9px 20px; margin-bottom:22px;
+  background:rgba(255,255,255,.018);
+  border:1px solid rgba(255,255,255,.04); border-radius:11px;
 }
-.ctrl-info { font-size: 12px; color: #3d2e55; }
-.ctrl-info strong { color: #7c6a99; font-weight: 700; }
+.info-strip-l { font-size:11.5px; font-weight:700; color:#5a4a72; }
+.info-strip-l strong { color:#8b75b0; }
+.info-strip-r { font-size:10.5px; color:#2e2040; }
 
 #dashboard {
-  width: 1040px; background: #fff; border-radius: 22px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
-  font-family: 'Poppins', sans-serif;
-  animation: fadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  width:1060px; background:#fff; border-radius:24px;
+  box-shadow:0 28px 90px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);
+  font-family:'Poppins',sans-serif;
+  animation:rise .4s cubic-bezier(.4,0,.2,1) both;
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════
-     PAGE 1 · UPLOAD
-══════════════════════════════════════════ -->
+<!-- ══════════ UPLOAD PAGE ══════════ -->
 <div id="pg-upload" class="page active">
-  <div class="up-brand">
-    <div class="up-brand-name">JANAGEN</div>
-    <div class="up-brand-sub">Operations Dashboard</div>
-  </div>
+  <div class="up-eyebrow">JANAGEN PHARMACIES · HYDERABAD</div>
+  <div class="up-logo-text">JANAGEN</div>
+  <div class="up-tagline">Operations Intelligence Dashboard</div>
   <div class="up-card">
-    <div class="up-drop-zone" onclick="document.getElementById('excelInput').click()">
-      <div class="up-drop-icon">📊</div>
-      <div class="up-drop-title">Drop your Huddle Excel here</div>
-      <div class="up-drop-hint">or click to browse files</div>
+    <div class="up-zone" onclick="document.getElementById('xi').click()">
+      <div class="up-zone-icon">📊</div>
+      <div class="up-zone-title">Drop your Huddle Excel here</div>
+      <div class="up-zone-sub">Click to browse · .xlsx supported</div>
     </div>
-    <button class="up-btn" onclick="document.getElementById('excelInput').click()">
-      ⬆ Select Excel File
-    </button>
-    <div class="up-format">Accepts · HUDDLE PICTURES POST CHECK LIST (.xlsx)</div>
+    <button class="up-cta" onclick="document.getElementById('xi').click()">⬆&nbsp; Select Excel File</button>
+    <div class="up-hint">HUDDLE PICTURES POST CHECK LIST (.xlsx)</div>
     <div id="up-status"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PAGE 2 · MODE SELECTION
-══════════════════════════════════════════ -->
+<!-- ══════════ MODE PAGE ══════════ -->
 <div id="pg-mode" class="page">
-  <div class="mode-success">
-    <span>✓</span><span id="mode-filename">File loaded</span>
-  </div>
-  <div class="mode-heading">Choose Your Report View</div>
-  <div class="mode-subhead">Select how you'd like to explore this month's operations data</div>
-  <div class="mode-cards">
+  <div class="mode-pill-badge">✓ &nbsp;<span id="mode-fn">File loaded</span></div>
+  <div class="mode-h">Choose Your Report View</div>
+  <div class="mode-sh">How would you like to explore this month's operations data?</div>
+  <div class="mode-grid">
 
     <div class="mode-card" onclick="enterMode('monthly')">
-      <div class="mode-card-icon yellow">📅</div>
-      <div class="mode-card-title">Monthly Report</div>
-      <div class="mode-card-desc">
-        Full-month overview of all branches. Huddle attendance, marketing activities, top performers and branch notes — all in one view.
+      <div class="mc-num">M</div>
+      <div class="mc-icon y">📅</div>
+      <div class="mc-title">Monthly Report</div>
+      <div class="mc-desc">Full-month overview — huddle attendance, marketing activity, top performers and branch-level notes.</div>
+      <div class="mc-tags">
+        <span class="mc-tag y">Feb 2026</span>
+        <span class="mc-tag y">Mar 2026</span>
+        <span class="mc-tag y">Apr 2026</span>
       </div>
-      <div class="mode-card-tags">
-        <span class="mode-tag y">Feb 2026</span>
-        <span class="mode-tag y">Mar 2026</span>
-        <span class="mode-tag y">Apr 2026</span>
-      </div>
-      <div class="mode-card-arrow">→</div>
+      <div class="mc-arrow">→</div>
     </div>
 
     <div class="mode-card" onclick="enterMode('weekly')">
-      <div class="mode-card-icon peach">📆</div>
-      <div class="mode-card-title">Weekly Report</div>
-      <div class="mode-card-desc">
-        Drill down week-by-week within each month. Track which branches had huddles each specific week and their action points.
+      <div class="mc-num">W</div>
+      <div class="mc-icon p">📆</div>
+      <div class="mc-title">Weekly Report</div>
+      <div class="mc-desc">Week-by-week drill-down — track which branches held huddles each week and their specific action points.</div>
+      <div class="mc-tags">
+        <span class="mc-tag p">Week 1</span>
+        <span class="mc-tag p">Week 2</span>
+        <span class="mc-tag p">Week 3</span>
+        <span class="mc-tag p">Week 4</span>
       </div>
-      <div class="mode-card-tags">
-        <span class="mode-tag p">Week 1</span>
-        <span class="mode-tag p">Week 2</span>
-        <span class="mode-tag p">Week 3</span>
-        <span class="mode-tag p">Week 4</span>
-      </div>
-      <div class="mode-card-arrow">→</div>
+      <div class="mc-arrow">→</div>
     </div>
 
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PAGE 3 · APP DASHBOARD
-══════════════════════════════════════════ -->
+<!-- ══════════ APP PAGE ══════════ -->
 <div id="pg-app" class="page">
 
-  <!-- Top bar -->
-  <div class="app-topbar">
-    <div class="app-logo">
-      JANAGEN
-      <span>PHARMACIES · HYD</span>
-    </div>
-    <div class="topbar-divider"></div>
+  <div class="app-bar">
+    <div class="app-wordmark">JANAGEN<small>PHARMACIES · HYD</small></div>
+    <div class="vdiv"></div>
     <div class="mode-toggle">
-      <button class="mode-pill active" id="pill-monthly" onclick="switchMode('monthly')">📅 Monthly</button>
-      <button class="mode-pill"        id="pill-weekly"  onclick="switchMode('weekly')">📆 Weekly</button>
+      <button class="mpill active" id="pill-m" onclick="switchMode('monthly')">📅 Monthly</button>
+      <button class="mpill"        id="pill-w" onclick="switchMode('weekly')">📆 Weekly</button>
     </div>
     <div class="spacer"></div>
-    <button class="topbar-btn" onclick="goModeSelect()">← Change View</button>
-    <button class="topbar-btn" onclick="goUpload()">↺ Reupload</button>
-    <button class="btn-download" id="dlBtn" onclick="downloadDashboard()">⬇ Download</button>
+    <button class="ghost-btn" onclick="goModeSelect()">← Views</button>
+    <button class="ghost-btn" onclick="goUpload()">↺ Reupload</button>
+    <button class="dl-btn" id="dlBtn" onclick="downloadDashboard()">⬇ Download</button>
   </div>
 
-  <!-- Month tabs -->
-  <div class="tab-row" id="month-tab-row">
-    <div class="tab-row-label">MONTH</div>
-    <button class="tab-pill active" id="tab-Feb" onclick="switchMonth('Feb')">Feb 2026</button>
-    <button class="tab-pill"        id="tab-Mar" onclick="switchMonth('Mar')">Mar 2026</button>
-    <button class="tab-pill"        id="tab-Apr" onclick="switchMonth('Apr')">Apr 2026</button>
+  <div class="tab-strip" id="month-strip">
+    <div class="strip-lbl">MONTH</div>
+    <button class="tpill on" id="tab-Feb" onclick="switchMonth('Feb')">Feb 2026</button>
+    <button class="tpill"    id="tab-Mar" onclick="switchMonth('Mar')">Mar 2026</button>
+    <button class="tpill"    id="tab-Apr" onclick="switchMonth('Apr')">Apr 2026</button>
   </div>
 
-  <!-- Week tabs (shown only in weekly mode) -->
-  <div class="tab-row" id="week-tab-row" style="display:none;">
-    <div class="tab-row-label">WEEK</div>
-    <button class="tab-pill week-pill active" id="tab-W1" onclick="switchWeek(1)">
-      <span class="wk-num">W1</span><span class="wk-range" id="wk-range-1">—</span>
-    </button>
-    <button class="tab-pill week-pill" id="tab-W2" onclick="switchWeek(2)">
-      <span class="wk-num">W2</span><span class="wk-range" id="wk-range-2">—</span>
-    </button>
-    <button class="tab-pill week-pill" id="tab-W3" onclick="switchWeek(3)">
-      <span class="wk-num">W3</span><span class="wk-range" id="wk-range-3">—</span>
-    </button>
-    <button class="tab-pill week-pill" id="tab-W4" onclick="switchWeek(4)">
-      <span class="wk-num">W4</span><span class="wk-range" id="wk-range-4">—</span>
-    </button>
+  <div class="tab-strip" id="week-strip" style="display:none">
+    <div class="strip-lbl">WEEK</div>
+    <button class="tpill wpill on" id="tab-W1" onclick="switchWeek(1)"><span class="wn">W1</span><span class="wr" id="wr1">—</span></button>
+    <button class="tpill wpill"    id="tab-W2" onclick="switchWeek(2)"><span class="wn">W2</span><span class="wr" id="wr2">—</span></button>
+    <button class="tpill wpill"    id="tab-W3" onclick="switchWeek(3)"><span class="wn">W3</span><span class="wr" id="wr3">—</span></button>
+    <button class="tpill wpill"    id="tab-W4" onclick="switchWeek(4)"><span class="wn">W4</span><span class="wr" id="wr4">—</span></button>
   </div>
 
-  <!-- Ctrl strip -->
-  <div class="ctrl-strip">
-    <div class="ctrl-info"><strong id="ctrl-title">Branch Operations Report</strong></div>
-    <div style="font-size:11px;color:#3d2e55;" id="ctrl-sub">12 branches · JANAGEN Pharmacies</div>
+  <div class="info-strip">
+    <div class="info-strip-l"><strong id="ctrl-title">Branch Operations Report</strong></div>
+    <div class="info-strip-r" id="ctrl-sub">12 branches · JANAGEN Pharmacies</div>
   </div>
 
-  <!-- Dashboard card -->
   <div id="dashboard"></div>
-
 </div>
 
-<!-- Hidden file input -->
-<input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this)">
+<input type="file" id="xi" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this)">
 
 <script>
-/* ══════════════════════════════════════════════════
-   BRAND COLORS
-══════════════════════════════════════════════════ */
-var PLUM   = '#251632';
-var YELLOW = '#FECF00';
-var PEACH  = '#FFBC7D';
-var BGREEN = '#61CE70';
+/* ══════════════════════════ COLORS ══════════════════════════ */
+var P  = '#251632';  // plum
+var P2 = '#362048';  // plum lighter
+var Y  = '#FECF00';  // yellow
+var PC = '#FFBC7D';  // peach
+var G  = '#61CE70';  // green
+var RE = '#e53935';  // red
 
-/* ══════════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════════ */
-var currentMode  = 'monthly';
-var activeMonth  = 'Feb';
-var activeWeek   = 1;
-var loadedFile   = '';
+/* ══════════════════════════ STATE ══════════════════════════ */
+var MODE   = 'monthly';
+var MONTH  = 'Feb';
+var WEEK   = 1;
+var MONTH_DATA={}, MONTH_NOTES={}, WEEK_DATA={}, WEEK_NOTES={};
 
-var MONTH_DATA  = {};
-var MONTH_NOTES = {};
-var WEEK_DATA   = {};   // WEEK_DATA[month][week] = { label, dateRange, branches:[{name,huddles}], maxH }
-var WEEK_NOTES  = {};   // WEEK_NOTES[month][week] = [{name, problems, actions, remarks}]
-
-/* ══════════════════════════════════════════════════
-   CANONICAL BRANCHES
-══════════════════════════════════════════════════ */
-var CANONICAL = [
-  'Suchitra','Chintal Basti','Kachiguda 1','Kachiguda 2',
+var CANONICAL=['Suchitra','Chintal Basti','Kachiguda 1','Kachiguda 2',
   'Panjagutta','Kutbiguda','Nacharam','Marredpally',
-  'Moosarambagh','Dilsukhnagar','KPHB','Manikonda'
-];
+  'Moosarambagh','Dilsukhnagar','KPHB','Manikonda'];
 
-var BRANCH_MAP = {
-  'suchitra':'Suchitra',
-  'chintal basti':'Chintal Basti','chintal':'Chintal Basti',
+var BM={
+  'suchitra':'Suchitra','chintal basti':'Chintal Basti','chintal':'Chintal Basti',
   'kachiguda 1':'Kachiguda 1','kachiguda-1':'Kachiguda 1','kachiguda store 1':'Kachiguda 1',
   'kachiguda 2':'Kachiguda 2','kachiguda-2':'Kachiguda 2','kachiguda store 2':'Kachiguda 2',
   'panjagutta':'Panjagutta','panjgutta':'Panjagutta','punja gutta':'Panjagutta',
-  'kutbiguda':'Kutbiguda','kutbi guda':'Kutbiguda',
-  'nacharam':'Nacharam',
-  'marredpally':'Marredpally','east marredpally':'Marredpally',
-  'moosarambagh':'Moosarambagh',
-  'dilsukhnagar':'Dilsukhnagar',
-  'kphb':'KPHB','kphb colony':'KPHB',
-  'manikonda':'Manikonda',
+  'kutbiguda':'Kutbiguda','kutbi guda':'Kutbiguda','nacharam':'Nacharam',
+  'marredpally':'Marredpally','east marredpally':'Marredpally','moosarambagh':'Moosarambagh',
+  'dilsukhnagar':'Dilsukhnagar','kphb':'KPHB','kphb colony':'KPHB','manikonda':'Manikonda'
 };
 
-function normBranch(s) {
-  return BRANCH_MAP[(s||'').toLowerCase().replace(/\s+/g,' ').trim()] || null;
-}
-function normMonth(s) {
-  s = (s||'').toString().trim().toLowerCase();
-  if (s.startsWith('feb')) return 'Feb';
-  if (s.startsWith('mar')) return 'Mar';
-  if (s.startsWith('apr')) return 'Apr';
-  return null;
-}
-function parseNum(v) { var n=parseFloat(v); return isNaN(n)?0:Math.round(n); }
-function cleanNote(s) {
-  s=(s||'').toString().trim();
-  var l=s.toLowerCase();
-  if(!s||l==='na'||l==='n/a'||l==='nil'||l==='-'||l==='none') return null;
-  return s.length>120 ? s.substring(0,120)+'…' : s;
-}
+function nb(s){return BM[(s||'').toLowerCase().replace(/\s+/g,' ').trim()]||null;}
+function nm(s){s=(s||'').toString().trim().toLowerCase();if(s.startsWith('feb'))return'Feb';if(s.startsWith('mar'))return'Mar';if(s.startsWith('apr'))return'Apr';return null;}
+function pn(v){var n=parseFloat(v);return isNaN(n)?0:Math.round(n);}
+function cn(s){s=(s||'').toString().trim();var l=s.toLowerCase();if(!s||l==='na'||l==='n/a'||l==='nil'||l==='-'||l==='none')return null;return s.length>120?s.substring(0,120)+'…':s;}
+function ew(ds){var pt=(ds||'').split('→');if(pt.length<2)return null;var ep=pt[1].trim().split('-');var d=parseInt(ep[2]||'0');if(isNaN(d)||!d){var sp=pt[0].trim().split('-');d=parseInt(sp[2]||'0');}if(isNaN(d)||!d)return null;return Math.min(Math.ceil(d/7),4);}
 
-/* Week from date-range string "2026-02-09 → 2026-02-10" */
-function extractWeek(dateStr) {
-  var parts = (dateStr||'').split('→');
-  if (parts.length < 2) return null;
-  var endStr = parts[1].trim();
-  var ep = endStr.split('-');
-  if (ep.length < 3) return null;
-  var day = parseInt(ep[2]);
-  if (isNaN(day)||day===0) {
-    var sp = parts[0].trim().split('-');
-    day = parseInt(sp[2]||'0');
-  }
-  if (isNaN(day)||day===0) return null;
-  return Math.min(Math.ceil(day/7), 4);
-}
+function initials(n){var p=n.split(' ');return p.length>=2?p[0][0]+p[1][0]:n.substring(0,2);}
+function avatar(n,sz,bg,col){return'<div style="width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:'+bg+';display:flex;align-items:center;justify-content:center;font-size:'+(sz*.34)+'px;font-weight:800;color:'+col+';flex-shrink:0;letter-spacing:.5px;">'+initials(n).toUpperCase()+'</div>';}
 
-/* Format date range string for display: "2026-02-09 → 2026-02-10" → "Feb 9–10" */
-function fmtDateRange(dateStr) {
-  var MNAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var parts = (dateStr||'').split('→');
-  if (parts.length < 2) return '';
-  try {
-    var s = new Date(parts[0].trim()+'T00:00:00');
-    var e = new Date(parts[1].trim()+'T00:00:00');
-    var sm = MNAMES[s.getMonth()]; var sd = s.getDate();
-    var em = MNAMES[e.getMonth()]; var ed = e.getDate();
-    return sm===em ? sm+' '+sd+'–'+ed : sm+' '+sd+' – '+em+' '+ed;
-  } catch(x) { return dateStr; }
-}
-
-/* ══════════════════════════════════════════════════
-   EXCEL PARSER
-══════════════════════════════════════════════════ */
-function handleFile(input) {
-  var file = input.files[0]; input.value='';
-  if (!file) return;
-  var status = document.getElementById('up-status');
-  status.style.color = '#FFBC7D'; status.textContent = 'Reading file…';
-
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      var wb = XLSX.read(new Uint8Array(e.target.result), { type:'array' });
-      loadedFile = file.name;
-      parseExcel(wb);
-      document.getElementById('mode-filename').textContent = file.name;
-      showPage('pg-mode');
-      status.textContent = '';
-    } catch(err) {
-      status.style.color='#e53935';
-      status.textContent='Error: '+err.message;
-    }
+/* ══════════════════════════ PARSE ══════════════════════════ */
+function handleFile(inp){
+  var f=inp.files[0];inp.value='';if(!f)return;
+  var st=document.getElementById('up-status');
+  st.style.color=PC;st.textContent='Reading file…';
+  var rd=new FileReader();
+  rd.onload=function(e){
+    try{
+      var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+      parse(wb);
+      document.getElementById('mode-fn').textContent=f.name;
+      show('pg-mode');st.textContent='';
+    }catch(er){st.style.color=RE;st.textContent='Error: '+er.message;}
   };
-  reader.onerror=function(){ status.style.color='#e53935'; status.textContent='Could not read file.'; };
-  reader.readAsArrayBuffer(file);
+  rd.onerror=function(){st.style.color=RE;st.textContent='Could not read file.';};
+  rd.readAsArrayBuffer(f);
 }
 
-function parseExcel(wb) {
-  /* ── accumulators ── */
-  var huddleCounts = {}; // [branch][month] = count
-  var mkData       = {}; // [branch][month] = {calls,flyers,stickers,reviews}
-  var notesAcc     = {}; // [branch][month] = {problems:[], actions:[], remarks:[]}
-  var weekCounts   = {}; // [branch][month][week] = count
-  var weekNoteAcc  = {}; // [branch][month][week] = {problems:[], actions:[], remarks:[]}
-  var weekDateMin  = {}; // [month][week] = earliest date string
-  var weekDateMax  = {}; // [month][week] = latest date string
-
-  CANONICAL.forEach(function(b) {
-    huddleCounts[b] = {Feb:0,Mar:0,Apr:0};
-    mkData[b]       = {Feb:{calls:0,flyers:0,stickers:0,reviews:0},Mar:{calls:0,flyers:0,stickers:0,reviews:0},Apr:{calls:0,flyers:0,stickers:0,reviews:0}};
-    notesAcc[b]     = {Feb:{problems:[],actions:[],remarks:[]},Mar:{problems:[],actions:[],remarks:[]},Apr:{problems:[],actions:[],remarks:[]}};
-    weekCounts[b]   = {Feb:{1:0,2:0,3:0,4:0},Mar:{1:0,2:0,3:0,4:0},Apr:{1:0,2:0,3:0,4:0}};
-    weekNoteAcc[b]  = {};
-    ['Feb','Mar','Apr'].forEach(function(m){
-      weekNoteAcc[b][m]={1:{problems:[],actions:[],remarks:[]},2:{problems:[],actions:[],remarks:[]},3:{problems:[],actions:[],remarks:[]},4:{problems:[],actions:[],remarks:[]}};
-    });
+function parse(wb){
+  var hc={},mk={},na={},wc={},wna={},wdmin={},wdmax={};
+  CANONICAL.forEach(function(b){
+    hc[b]={Feb:0,Mar:0,Apr:0};
+    mk[b]={Feb:{c:0,fl:0,st:0,rv:0},Mar:{c:0,fl:0,st:0,rv:0},Apr:{c:0,fl:0,st:0,rv:0}};
+    na[b]={Feb:{p:[],a:[],r:[]},Mar:{p:[],a:[],r:[]},Apr:{p:[],a:[],r:[]}};
+    wc[b]={Feb:{1:0,2:0,3:0,4:0},Mar:{1:0,2:0,3:0,4:0},Apr:{1:0,2:0,3:0,4:0}};
+    wna[b]={};
+    ['Feb','Mar','Apr'].forEach(function(m){wna[b][m]={1:{p:[],a:[],r:[]},2:{p:[],a:[],r:[]},3:{p:[],a:[],r:[]},4:{p:[],a:[],r:[]}};});
   });
-  ['Feb','Mar','Apr'].forEach(function(m){
-    weekDateMin[m]={1:null,2:null,3:null,4:null};
-    weekDateMax[m]={1:null,2:null,3:null,4:null};
-  });
+  ['Feb','Mar','Apr'].forEach(function(m){wdmin[m]={1:null,2:null,3:null,4:null};wdmax[m]={1:null,2:null,3:null,4:null};});
 
-  /* ── HUDDLE DETAILS INCHARGE ── */
-  var ws = wb.Sheets['HUDDLE DETAILS INCHARGE'];
-  if (!ws) throw new Error('"HUDDLE DETAILS INCHARGE" sheet not found.');
-  var rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
-
-  for (var i=1; i<rows.length; i++) {
-    var r = rows[i];
-    var branch = normBranch(r[0]);
-    var month  = normMonth(r[2]);
-    if (!branch||!month) continue;
-
-    huddleCounts[branch][month]++;
-
-    var dateStr = (r[3]||'').toString().trim();
-    var week = extractWeek(dateStr);
-    if (week) {
-      weekCounts[branch][month][week]++;
-      /* Track date range bounds for week label */
-      if (!weekDateMin[month][week] || dateStr < weekDateMin[month][week]) weekDateMin[month][week] = dateStr;
-      if (!weekDateMax[month][week] || dateStr > weekDateMax[month][week]) weekDateMax[month][week] = dateStr;
-
-      /* Weekly notes */
-      var wnd = weekNoteAcc[branch][month][week];
-      var wp = cleanNote(r[8]);  var wa1 = cleanNote(r[21]); var wa2 = cleanNote(r[23]); var wr = cleanNote(r[13]);
-      if (wp && wnd.problems.indexOf(wp)<0) wnd.problems.push(wp);
-      if (wa1&& wnd.actions.indexOf(wa1)<0) wnd.actions.push(wa1);
-      if (wa2&& wnd.actions.indexOf(wa2)<0) wnd.actions.push(wa2);
-      if (wr && wnd.remarks.indexOf(wr)<0)  wnd.remarks.push(wr);
+  var ws=wb.Sheets['HUDDLE DETAILS INCHARGE'];
+  if(!ws)throw new Error('"HUDDLE DETAILS INCHARGE" sheet not found.');
+  var rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+  for(var i=1;i<rows.length;i++){
+    var r=rows[i];var b=nb(r[0]);var m=nm(r[2]);if(!b||!m)continue;
+    hc[b][m]++;
+    var ds=(r[3]||'').toString().trim();var w=ew(ds);
+    if(w){
+      wc[b][m][w]++;
+      if(!wdmin[m][w]||ds<wdmin[m][w])wdmin[m][w]=ds;
+      if(!wdmax[m][w]||ds>wdmax[m][w])wdmax[m][w]=ds;
+      var wnd=wna[b][m][w];
+      var wp=cn(r[8]);var wa1=cn(r[21]);var wa2=cn(r[23]);var wr2=cn(r[13]);
+      if(wp&&wnd.p.indexOf(wp)<0)wnd.p.push(wp);
+      if(wa1&&wnd.a.indexOf(wa1)<0)wnd.a.push(wa1);
+      if(wa2&&wnd.a.indexOf(wa2)<0)wnd.a.push(wa2);
+      if(wr2&&wnd.r.indexOf(wr2)<0)wnd.r.push(wr2);
     }
-
-    /* Monthly notes */
-    var nd = notesAcc[branch][month];
-    var p=cleanNote(r[8]); var a1=cleanNote(r[21]); var a2=cleanNote(r[23]); var rem=cleanNote(r[13]);
-    if (p &&nd.problems.indexOf(p)<0)  nd.problems.push(p);
-    if (a1&&nd.actions.indexOf(a1)<0)  nd.actions.push(a1);
-    if (a2&&nd.actions.indexOf(a2)<0)  nd.actions.push(a2);
-    if (rem&&nd.remarks.indexOf(rem)<0) nd.remarks.push(rem);
+    var nd=na[b][m];
+    var p2=cn(r[8]);var a1=cn(r[21]);var a2=cn(r[23]);var rm=cn(r[13]);
+    if(p2&&nd.p.indexOf(p2)<0)nd.p.push(p2);
+    if(a1&&nd.a.indexOf(a1)<0)nd.a.push(a1);
+    if(a2&&nd.a.indexOf(a2)<0)nd.a.push(a2);
+    if(rm&&nd.r.indexOf(rm)<0)nd.r.push(rm);
   }
+  if(hc['Dilsukhnagar']['Apr']>13)hc['Dilsukhnagar']['Apr']=13;
 
-  /* Cap known data anomaly */
-  if (huddleCounts['Dilsukhnagar']['Apr']>13) huddleCounts['Dilsukhnagar']['Apr']=13;
-
-  /* ── Sheet4 (Marketing) ── */
-  var ws4 = wb.Sheets['Sheet4'];
-  if (ws4) {
-    var rows4 = XLSX.utils.sheet_to_json(ws4,{header:1,defval:''});
-    var cur4='';
-    for (var j=1; j<rows4.length; j++) {
-      var r4=rows4[j];
-      var braw=(r4[0]||'').toString().trim();
-      if (braw){ var nb=normBranch(braw); if(nb) cur4=nb; }
-      var m4=normMonth(r4[1]);
-      if(!cur4||!m4) continue;
-      var mk=mkData[cur4][m4];
-      mk.calls    +=parseNum(r4[2]);
-      mk.flyers   +=parseNum(r4[3]);
-      mk.stickers +=parseNum(r4[4]);
-      mk.reviews  +=parseNum(r4[5]);
+  var ws4=wb.Sheets['Sheet4'];
+  if(ws4){
+    var r4s=XLSX.utils.sheet_to_json(ws4,{header:1,defval:''});var cb='';
+    for(var j=1;j<r4s.length;j++){
+      var rr=r4s[j];var br=(rr[0]||'').toString().trim();
+      if(br){var xb=nb(br);if(xb)cb=xb;}
+      var mm=nm(rr[1]);if(!cb||!mm)continue;
+      var mx=mk[cb][mm];mx.c+=pn(rr[2]);mx.fl+=pn(rr[3]);mx.st+=pn(rr[4]);mx.rv+=pn(rr[5]);
     }
   }
 
-  /* ── Build MONTH_DATA & MONTH_NOTES ── */
-  var MONTHS=['Feb','Mar','Apr'];
-  var LABELS={Feb:'February 2026',Mar:'March 2026',Apr:'April 2026'};
-
-  MONTH_DATA={};  MONTH_NOTES={};
-  MONTHS.forEach(function(m) {
-    var hasMk=CANONICAL.some(function(b){var mk=mkData[b][m];return mk.calls+mk.flyers+mk.stickers+mk.reviews>0;});
-    MONTH_DATA[m]={
-      label:LABELS[m], maxH:13,
-      marketingNote: hasMk?LABELS[m]:LABELS[m]+' (marketing data not yet reported)',
-      branches:CANONICAL.map(function(b){var mk=mkData[b][m];return{name:b,huddles:Math.min(huddleCounts[b][m],13),calls:mk.calls,flyers:mk.flyers,stickers:mk.stickers,reviews:mk.reviews};})
-    };
-    MONTH_NOTES[m]=CANONICAL.map(function(b){var nd=notesAcc[b][m];return{name:b,problems:nd.problems.slice(0,5),actions:nd.actions.slice(0,6),remarks:nd.remarks.slice(0,4)};});
+  var MS=['Feb','Mar','Apr'];var LB={Feb:'February 2026',Mar:'March 2026',Apr:'April 2026'};
+  MONTH_DATA={};MONTH_NOTES={};
+  MS.forEach(function(m){
+    var hmk=CANONICAL.some(function(b){var x=mk[b][m];return x.c+x.fl+x.st+x.rv>0;});
+    MONTH_DATA[m]={label:LB[m],maxH:13,mkNote:hmk?LB[m]:LB[m]+' (marketing data not yet reported)',hasMk:hmk,
+      branches:CANONICAL.map(function(b){var x=mk[b][m];return{name:b,h:Math.min(hc[b][m],13),c:x.c,fl:x.fl,st:x.st,rv:x.rv};})};
+    MONTH_NOTES[m]=CANONICAL.map(function(b){var nd=na[b][m];return{name:b,p:nd.p.slice(0,5),a:nd.a.slice(0,6),r:nd.r.slice(0,4)};});
   });
 
-  /* ── Build WEEK_DATA & WEEK_NOTES ── */
-  WEEK_DATA={}; WEEK_NOTES={};
-  MONTHS.forEach(function(m) {
-    WEEK_DATA[m]={}; WEEK_NOTES[m]={};
-    [1,2,3,4].forEach(function(w) {
-      var branchesW = CANONICAL.map(function(b){return{name:b,huddles:weekCounts[b][m][w]};});
-      var maxH = Math.max.apply(null, branchesW.map(function(b){return b.huddles;}));
-      if(maxH<1) maxH=1;
-
-      /* Date range label for this week */
-      var drMin=weekDateMin[m][w]; var drMax=weekDateMax[m][w];
-      var drLabel='';
-      if(drMin&&drMax){
-        var partsA=drMin.split('→'); var partsB=drMax.split('→');
-        var startStr=(partsA[0]||'').trim(); var endStr=(partsB[1]||'').trim();
+  WEEK_DATA={};WEEK_NOTES={};
+  MS.forEach(function(m){
+    WEEK_DATA[m]={};WEEK_NOTES[m]={};
+    [1,2,3,4].forEach(function(w){
+      var bw=CANONICAL.map(function(b){return{name:b,h:wc[b][m][w]};});
+      var mxH=Math.max.apply(null,bw.map(function(b){return b.h;}));if(mxH<1)mxH=1;
+      var any=bw.some(function(b){return b.h>0;});
+      var drLbl='';
+      if(wdmin[m][w]&&wdmax[m][w]){
+        var MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         try{
-          var MNAMES=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          var sd=new Date(startStr+'T00:00:00'); var ed=new Date(endStr+'T00:00:00');
-          var sm2=MNAMES[sd.getMonth()]; var sd2=sd.getDate();
-          var em2=MNAMES[ed.getMonth()]; var ed2=ed.getDate();
-          drLabel = sm2===em2 ? sm2+' '+sd2+'–'+ed2 : sm2+' '+sd2+' – '+em2+' '+ed2;
+          var ptA=wdmin[m][w].split('→');var ptB=wdmax[m][w].split('→');
+          var sd2=new Date(ptA[0].trim()+'T00:00:00');var ed2=new Date(ptB[1].trim()+'T00:00:00');
+          var sm=MN[sd2.getMonth()];var sdd=sd2.getDate();var em=MN[ed2.getMonth()];var edd=ed2.getDate();
+          drLbl=sm===em?sm+' '+sdd+'–'+edd:sm+' '+sdd+' – '+em+' '+edd;
         }catch(x){}
       }
-
-      var hasAny=branchesW.some(function(b){return b.huddles>0;});
-      WEEK_DATA[m][w]={
-        label:'Week '+w+' · '+LABELS[m],
-        dateRange: drLabel||'—',
-        branches: branchesW,
-        maxH: maxH,
-        hasData: hasAny
-      };
-      WEEK_NOTES[m][w]=CANONICAL.map(function(b){
-        var nd=weekNoteAcc[b][m][w];
-        return{name:b,problems:nd.problems.slice(0,4),actions:nd.actions.slice(0,5),remarks:nd.remarks.slice(0,3)};
-      });
+      WEEK_DATA[m][w]={label:'Week '+w+' · '+LB[m],dr:drLbl||'—',branches:bw,maxH:mxH,hasData:any};
+      WEEK_NOTES[m][w]=CANONICAL.map(function(b){var nd=wna[b][m][w];return{name:b,p:nd.p.slice(0,4),a:nd.a.slice(0,5),r:nd.r.slice(0,3)};});
     });
   });
 }
 
-/* ══════════════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════════════ */
-function showPage(id) {
-  ['pg-upload','pg-mode','pg-app'].forEach(function(p){
-    var el=document.getElementById(p);
-    el.classList.remove('active');
-  });
-  document.getElementById(id).classList.add('active');
+/* ══════════════════════════ NAV ══════════════════════════ */
+function show(id){['pg-upload','pg-mode','pg-app'].forEach(function(p){document.getElementById(p).classList.remove('active');});document.getElementById(id).classList.add('active');}
+function goUpload(){show('pg-upload');}
+function goModeSelect(){show('pg-mode');}
+
+function enterMode(mode){
+  MODE=mode;show('pg-app');
+  document.getElementById('pill-m').classList.toggle('active',mode==='monthly');
+  document.getElementById('pill-w').classList.toggle('active',mode==='weekly');
+  document.getElementById('week-strip').style.display=mode==='weekly'?'flex':'none';
+  MONTH='Feb';
+  ['Feb','Mar','Apr'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('on',x==='Feb');});
+  if(mode==='monthly'){renderM('Feb');}
+  else{WEEK=1;updWkTabs('Feb');renderW('Feb',1);}
 }
-function goUpload()    { showPage('pg-upload'); }
-function goModeSelect(){ showPage('pg-mode'); }
-
-function enterMode(mode) {
-  currentMode = mode;
-  showPage('pg-app');
-  document.getElementById('pill-monthly').classList.toggle('active', mode==='monthly');
-  document.getElementById('pill-weekly').classList.toggle('active',  mode==='weekly');
-  document.getElementById('week-tab-row').style.display = mode==='weekly' ? 'flex' : 'none';
-
-  activeMonth='Feb';
-  ['Feb','Mar','Apr'].forEach(function(x){
-    document.getElementById('tab-'+x).classList.toggle('active', x==='Feb');
-  });
-
-  if (mode==='monthly') {
-    renderMonthly('Feb');
-  } else {
-    activeWeek=1;
-    updateWeekTabs('Feb');
-    renderWeekly('Feb',1);
-  }
+function switchMode(m){if(m!==MODE)enterMode(m);}
+function switchMonth(m){
+  MONTH=m;
+  ['Feb','Mar','Apr'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('on',x===m);});
+  if(MODE==='monthly')renderM(m);
+  else{WEEK=1;updWkTabs(m);renderW(m,1);}
 }
-
-function switchMode(mode) {
-  if (mode===currentMode) return;
-  enterMode(mode);
+function switchWeek(w){
+  WEEK=w;[1,2,3,4].forEach(function(x){document.getElementById('tab-W'+x).classList.toggle('on',x===w);});
+  renderW(MONTH,w);
 }
-
-function switchMonth(m) {
-  activeMonth=m;
-  ['Feb','Mar','Apr'].forEach(function(x){
-    document.getElementById('tab-'+x).classList.toggle('active', x===m);
-  });
-  if (currentMode==='monthly') {
-    renderMonthly(m);
-  } else {
-    activeWeek=1;
-    updateWeekTabs(m);
-    renderWeekly(m,1);
-  }
-}
-
-function switchWeek(w) {
-  activeWeek=w;
-  [1,2,3,4].forEach(function(x){
-    document.getElementById('tab-W'+x).classList.toggle('active', x===w);
-  });
-  renderWeekly(activeMonth,w);
-}
-
-function updateWeekTabs(m) {
+function updWkTabs(m){
   [1,2,3,4].forEach(function(w){
-    document.getElementById('tab-W'+w).classList.toggle('active', w===1);
+    document.getElementById('tab-W'+w).classList.toggle('on',w===1);
     var wd=WEEK_DATA[m]&&WEEK_DATA[m][w];
-    document.getElementById('wk-range-'+w).textContent = wd ? wd.dateRange : '—';
+    document.getElementById('wr'+w).textContent=wd?wd.dr:'—';
   });
 }
 
-/* ══════════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════════ */
-function perfBarColor(p)  { return p===100?BGREEN:p>=85?YELLOW:p>=77?PEACH:'#e53935'; }
-function perfTextColor(p) { return p===100?'#1a5e20':p>=85?'#7a5f00':p>=77?'#7a4000':'#c62828'; }
+/* ══════════════════════════ HELPERS ══════════════════════════ */
+function barC(p){return p===100?G:p>=85?Y:p>=77?PC:RE;}
+function txtC(p){return p===100?'#1a5e20':p>=85?'#7a5f00':p>=77?'#7a4000':'#c62828';}
 
-function sectionHeader(title) {
-  return '<div style="background:'+PLUM+';padding:14px 20px;font-size:10.5px;font-weight:800;letter-spacing:2.5px;color:#fff;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;">' +
-    '<span>'+title+'</span>' +
-    '<div style="width:28px;height:3px;background:'+YELLOW+';border-radius:2px;"></div>' +
-  '</div>';
+function secHead(title){
+  return '<div style="background:linear-gradient(135deg,'+P+' 0%,'+P2+' 100%);padding:15px 24px;display:flex;align-items:center;justify-content:space-between;">'
+    +'<span style="font-size:10px;font-weight:800;color:#fff;letter-spacing:2.5px;text-transform:uppercase;">'+title+'</span>'
+    +'<div style="display:flex;gap:4px;">'
+    +'<div style="width:6px;height:6px;border-radius:50%;background:'+Y+';opacity:.9;"></div>'
+    +'<div style="width:6px;height:6px;border-radius:50%;background:'+PC+';opacity:.6;"></div>'
+    +'<div style="width:6px;height:6px;border-radius:50%;background:'+G+';opacity:.5;"></div>'
+    +'</div></div>';
 }
 
-/* ══════════════════════════════════════════════════
-   RENDER MONTHLY
-══════════════════════════════════════════════════ */
-function renderMonthly(m) {
-  var md=MONTH_DATA[m]; var notes=MONTH_NOTES[m];
-  var branches=md.branches; var maxH=md.maxH;
+function kpiCard(lbl, val, sub, acColor, icon){
+  return '<div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(37,22,50,.10);border:1px solid #EDE8F5;">'
+    +'<div style="height:4px;background:'+acColor+';"></div>'
+    +'<div style="padding:18px 18px 16px;">'
+    +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">'
+    +'<div style="font-size:8.5px;font-weight:800;color:#b0a0c0;letter-spacing:2px;text-transform:uppercase;line-height:1.3;max-width:80px;">'+lbl+'</div>'
+    +'<div style="width:34px;height:34px;border-radius:10px;background:rgba(37,22,50,.06);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">'+icon+'</div>'
+    +'</div>'
+    +'<div style="font-size:34px;font-weight:900;color:'+P+';line-height:1;letter-spacing:-1px;">'+val+'</div>'
+    +'<div style="font-size:9.5px;color:#c0b0d8;margin-top:6px;line-height:1.4;">'+sub+'</div>'
+    +'</div></div>';
+}
 
-  var totals=branches.reduce(function(acc,b){acc.huddles+=b.huddles;acc.calls+=b.calls;acc.flyers+=b.flyers;acc.stickers+=b.stickers;acc.reviews+=b.reviews;return acc;},{huddles:0,calls:0,flyers:0,stickers:0,reviews:0});
-  var overallPct=Math.round(totals.huddles/(branches.length*maxH)*100);
-  var hasMk=totals.calls+totals.flyers+totals.stickers+totals.reviews>0;
+function noteCard(n, week){
+  var pi=n.p.map(function(x){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+  var ai=n.a.map(function(x){return'<li style="font-size:10.5px;color:'+P+';line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+  var ri=n.r.map(function(x){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+  var empty=!n.p.length&&!n.a.length&&!n.r.length;
+  var badge=week?('<span style="background:'+(week.h>0?'rgba(97,206,112,.15)':'rgba(229,57,53,.12)')+';color:'+(week.h>0?'#1a5e20':'#c62828')+';font-size:8px;font-weight:800;padding:2px 8px;border-radius:10px;">'+(week.h>0?week.h+' huddle'+(week.h>1?'s':''):'No Huddle')+'</span>'):'';
+  return '<div style="background:#fff;border-radius:14px;border:1px solid #EDE8F5;overflow:hidden;box-shadow:0 2px 12px rgba(37,22,50,.07);">'
+    +'<div style="background:linear-gradient(135deg,'+P+','+P2+');padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">'
+    +'<div style="display:flex;align-items:center;gap:8px;">'+avatar(n.name,26,Y,P)+'<span style="font-size:10.5px;font-weight:800;color:#fff;letter-spacing:.8px;text-transform:uppercase;">'+n.name+'</span></div>'
+    +(badge||'<div style="width:14px;height:3px;background:'+Y+';border-radius:2px;"></div>')
+    +'</div>'
+    +'<div style="padding:13px 14px;">'
+    +(empty?'<div style="font-size:11px;color:#ddd;text-align:center;padding:8px 0;">No notes recorded</div>':'')
+    +(n.p.length?'<div style="margin-bottom:10px;border-left:3px solid #ef5350;padding-left:10px;">'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#ef5350;text-transform:uppercase;margin-bottom:6px;">PROBLEMS</div>'
+      +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+pi+'</ul></div>':'')
+    +(n.a.length?'<div style="margin-bottom:'+(n.r.length?'10px':'0')+'";border-left:3px solid '+Y+';padding-left:10px;">'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#9a7f00;text-transform:uppercase;margin-bottom:6px;">ACTION POINTS</div>'
+      +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ai+'</ul></div>':'')
+    +(n.r.length?'<div style="border-left:3px solid '+PC+';padding-left:10px;">'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#a05a20;text-transform:uppercase;margin-bottom:6px;">REMARKS</div>'
+      +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ri+'</ul></div>':'')
+    +'</div></div>';
+}
+
+/* ══════════════════════════ RENDER MONTHLY ══════════════════════════ */
+function renderM(m){
+  var md=MONTH_DATA[m];var notes=MONTH_NOTES[m];
+  var br=md.branches;var maxH=md.maxH;
+  var tot=br.reduce(function(acc,b){acc.h+=b.h;acc.c+=b.c;acc.fl+=b.fl;acc.st+=b.st;acc.rv+=b.rv;return acc;},{h:0,c:0,fl:0,st:0,rv:0});
+  var ovPct=Math.round(tot.h/(br.length*maxH)*100);
   var dash='—';
 
   document.getElementById('ctrl-title').textContent='Branch Operations Report — '+md.label;
   document.getElementById('ctrl-sub').textContent='12 branches · '+md.label;
 
   /* KPIs */
-  var kpis=[
-    {label:'TOTAL HUDDLES', val:totals.huddles, sub:branches.length+' branches'},
-    {label:'CALLS MADE',    val:hasMk?totals.calls.toLocaleString():dash, sub:md.marketingNote},
-    {label:'FLYERS OUT',    val:hasMk?totals.flyers.toLocaleString():dash, sub:md.marketingNote},
-    {label:'GOOGLE REVIEWS',val:hasMk?totals.reviews.toLocaleString():dash, sub:md.marketingNote},
-  ];
-  var kpiHtml=kpis.map(function(k){
-    return '<div style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(37,22,50,0.10);border:1px solid #f0ebf8;">' +
-      '<div style="background:'+PLUM+';padding:10px 16px;"><div style="font-size:8.5px;font-weight:800;color:'+PEACH+';letter-spacing:2px;text-transform:uppercase;">'+k.label+'</div></div>' +
-      '<div style="padding:16px 16px 14px;text-align:center;">' +
-        '<div style="font-size:32px;font-weight:900;color:'+PLUM+';line-height:1;">'+k.val+'</div>' +
-        '<div style="font-size:9.5px;color:#aaa;margin-top:5px;line-height:1.4;">'+k.sub+'</div>' +
-        '<div style="width:32px;height:3px;background:'+YELLOW+';margin:10px auto 0;border-radius:2px;"></div>' +
-      '</div></div>';
-  }).join('');
+  var kh=kpiCard('Total Huddles',tot.h,br.length+' branches · '+md.label,Y,'🤝')
+    +kpiCard('Calls Made',md.hasMk?tot.c.toLocaleString():dash,md.mkNote,'#5c6bc0','📞')
+    +kpiCard('Flyers Out',md.hasMk?tot.fl.toLocaleString():dash,md.mkNote,'#e65100','📄')
+    +kpiCard('Google Reviews',md.hasMk?tot.rv.toLocaleString():dash,md.mkNote,'#7b1fa2','⭐');
 
   /* Huddle rows */
-  var sortedH=branches.slice().sort(function(a,b){return b.huddles-a.huddles;});
-  var huddleRows=sortedH.map(function(b){
-    var pct=Math.round(b.huddles/maxH*100);
-    return '<div style="display:grid;grid-template-columns:148px 1fr 70px 82px;align-items:center;padding:11px 20px;border-bottom:1px solid #f5f0fc;">' +
-      '<div style="font-size:11.5px;font-weight:700;color:'+PLUM+';">'+b.name+'</div>' +
-      '<div style="background:#ede8f5;height:9px;border-radius:5px;overflow:hidden;margin:0 12px;">' +
-        '<div style="width:'+pct+'%;height:100%;background:'+perfBarColor(pct)+';border-radius:5px;transition:width 0.4s ease;"></div>' +
-      '</div>' +
-      '<div style="font-size:12px;font-weight:800;color:'+perfTextColor(pct)+';text-align:center;">'+pct+'%</div>' +
-      '<div style="font-size:10.5px;color:#bbb;text-align:right;">'+b.huddles+'/'+maxH+'</div>' +
-    '</div>';
-  }).join('');
-
-  /* Marketing table */
-  var mkS=branches.slice().sort(function(a,b){return(b.calls+b.flyers+b.stickers+b.reviews)-(a.calls+a.flyers+a.stickers+a.reviews);});
-  var mktRows=mkS.map(function(b,i){
-    var tot=b.calls+b.flyers+b.stickers+b.reviews;
-    return '<tr style="background:'+(i%2===0?'#fff':'#faf8ff')+';"><td style="padding:9px 16px;font-size:11.5px;font-weight:700;color:'+PLUM+';border-bottom:1px solid #f0ecf8;">'+b.name+'</td>'+
-      '<td style="padding:9px;font-size:11.5px;font-weight:600;color:#1565c0;text-align:center;border-bottom:1px solid #f0ecf8;">'+(b.calls||dash)+'</td>'+
-      '<td style="padding:9px;font-size:11.5px;font-weight:600;color:#e65100;text-align:center;border-bottom:1px solid #f0ecf8;">'+(b.flyers||dash)+'</td>'+
-      '<td style="padding:9px;font-size:11.5px;font-weight:600;color:#2e7d32;text-align:center;border-bottom:1px solid #f0ecf8;">'+(b.stickers||dash)+'</td>'+
-      '<td style="padding:9px;font-size:11.5px;font-weight:600;color:#7b1fa2;text-align:center;border-bottom:1px solid #f0ecf8;">'+(b.reviews||dash)+'</td>'+
-      '<td style="padding:9px;font-size:12px;font-weight:800;color:'+(tot>0?PLUM:'#ccc')+';text-align:center;border-bottom:1px solid #f0ecf8;">'+(tot>0?tot:dash)+'</td></tr>';
+  var hrows=br.slice().sort(function(a,b){return b.h-a.h;}).map(function(b){
+    var pct=Math.round(b.h/maxH*100);
+    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid #F5F0FC;">'
+      +avatar(b.name,34,P,Y)
+      +'<div style="font-size:11.5px;font-weight:700;color:'+P+';min-width:110px;">'+b.name+'</div>'
+      +'<div style="flex:1;background:#EDE8F5;height:11px;border-radius:6px;overflow:hidden;">'
+      +'<div style="width:'+pct+'%;height:100%;background:'+barC(pct)+';border-radius:6px;"></div></div>'
+      +'<div style="font-size:12px;font-weight:800;color:'+txtC(pct)+';min-width:40px;text-align:right;">'+pct+'%</div>'
+      +'<div style="font-size:10.5px;color:#C0B0D8;min-width:52px;text-align:right;">'+b.h+'/'+maxH+'</div>'
+      +'</div>';
   }).join('');
 
   /* Top 3 */
-  var top3=branches.slice().filter(function(b){return b.calls+b.flyers+b.stickers+b.reviews>0;}).sort(function(a,b){return(b.calls+b.flyers+b.stickers+b.reviews)-(a.calls+a.flyers+a.stickers+a.reviews);}).slice(0,3);
-  var rs=[{bg:YELLOW,col:PLUM,nc:'#7a5f00'},{bg:PLUM,col:'#fff',nc:PLUM},{bg:PEACH,col:PLUM,nc:'#7a4000'}];
-  var top3Html=top3.length>0?top3.map(function(b,i){var tot=b.calls+b.flyers+b.stickers+b.reviews;var r=rs[i];return'<div style="background:#faf8ff;border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin:10px 14px 0;border:1px solid #ede8f5;">'+'<div style="width:42px;height:42px;border-radius:50%;background:'+r.bg+';display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:'+r.col+';flex-shrink:0;">'+(i+1)+'</div>'+'<div style="flex:1;"><div style="font-size:13.5px;font-weight:800;color:'+PLUM+';">'+b.name+'</div><div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap;"><span style="font-size:10px;color:#1565c0;font-weight:600;">Calls:'+b.calls+'</span><span style="font-size:10px;color:#e65100;font-weight:600;">Flyers:'+b.flyers+'</span><span style="font-size:10px;color:#2e7d32;font-weight:600;">Stickers:'+b.stickers+'</span><span style="font-size:10px;color:#7b1fa2;font-weight:600;">Reviews:'+b.reviews+'</span></div></div>'+'<div style="font-size:22px;font-weight:900;color:'+r.nc+';">'+tot+'</div></div>';}).join(''):'<div style="padding:24px;text-align:center;color:#ccc;font-size:12px;">Marketing data not yet reported</div>';
+  var top3=br.slice().filter(function(b){return b.c+b.fl+b.st+b.rv>0;}).sort(function(a,b){return(b.c+b.fl+b.st+b.rv)-(a.c+a.fl+a.st+a.rv);}).slice(0,3);
+  var topStyles=[{bg:Y,fg:P,nr:'#7a5f00',lbl:'🥇'},{bg:P2,fg:'#fff',nr:Y,lbl:'🥈'},{bg:'#f5e8d8',fg:P,nr:'#7a4000',lbl:'🥉'}];
+  var topHtml=top3.length>0?top3.map(function(b,i){
+    var tot2=b.c+b.fl+b.st+b.rv;var s=topStyles[i];
+    return '<div style="margin:10px 16px 0;background:#FAFAFF;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;border:1px solid #EDE8F5;">'
+      +'<div style="font-size:26px;flex-shrink:0;">'+s.lbl+'</div>'
+      +avatar(b.name,38,s.bg,s.fg)
+      +'<div style="flex:1;">'
+      +'<div style="font-size:13px;font-weight:800;color:'+P+';">'+b.name+'</div>'
+      +'<div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">'
+      +'<span style="font-size:10px;color:#5c6bc0;font-weight:600;">Calls: '+b.c+'</span>'
+      +'<span style="font-size:10px;color:#e65100;font-weight:600;">Flyers: '+b.fl+'</span>'
+      +'<span style="font-size:10px;color:#2e7d32;font-weight:600;">Stickers: '+b.st+'</span>'
+      +'<span style="font-size:10px;color:#7b1fa2;font-weight:600;">Reviews: '+b.rv+'</span>'
+      +'</div></div>'
+      +'<div style="font-size:24px;font-weight:900;color:'+s.nr+';">'+tot2+'</div></div>';
+  }).join(''):('<div style="padding:28px;text-align:center;color:#D0C0E8;font-size:12px;">Marketing data not yet reported for this month</div>');
 
-  /* Notes */
-  var notesHtml=notes.map(function(n){
-    var pi=n.problems.map(function(p){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.55;margin-bottom:3px;">'+p+'</li>';}).join('');
-    var ai=n.actions.map(function(a){return'<li style="font-size:10.5px;color:'+PLUM+';line-height:1.55;margin-bottom:3px;">'+a+'</li>';}).join('');
-    var ri=n.remarks.map(function(r){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.55;margin-bottom:3px;">'+r+'</li>';}).join('');
-    var noData=!n.problems.length&&!n.actions.length&&!n.remarks.length;
-    return'<div style="background:#fff;border-radius:12px;border:1px solid #ede8f5;overflow:hidden;box-shadow:0 2px 10px rgba(37,22,50,0.07);">'+
-      '<div style="background:'+PLUM+';padding:9px 14px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:10.5px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;">'+n.name+'</span><div style="width:16px;height:3px;background:'+YELLOW+';border-radius:2px;"></div></div>'+
-      '<div style="padding:12px 14px;">'+(noData?'<div style="font-size:11px;color:#ddd;text-align:center;padding:10px 0;">No notes recorded</div>':'')+
-      (n.problems.length?'<div style="margin-bottom:9px;"><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:#b71c1c;text-transform:uppercase;margin-bottom:5px;">⬤ PROBLEMS</div><ul style="padding-left:14px;margin:0;">'+pi+'</ul></div>':'')+
-      (n.actions.length?'<div style="margin-bottom:'+(n.remarks.length?'9px':'0')+'"><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:'+PLUM+';text-transform:uppercase;margin-bottom:5px;">⬤ ACTIONS</div><ul style="padding-left:14px;margin:0;">'+ai+'</ul></div>':'')+
-      (n.remarks.length?'<div><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:#7a4000;text-transform:uppercase;margin-bottom:5px;">⬤ REMARKS</div><ul style="padding-left:14px;margin:0;">'+ri+'</ul></div>':'')+
-      '</div></div>';
+  /* Marketing table */
+  var mkRows=br.slice().sort(function(a,b){return(b.c+b.fl+b.st+b.rv)-(a.c+a.fl+a.st+a.rv);}).map(function(b,i){
+    var tot2=b.c+b.fl+b.st+b.rv;var bg=i%2===0?'#fff':'#FAFAFF';
+    return '<tr style="background:'+bg+';">'
+      +'<td style="padding:10px 18px;font-size:11.5px;font-weight:700;color:'+P+';border-bottom:1px solid #F0EAF8;">'
+      +'<div style="display:flex;align-items:center;gap:8px;">'+avatar(b.name,28,P,Y)+b.name+'</div></td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#3949ab;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.c||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#e65100;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.fl||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#2e7d32;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.st||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#7b1fa2;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.rv||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:12px;font-weight:900;color:'+(tot2>0?P:'#ccc')+';text-align:center;border-bottom:1px solid #F0EAF8;">'+(tot2>0?tot2:dash)+'</td>'
+      +'</tr>';
   }).join('');
 
-  /* Totals */
-  var tC=hasMk?totals.calls.toLocaleString():dash;
-  var tF=hasMk?totals.flyers.toLocaleString():dash;
-  var tS=hasMk?totals.stickers.toLocaleString():dash;
-  var tR=hasMk?totals.reviews.toLocaleString():dash;
-  var tT=hasMk?(totals.calls+totals.flyers+totals.stickers+totals.reviews).toLocaleString():dash;
+  var tC=md.hasMk?tot.c.toLocaleString():dash;var tF=md.hasMk?tot.fl.toLocaleString():dash;
+  var tS=md.hasMk?tot.st.toLocaleString():dash;var tR=md.hasMk?tot.rv.toLocaleString():dash;
+  var tT=md.hasMk?(tot.c+tot.fl+tot.st+tot.rv).toLocaleString():dash;
 
-  document.getElementById('dashboard').innerHTML =
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">' +
+  var notesH=notes.map(function(n){return noteCard(n,null);}).join('');
 
-  // HEADER
-  '<div style="background:'+PLUM+';padding:30px 44px 26px;text-align:center;">' +
-    '<div style="font-size:10px;font-weight:700;letter-spacing:4px;color:rgba(255,188,125,0.7);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · HYDERABAD</div>' +
-    '<div style="font-size:46px;font-weight:900;color:'+YELLOW+';letter-spacing:3px;line-height:1;">TOGETHER WE ACHIEVE</div>' +
-    '<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;">' +
-      '<div style="height:1px;width:60px;background:rgba(254,207,0,0.2);"></div>' +
-      '<div style="background:'+YELLOW+';color:'+PLUM+';padding:8px 26px;border-radius:8px;font-size:11.5px;font-weight:800;letter-spacing:2px;">BRANCH OPERATIONS REPORT</div>' +
-      '<div style="border:1.5px solid rgba(254,207,0,0.3);padding:8px 20px;border-radius:8px;font-size:11.5px;font-weight:600;color:rgba(255,255,255,0.75);">'+md.label.toUpperCase()+'</div>' +
-      '<div style="height:1px;width:60px;background:rgba(254,207,0,0.2);"></div>' +
-    '</div>' +
-  '</div>' +
+  document.getElementById('dashboard').innerHTML=
+  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
 
-  // KPIs
-  '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:22px 36px 20px;">'+kpiHtml+'</div>' +
+  /* ── HEADER ── */
+  +'<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:36px 48px 32px;text-align:center;position:relative;overflow:hidden;">'
+  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
+  +'<div style="position:relative;">'
+  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.55);text-transform:uppercase;margin-bottom:12px;">JANAGEN PHARMACIES · HYDERABAD</div>'
+  +'<div style="font-size:50px;font-weight:900;color:'+Y+';letter-spacing:3px;line-height:1.05;text-shadow:0 0 60px rgba(254,207,0,.2);">TOGETHER WE ACHIEVE</div>'
+  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:16px auto;border-radius:2px;"></div>'
+  +'<div style="display:inline-flex;align-items:center;gap:10px;margin-top:4px;">'
+  +'<div style="background:'+Y+';color:'+P+';padding:9px 28px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">BRANCH OPERATIONS REPORT</div>'
+  +'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 20px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);">'+md.label.toUpperCase()+'</div>'
+  +'</div></div></div>'
 
-  // HUDDLE BANNER
-  '<div style="margin:0 36px 22px;background:'+PLUM+';border-radius:14px;padding:18px 30px;display:flex;align-items:center;justify-content:center;gap:22px;">' +
-    '<div style="font-size:13px;font-weight:700;color:#fff;letter-spacing:2.5px;text-transform:uppercase;">Overall Huddle Completion</div>' +
-    '<div style="width:1px;height:28px;background:rgba(254,207,0,0.25);"></div>' +
-    '<div style="font-size:44px;font-weight:900;color:'+YELLOW+';">'+overallPct+'%</div>' +
-    '<div style="font-size:12px;color:rgba(255,188,125,0.8);">'+totals.huddles+' / '+(branches.length*maxH)+' sessions</div>' +
-  '</div>' +
+  /* ── KPIs ── */
+  +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 38px 20px;">'+kh+'</div>'
 
-  // MAIN GRID
-  '<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 36px 22px;">' +
-    '<div style="border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 14px rgba(37,22,50,0.08);">'+sectionHeader('Huddle Attendance — '+md.label)+
-      '<div style="display:grid;grid-template-columns:148px 1fr 70px 82px;padding:9px 20px;font-size:8.5px;font-weight:700;color:#b0a0c0;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid #f5f0fc;"><div>Branch</div><div style="margin:0 12px;">Progress</div><div style="text-align:center;">Score</div><div style="text-align:right;">Sessions</div></div>'+
-      huddleRows+
-      '<div style="display:flex;gap:14px;padding:10px 20px;border-top:1px solid #f5f0fc;background:#faf8ff;">'+
-        '<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#555;"><div style="width:9px;height:9px;border-radius:50%;background:'+BGREEN+';"></div>100%</div>'+
-        '<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#555;"><div style="width:9px;height:9px;border-radius:50%;background:'+YELLOW+';"></div>85–99%</div>'+
-        '<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#555;"><div style="width:9px;height:9px;border-radius:50%;background:'+PEACH+';"></div>77–84%</div>'+
-        '<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#555;"><div style="width:9px;height:9px;border-radius:50%;background:#e53935;"></div>&lt;77%</div>'+
-      '</div></div>' +
-    '<div style="border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 14px rgba(37,22,50,0.08);">'+sectionHeader('Top Marketing Branches')+top3Html+
-      '<div style="padding:12px 14px 4px;font-size:9.5px;color:#ccc;text-align:center;">Ranked by Calls + Flyers + Stickers + Reviews</div><div style="height:14px;"></div></div>' +
-  '</div>' +
+  /* ── OVERALL HUDDLE BANNER ── */
+  +'<div style="margin:0 38px 24px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:20px 32px;display:flex;align-items:center;gap:24px;">'
+  +'<div style="flex:1;">'
+  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,188,125,.65);text-transform:uppercase;margin-bottom:4px;">Overall Huddle Completion</div>'
+  +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.5);">'+tot.h+' sessions across all branches</div>'
+  +'</div>'
+  +'<div style="text-align:right;">'
+  +'<div style="font-size:52px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-2px;">'+ovPct+'%</div>'
+  +'<div style="font-size:10.5px;color:rgba(255,188,125,.6);margin-top:2px;">'+tot.h+' / '+(br.length*maxH)+' max sessions</div>'
+  +'</div>'
+  +'<div style="width:100px;">'
+  +'<svg viewBox="0 0 36 36" style="width:100px;height:100px;transform:rotate(-90deg);">'
+  +'<circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>'
+  +'<circle cx="18" cy="18" r="15.9" fill="none" stroke="'+Y+'" stroke-width="3" stroke-dasharray="'+ovPct+' '+(100-ovPct)+'" stroke-linecap="round"/>'
+  +'</svg>'
+  +'</div>'
+  +'</div>'
 
-  // MARKETING TABLE
-  '<div style="margin:0 36px 26px;border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 14px rgba(37,22,50,0.08);">'+sectionHeader('Marketing Activities — '+md.label)+
-    '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#faf8ff;">'+
-      '<th style="padding:10px 16px;font-size:9px;font-weight:700;color:#999;letter-spacing:1.5px;text-align:left;border-bottom:2px solid #ede8f5;">BRANCH</th>'+
-      '<th style="padding:10px;font-size:9px;font-weight:700;color:#1565c0;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">CALLS</th>'+
-      '<th style="padding:10px;font-size:9px;font-weight:700;color:#e65100;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">FLYERS</th>'+
-      '<th style="padding:10px;font-size:9px;font-weight:700;color:#2e7d32;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">STICKERS</th>'+
-      '<th style="padding:10px;font-size:9px;font-weight:700;color:#7b1fa2;letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">REVIEWS</th>'+
-      '<th style="padding:10px;font-size:9px;font-weight:700;color:'+PLUM+';letter-spacing:1px;text-align:center;border-bottom:2px solid #ede8f5;">TOTAL</th>'+
-    '</tr></thead><tbody>'+mktRows+'</tbody>'+
-    '<tfoot><tr style="background:'+PLUM+';"><td style="padding:11px 16px;font-size:12px;font-weight:800;color:'+YELLOW+';">TOTAL</td>'+
-      '<td style="padding:11px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tC+'</td>'+
-      '<td style="padding:11px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tF+'</td>'+
-      '<td style="padding:11px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tS+'</td>'+
-      '<td style="padding:11px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tR+'</td>'+
-      '<td style="padding:11px;font-size:13px;font-weight:900;color:'+YELLOW+';text-align:center;">'+tT+'</td>'+
-    '</tr></tfoot></table></div>' +
+  /* ── MAIN GRID ── */
+  +'<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 38px 24px;">'
 
-  // NOTES
-  '<div style="margin:0 36px 28px;">'+sectionHeader('Branch Issues, Action Points &amp; Notes — '+md.label)+
-    '<div style="padding:10px 18px;border-left:4px solid '+YELLOW+';margin-bottom:16px;font-size:10px;color:#888;">'+
-      '<span style="color:#b71c1c;font-weight:700;">⬤ Problems</span>&nbsp;&nbsp;'+
-      '<span style="color:'+PLUM+';font-weight:700;">⬤ Action Points</span>&nbsp;&nbsp;'+
-      '<span style="color:#7a4000;font-weight:700;">⬤ Remarks</span>'+
-    '</div>'+
-    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">'+notesHtml+'</div></div>' +
+  /* Attendance */
+  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +secHead('Huddle Attendance — '+md.label)
+  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:#C0B0D8;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #F5F0FC;gap:14px;">'
+  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin:0 0 0 14px;">PROGRESS</div><div style="min-width:40px;text-align:right;">SCORE</div><div style="min-width:52px;text-align:right;">SESSIONS</div>'
+  +'</div>'+hrows
+  +'<div style="display:flex;gap:16px;padding:11px 22px;background:#FAFAFF;border-top:1px solid #F0EAF8;">'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+G+';"></div>100%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+Y+';"></div>85–99%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+PC+';"></div>77–84%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+RE+';"></div>&lt;77%</div>'
+  +'</div></div>'
 
-  // FOOTER
-  '<div style="margin:0 36px 36px;background:'+PLUM+';border-radius:14px;padding:22px 30px;display:flex;align-items:center;gap:18px;">' +
-    '<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+YELLOW+';">THANK YOU TEAM!</div><div style="font-size:12px;color:rgba(255,188,125,0.8);margin-top:3px;">Great effort across all branches — let\'s keep building momentum!</div></div>' +
-    '<div style="text-align:right;"><div style="font-size:24px;font-weight:900;color:'+YELLOW+';letter-spacing:3px;">JANAGEN</div><div style="font-size:9px;color:rgba(255,188,125,0.5);letter-spacing:3px;text-transform:uppercase;">Pharmacies · Hyderabad</div></div>' +
-  '</div>' +
-  '</div>';
+  /* Top performers */
+  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +secHead('Top Marketing Branches')
+  +topHtml
+  +'<div style="padding:12px 16px;font-size:9.5px;color:#D0C0E8;text-align:center;">Ranked by Calls + Flyers + Stickers + Reviews</div>'
+  +'</div>'
+  +'</div>'
+
+  /* ── MARKETING TABLE ── */
+  +'<div style="margin:0 38px 28px;border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +secHead('Marketing Activities — '+md.label)
+  +'<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#FAFAFF;">'
+  +'<th style="padding:11px 18px;font-size:8.5px;font-weight:800;color:#999;letter-spacing:2px;text-align:left;border-bottom:2px solid #EDE8F5;">BRANCH</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#3949ab;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">CALLS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#e65100;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">FLYERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#2e7d32;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">STICKERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#7b1fa2;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">REVIEWS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:'+P+';letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">TOTAL</th>'
+  +'</tr></thead><tbody>'+mkRows+'</tbody>'
+  +'<tfoot><tr style="background:linear-gradient(135deg,'+P+','+P2+');">'
+  +'<td style="padding:12px 18px;font-size:12.5px;font-weight:800;color:'+Y+';">TOTAL</td>'
+  +'<td style="padding:12px 10px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tC+'</td>'
+  +'<td style="padding:12px 10px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tF+'</td>'
+  +'<td style="padding:12px 10px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tS+'</td>'
+  +'<td style="padding:12px 10px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tR+'</td>'
+  +'<td style="padding:12px 10px;font-size:14px;font-weight:900;color:'+Y+';text-align:center;">'+tT+'</td>'
+  +'</tr></tfoot></table></div>'
+
+  /* ── NOTES ── */
+  +'<div style="margin:0 38px 30px;">'
+  +secHead('Branch Issues, Action Points &amp; Notes — '+md.label)
+  +'<div style="padding:11px 20px;background:#FAFAFF;border-left:4px solid '+Y+';margin-bottom:18px;display:flex;gap:20px;align-items:center;">'
+  +'<span style="font-size:10px;font-weight:700;color:#c62828;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#ef5350;display:inline-block;"></span>Problems</span>'
+  +'<span style="font-size:10px;font-weight:700;color:#9a7f00;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:'+Y+';display:inline-block;"></span>Action Points</span>'
+  +'<span style="font-size:10px;font-weight:700;color:#a05a20;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:'+PC+';display:inline-block;"></span>Remarks</span>'
+  +'</div>'
+  +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'+notesH+'</div></div>'
+
+  /* ── FOOTER ── */
+  +'<div style="margin:0 38px 38px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;">'
+  +'<div style="width:52px;height:52px;border-radius:14px;background:rgba(254,207,0,.12);border:1px solid rgba(254,207,0,.25);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">📈</div>'
+  +'<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+Y+';">THANK YOU TEAM!</div><div style="font-size:12px;color:rgba(255,188,125,.75);margin-top:3px;">Great effort across all branches — let\'s keep building momentum!</div></div>'
+  +'<div style="text-align:right;">'
+  +'<div style="font-size:26px;font-weight:900;color:'+Y+';letter-spacing:3px;">JANAGEN</div>'
+  +'<div style="font-size:8.5px;color:rgba(255,188,125,.45);letter-spacing:3px;margin-top:2px;">PHARMACIES · HYDERABAD</div>'
+  +'</div></div>'
+  +'</div>';
 }
 
-/* ══════════════════════════════════════════════════
-   RENDER WEEKLY
-══════════════════════════════════════════════════ */
-function renderWeekly(m, w) {
-  var wd = WEEK_DATA[m] && WEEK_DATA[m][w];
-  if (!wd) return;
+/* ══════════════════════════ RENDER WEEKLY ══════════════════════════ */
+function renderW(m,w){
+  var wd=WEEK_DATA[m]&&WEEK_DATA[m][w];if(!wd)return;
+  var md=MONTH_DATA[m];
+  document.getElementById('ctrl-title').textContent=wd.label+(wd.dr!=='—'?' · '+wd.dr:'');
+  document.getElementById('ctrl-sub').textContent='12 branches · weekly drill-down';
 
-  document.getElementById('ctrl-title').textContent = wd.label + (wd.dateRange !== '—' ? ' · '+wd.dateRange : '');
-  document.getElementById('ctrl-sub').textContent = '12 branches · weekly drill-down';
-
-  if (!wd.hasData) {
-    document.getElementById('dashboard').innerHTML =
-      '<div style="background:#fff;border-radius:22px;padding:80px 40px;text-align:center;">' +
-        '<div style="font-size:48px;margin-bottom:20px;">📭</div>' +
-        '<div style="font-size:20px;font-weight:800;color:'+PLUM+';margin-bottom:10px;">No weekly data available</div>' +
-        '<div style="font-size:13px;color:#aaa;">Date-level data was not recorded for this week in the Excel file.<br>Switch to <strong>Monthly view</strong> for '+MONTH_DATA[m].label+' summary.</div>' +
-      '</div>';
+  if(!wd.hasData){
+    document.getElementById('dashboard').innerHTML='<div style="background:#fff;border-radius:24px;padding:90px 40px;text-align:center;">'
+      +'<div style="width:80px;height:80px;border-radius:20px;background:#FAFAFF;border:1px solid #EDE8F5;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;">📭</div>'
+      +'<div style="font-size:22px;font-weight:800;color:'+P+';margin-bottom:10px;">No weekly data for this period</div>'
+      +'<div style="font-size:13px;color:#c0b0d8;line-height:1.7;">Date-level records were not logged for this week.<br>Switch to <strong style="color:'+P+'">Monthly view</strong> for '+md.label+' summary.</div>'
+      +'</div>';
     return;
   }
 
-  var branches   = wd.branches;
-  var maxH       = wd.maxH;
-  var weekNotes  = WEEK_NOTES[m][w];
+  var br=wd.branches;var maxH=wd.maxH;var wn=WEEK_NOTES[m][w];
+  var totH=br.reduce(function(a,b){return a+b.h;},0);
+  var active=br.filter(function(b){return b.h>0;}).length;
+  var absent=br.length-active;
+
+  var kh=kpiCard('Total Huddles',totH,'Week '+w+' · '+wd.dr,Y,'🤝')
+    +kpiCard('Active Branches',active,'out of '+br.length+' branches',G,'✅')
+    +kpiCard('Absent Branches',absent,'missed this week',RE,'⚠️')
+    +kpiCard('Avg Huddles',active>0?(totH/active).toFixed(1):'—','per active branch',PC,'📊');
+
+  /* Week progress pills */
+  var wpills=[1,2,3,4].map(function(x){
+    var xd=WEEK_DATA[m][x];var isA=x===w;
+    return '<div style="flex:1;padding:12px 10px;border-radius:12px;text-align:center;background:'+(isA?P:'transparent')+';border:1px solid '+(isA?'rgba(254,207,0,.3)':'#EDE8F5')+';">'
+      +'<div style="font-size:13px;font-weight:900;color:'+(isA?Y:'#C0B0D8')+';">W'+x+'</div>'
+      +'<div style="font-size:9px;color:'+(isA?PC:'#D0C0E0')+';margin-top:3px;">'+(xd&&xd.dr!=='—'?xd.dr:'—')+'</div>'
+      +'</div>';
+  }).join('');
+
+  /* Attendance rows */
+  var hrows=br.slice().sort(function(a,b){return b.h-a.h;}).map(function(b){
+    var pct=maxH>0?Math.round(b.h/maxH*100):0;
+    var bc=b.h===0?'#EDE8F5':(pct>=80?G:pct>=50?Y:PC);
+    var statusBg=b.h===0?'rgba(229,57,53,.1)':'rgba(97,206,112,.12)';
+    var statusC=b.h===0?'#c62828':'#1a5e20';
+    var statusTxt=b.h===0?'No Huddle':b.h+' session'+(b.h>1?'s':'');
+    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid #F5F0FC;">'
+      +avatar(b.name,34,b.h>0?P:'#EDE8F5',b.h>0?Y:P)
+      +'<div style="font-size:11.5px;font-weight:700;color:'+P+';min-width:110px;">'+b.name+'</div>'
+      +'<div style="flex:1;background:#EDE8F5;height:11px;border-radius:6px;overflow:hidden;">'
+      +'<div style="width:'+(b.h>0?pct:0)+'%;height:100%;background:'+bc+';border-radius:6px;"></div></div>'
+      +'<span style="font-size:9.5px;font-weight:700;color:'+statusC+';background:'+statusBg+';padding:3px 12px;border-radius:20px;white-space:nowrap;">'+statusTxt+'</span>'
+      +'</div>';
+  }).join('');
+
+  var notesH=wn.map(function(n){var bh=br.find(function(b){return b.name===n.name;})||{h:0};return noteCard(n,bh);}).join('');
+
+  document.getElementById('dashboard').innerHTML=
+  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
+
+  /* Header */
+  +'<div style="background:linear-gradient(135deg,'+P+',#1a0d30);padding:34px 48px 30px;text-align:center;position:relative;overflow:hidden;">'
+  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
+  +'<div style="position:relative;">'
+  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.5);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · WEEKLY DRILL-DOWN</div>'
+  +'<div style="font-size:46px;font-weight:900;color:'+Y+';letter-spacing:2px;line-height:1.05;">WEEK '+w+' REPORT</div>'
+  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:14px auto;border-radius:2px;"></div>'
+  +'<div style="display:inline-flex;align-items:center;gap:10px;">'
+  +'<div style="background:'+Y+';color:'+P+';padding:9px 26px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">'+md.label.toUpperCase()+'</div>'
+  +(wd.dr!=='—'?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 18px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);">'+wd.dr+'</div>':'')
+  +'</div></div></div>'
+
+  /* Week progress bar */
+  +'<div style="margin:24px 38px 0;background:#FAFAFF;border-radius:14px;border:1px solid #EDE8F5;padding:18px 22px;">'
+  +'<div style="font-size:8px;font-weight:800;letter-spacing:2.5px;color:#C0B0D8;text-transform:uppercase;margin-bottom:14px;">MONTH PROGRESS — '+md.label+'</div>'
+  +'<div style="display:flex;gap:10px;">'+wpills+'</div></div>'
 
   /* KPIs */
-  var totalH    = branches.reduce(function(a,b){return a+b.huddles;},0);
-  var active    = branches.filter(function(b){return b.huddles>0;}).length;
-  var absent    = branches.length - active;
-  var avgH      = active>0 ? (totalH/active).toFixed(1) : '—';
+  +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:22px 38px 20px;">'+kh+'</div>'
 
-  var kpis = [
-    {label:'TOTAL HUDDLES',     val:totalH, sub:'Week '+w+' · '+wd.dateRange, ic:'🤝'},
-    {label:'ACTIVE BRANCHES',   val:active,  sub:'out of 12 branches',          ic:'✅'},
-    {label:'ABSENT BRANCHES',   val:absent,  sub:'missed this week',             ic:'⚠️'},
-    {label:'AVG PER BRANCH',    val:avgH,    sub:'huddles (active branches)',     ic:'📊'},
-  ];
-  var kpiHtml = kpis.map(function(k){
-    return '<div style="background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(37,22,50,0.10);border:1px solid #f0ebf8;">' +
-      '<div style="background:'+PLUM+';padding:10px 16px;display:flex;align-items:center;justify-content:space-between;"><div style="font-size:8.5px;font-weight:800;color:'+PEACH+';letter-spacing:2px;text-transform:uppercase;">'+k.label+'</div><span style="font-size:16px;">'+k.ic+'</span></div>' +
-      '<div style="padding:16px 16px 14px;text-align:center;">'+
-        '<div style="font-size:32px;font-weight:900;color:'+PLUM+';line-height:1;">'+k.val+'</div>'+
-        '<div style="font-size:9.5px;color:#aaa;margin-top:5px;">'+k.sub+'</div>'+
-        '<div style="width:32px;height:3px;background:'+YELLOW+';margin:10px auto 0;border-radius:2px;"></div>'+
-      '</div></div>';
-  }).join('');
+  /* Attendance */
+  +'<div style="margin:0 38px 24px;border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +secHead('Huddle Attendance — Week '+w+' · '+wd.dr)
+  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:#C0B0D8;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #F5F0FC;gap:14px;">'
+  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin-left:14px;">PROGRESS</div><div>STATUS</div>'
+  +'</div>'+hrows+'</div>'
 
-  /* Week indicator pills */
-  var weekPills=[1,2,3,4].map(function(x){
-    var isActive=x===w;
-    var xwd=WEEK_DATA[m][x];
-    return '<div style="flex:1;text-align:center;padding:10px 8px;border-radius:10px;background:'+(isActive?PLUM:'transparent')+';border:1px solid '+(isActive?'rgba(254,207,0,0.3)':'rgba(255,255,255,0)')+';">' +
-      '<div style="font-size:11px;font-weight:900;color:'+(isActive?YELLOW:'#ccc')+';">W'+x+'</div>'+
-      '<div style="font-size:9px;color:'+(isActive?PEACH:'#999')+';margin-top:2px;">'+(xwd&&xwd.dateRange!=='—'?xwd.dateRange:'—')+'</div>'+
-    '</div>';
-  }).join('');
+  /* Notes */
+  +'<div style="margin:0 38px 30px;">'
+  +secHead('Action Points &amp; Notes — Week '+w+' · '+md.label)
+  +'<div style="padding:11px 20px;background:#FAFAFF;border-left:4px solid '+Y+';margin-bottom:18px;font-size:10.5px;color:#8a7aaa;line-height:1.6;">'
+  +'Per-branch action points and issues flagged during Week '+w+' huddle sessions in '+md.label+'.'
+  +'</div>'
+  +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'+notesH+'</div></div>'
 
-  /* Huddle attendance — sorted */
-  var sorted=branches.slice().sort(function(a,b){return b.huddles-a.huddles;});
-  var huddleRows=sorted.map(function(b){
-    var pct=maxH>0?Math.round(b.huddles/maxH*100):0;
-    var bc=b.huddles===0?'#f5f5f5':(pct>=80?BGREEN:pct>=50?YELLOW:PEACH);
-    var tc=b.huddles===0?'#ccc':(pct>=80?'#1a5e20':pct>=50?'#7a5f00':'#7a4000');
-    return '<div style="display:grid;grid-template-columns:148px 1fr 80px 100px;align-items:center;padding:11px 20px;border-bottom:1px solid #f5f0fc;">' +
-      '<div style="font-size:11.5px;font-weight:700;color:'+PLUM+';">'+b.name+'</div>'+
-      '<div style="background:#ede8f5;height:9px;border-radius:5px;overflow:hidden;margin:0 12px;">'+
-        '<div style="width:'+(b.huddles>0?pct:0)+'%;height:100%;background:'+bc+';border-radius:5px;"></div>'+
-      '</div>'+
-      '<div style="font-size:12px;font-weight:800;color:'+tc+';text-align:center;">'+(b.huddles===0?'—':b.huddles+' huddle'+(b.huddles!==1?'s':''))+'</div>'+
-      '<div style="text-align:right;">'+(b.huddles===0?'<span style="font-size:10px;font-weight:600;color:#e53935;background:#fde8e8;padding:3px 10px;border-radius:20px;">No Huddle</span>':'<span style="font-size:10px;font-weight:600;color:'+tc+';background:'+(pct>=80?'rgba(97,206,112,0.12)':pct>=50?'rgba(254,207,0,0.12)':'rgba(255,188,125,0.12)')+';padding:3px 10px;border-radius:20px;">Present</span>')+'</div>'+
-    '</div>';
-  }).join('');
-
-  /* Action points grid */
-  var notesHtml=weekNotes.map(function(n){
-    var ai=n.actions.map(function(a){return'<li style="font-size:10.5px;color:'+PLUM+';line-height:1.6;margin-bottom:3px;">'+a+'</li>';}).join('');
-    var pi=n.problems.map(function(p){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.6;margin-bottom:3px;">'+p+'</li>';}).join('');
-    var ri=n.remarks.map(function(r){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.6;margin-bottom:3px;">'+r+'</li>';}).join('');
-    var noData=!n.problems.length&&!n.actions.length&&!n.remarks.length;
-    var bHuddles=branches.find(function(b){return b.name===n.name;})||{huddles:0};
-    var hasBadge=bHuddles.huddles>0;
-    return '<div style="background:#fff;border-radius:12px;border:1px solid #ede8f5;overflow:hidden;box-shadow:0 2px 10px rgba(37,22,50,0.07);">'+
-      '<div style="background:'+PLUM+';padding:9px 14px;display:flex;align-items:center;justify-content:space-between;">'+
-        '<span style="font-size:10.5px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase;">'+n.name+'</span>'+
-        (hasBadge?'<span style="background:'+BGREEN+';color:#1a5e20;font-size:8.5px;font-weight:800;padding:2px 8px;border-radius:10px;">'+bHuddles.huddles+' huddle'+(bHuddles.huddles!==1?'s':'')+'</span>':'<span style="background:#4a2020;color:#ff8a80;font-size:8.5px;font-weight:700;padding:2px 8px;border-radius:10px;">No Huddle</span>')+
-      '</div>'+
-      '<div style="padding:12px 14px;">'+(noData?'<div style="font-size:11px;color:#ddd;text-align:center;padding:10px 0;">No notes this week</div>':'')+
-      (pi?'<div style="margin-bottom:8px;"><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:#b71c1c;margin-bottom:5px;">⬤ PROBLEMS</div><ul style="padding-left:14px;margin:0;">'+pi+'</ul></div>':'')+
-      (ai?'<div style="margin-bottom:'+(ri?'8px':'0')+'"><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:'+PLUM+';margin-bottom:5px;">⬤ ACTION POINTS</div><ul style="padding-left:14px;margin:0;">'+ai+'</ul></div>':'')+
-      (ri?'<div><div style="font-size:8px;font-weight:800;letter-spacing:1.5px;color:#7a4000;margin-bottom:5px;">⬤ REMARKS</div><ul style="padding-left:14px;margin:0;">'+ri+'</ul></div>':'')+
-      '</div></div>';
-  }).join('');
-
-  document.getElementById('dashboard').innerHTML =
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">' +
-
-  // HEADER
-  '<div style="background:'+PLUM+';padding:28px 44px 24px;text-align:center;">' +
-    '<div style="font-size:10px;font-weight:700;letter-spacing:4px;color:rgba(255,188,125,0.6);text-transform:uppercase;margin-bottom:8px;">JANAGEN PHARMACIES · WEEKLY OPERATIONS REPORT</div>' +
-    '<div style="font-size:40px;font-weight:900;color:'+YELLOW+';letter-spacing:2px;line-height:1;">WEEK '+w+' REPORT</div>' +
-    '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;">'+
-      '<div style="background:'+YELLOW+';color:'+PLUM+';padding:7px 22px;border-radius:8px;font-size:11px;font-weight:800;letter-spacing:2px;">'+MONTH_DATA[m].label.toUpperCase()+'</div>'+
-      (wd.dateRange!=='—'?'<div style="border:1.5px solid rgba(254,207,0,0.3);padding:7px 18px;border-radius:8px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);">'+wd.dateRange+'</div>':'')+'</div>'+
-  '</div>' +
-
-  // WEEK PROGRESS INDICATOR
-  '<div style="margin:22px 36px 0;background:#faf8ff;border-radius:14px;border:1px solid #ede8f5;padding:16px 22px;">' +
-    '<div style="font-size:9px;font-weight:800;letter-spacing:2px;color:#b0a0c0;text-transform:uppercase;margin-bottom:12px;">MONTH PROGRESS</div>'+
-    '<div style="display:flex;gap:8px;">'+weekPills+'</div>'+
-  '</div>' +
-
-  // KPIs
-  '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px 36px 20px;">'+kpiHtml+'</div>' +
-
-  // ATTENDANCE
-  '<div style="margin:0 36px 22px;border-radius:14px;overflow:hidden;border:1px solid #ede8f5;box-shadow:0 2px 14px rgba(37,22,50,0.08);">'+sectionHeader('Huddle Attendance — Week '+w+' · '+wd.dateRange)+
-    '<div style="display:grid;grid-template-columns:148px 1fr 80px 100px;padding:9px 20px;font-size:8.5px;font-weight:700;color:#b0a0c0;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid #f5f0fc;"><div>Branch</div><div style="margin:0 12px;">Progress</div><div style="text-align:center;">Count</div><div style="text-align:right;">Status</div></div>'+
-    huddleRows+
-  '</div>' +
-
-  // NOTES
-  '<div style="margin:0 36px 28px;">'+sectionHeader('Action Points &amp; Notes — Week '+w+' · '+MONTH_DATA[m].label)+
-    '<div style="padding:10px 18px;border-left:4px solid '+YELLOW+';margin-bottom:16px;font-size:10px;color:#888;">'+
-      'Per-branch focus areas, problems flagged and remarks recorded during Week '+w+' huddle sessions.'+
-    '</div>'+
-    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">'+notesHtml+'</div>'+
-  '</div>' +
-
-  // FOOTER
-  '<div style="margin:0 36px 36px;background:'+PLUM+';border-radius:14px;padding:22px 30px;display:flex;align-items:center;gap:18px;">'+
-    '<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+YELLOW+';">KEEP THE MOMENTUM!</div><div style="font-size:12px;color:rgba(255,188,125,0.8);margin-top:3px;">Week '+w+' done — push harder in the weeks ahead.</div></div>'+
-    '<div style="text-align:right;"><div style="font-size:24px;font-weight:900;color:'+YELLOW+';letter-spacing:3px;">JANAGEN</div><div style="font-size:9px;color:rgba(255,188,125,0.5);letter-spacing:3px;">PHARMACIES · HYDERABAD</div></div>'+
-  '</div>' +
-  '</div>';
+  /* Footer */
+  +'<div style="margin:0 38px 38px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;">'
+  +'<div style="width:52px;height:52px;border-radius:14px;background:rgba(254,207,0,.12);border:1px solid rgba(254,207,0,.25);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">🚀</div>'
+  +'<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+Y+';">KEEP THE MOMENTUM!</div><div style="font-size:12px;color:rgba(255,188,125,.7);margin-top:3px;">Week '+w+' done — push harder through the remaining weeks of '+md.label+'.</div></div>'
+  +'<div style="text-align:right;"><div style="font-size:26px;font-weight:900;color:'+Y+';letter-spacing:3px;">JANAGEN</div><div style="font-size:8.5px;color:rgba(255,188,125,.4);letter-spacing:3px;margin-top:2px;">PHARMACIES · HYDERABAD</div></div>'
+  +'</div>'
+  +'</div>';
 }
 
-/* ══════════════════════════════════════════════════
-   DOWNLOAD
-══════════════════════════════════════════════════ */
-async function downloadDashboard() {
-  var btn=document.getElementById('dlBtn');
-  btn.textContent='Generating…'; btn.disabled=true;
-  try {
+/* ══════════════════════════ DOWNLOAD ══════════════════════════ */
+async function downloadDashboard(){
+  var btn=document.getElementById('dlBtn');btn.textContent='Generating…';btn.disabled=true;
+  try{
     var src=document.getElementById('dashboard');
     var wrap=document.createElement('div');
-    wrap.style.cssText='position:absolute;left:0;top:0;width:1040px;background:#fff;z-index:-9999;pointer-events:none;';
-    wrap.innerHTML=src.innerHTML;
-    document.body.appendChild(wrap);
+    wrap.style.cssText='position:absolute;left:0;top:0;width:1060px;background:#fff;z-index:-9999;pointer-events:none;';
+    wrap.innerHTML=src.innerHTML;document.body.appendChild(wrap);
     Array.from(wrap.querySelectorAll('*')).concat([wrap]).forEach(function(el){el.style.overflow='visible';el.style.maxHeight='none';});
     await document.fonts.ready;
-    await new Promise(function(r){setTimeout(r,300);});
+    await new Promise(function(r){setTimeout(r,350);});
     var canvas=await html2canvas(wrap,{scale:2,useCORS:true,allowTaint:true,backgroundColor:'#fff',logging:false,width:wrap.offsetWidth,height:wrap.offsetHeight,windowWidth:wrap.offsetWidth,windowHeight:wrap.offsetHeight});
     document.body.removeChild(wrap);
-    var mLabel=(MONTH_DATA[activeMonth]&&MONTH_DATA[activeMonth].label)||activeMonth;
-    var suffix=currentMode==='weekly'?'-W'+activeWeek:'';
-    var link=document.createElement('a');
-    link.download='JANAGEN-Operations-'+mLabel.replace(' ','-')+suffix+'.png';
-    link.href=canvas.toDataURL('image/png'); link.click();
-  } catch(e){ alert('Download failed: '+e.message); }
-  btn.innerHTML='⬇ Download'; btn.disabled=false;
+    var lbl=(MONTH_DATA[MONTH]&&MONTH_DATA[MONTH].label)||MONTH;
+    var sfx=MODE==='weekly'?'-W'+WEEK:'';
+    var a=document.createElement('a');
+    a.download='JANAGEN-Operations-'+lbl.replace(' ','-')+sfx+'.png';
+    a.href=canvas.toDataURL('image/png');a.click();
+  }catch(e){alert('Download failed: '+e.message);}
+  btn.innerHTML='⬇ Download';btn.disabled=false;
 }
+
+/* ── Mode card spotlight effect ── */
+document.querySelectorAll('.mode-card').forEach(function(card){
+  card.addEventListener('mousemove',function(e){
+    var r=card.getBoundingClientRect();
+    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+  });
+});
 </script>
 </body>
 </html>
