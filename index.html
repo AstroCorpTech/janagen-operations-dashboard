@@ -277,6 +277,17 @@ body::before {
     </div>
 
     <div class="spacer"></div>
+
+    <!-- Theme picker -->
+    <div class="sel-block">
+      <div class="sel-lbl">Design</div>
+      <div class="sel-wrap" style="position:relative;">
+        <div id="theme-dot" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:#FECF00;flex-shrink:0;pointer-events:none;z-index:2;box-shadow:0 0 5px rgba(254,207,0,.5);"></div>
+        <select id="sel-theme" onchange="onThemeChange()" style="padding-left:30px;min-width:165px;">
+        </select>
+        <span class="sel-arr">▾</span>
+      </div>
+    </div>
     <button class="ghost-btn" onclick="goUpload()">↺ Reupload</button>
     <button class="dl-btn" id="dlBtn" onclick="downloadDashboard()">⬇ Download</button>
   </div>
@@ -299,6 +310,79 @@ var Y  = '#FECF00';  // yellow
 var PC = '#FFBC7D';  // peach
 var G  = '#61CE70';  // green
 var RE = '#e53935';  // red
+
+/* ══════════════════════════ THEMES ══════════════════════════ */
+var THEME_IDX=0;
+var THEMES=[
+  // ─── Dark Premium ───
+  {n:'JANAGEN Classic',   p:'#251632',p2:'#362048',y:'#FECF00',pc:'#FFBC7D',g:'#61CE70',bg:'#07031a'},
+  {n:'Midnight Ocean',    p:'#0a1628',p2:'#0d2444',y:'#38bdf8',pc:'#7dd3fc',g:'#34d399',bg:'#020a18'},
+  {n:'Forest Night',      p:'#0d2818',p2:'#1a3d26',y:'#84cc16',pc:'#bef264',g:'#22c55e',bg:'#030f08'},
+  {n:'Obsidian Gold',     p:'#1c1c1c',p2:'#2e2e2e',y:'#d4af37',pc:'#f5d97e',g:'#68d391',bg:'#0a0a0a'},
+  {n:'Cosmic Purple',     p:'#1e0a3c',p2:'#2d1455',y:'#c084fc',pc:'#e879f9',g:'#4ade80',bg:'#0d0420'},
+  {n:'Charcoal & Flame',  p:'#1c1c1e',p2:'#2c2c2e',y:'#ff6b35',pc:'#ff9f68',g:'#30d158',bg:'#0a0a0a'},
+  {n:'Deep Teal Night',   p:'#0f2b2b',p2:'#1a3f3f',y:'#2dd4bf',pc:'#5eead4',g:'#a3e635',bg:'#050f0f'},
+  {n:'Rose Gold Night',   p:'#1f0d16',p2:'#301420',y:'#e4a0b0',pc:'#f9c9d0',g:'#6ee7b7',bg:'#0d0609'},
+  {n:'Navy & Electric',   p:'#0f1f3d',p2:'#162d57',y:'#60a5fa',pc:'#93c5fd',g:'#34d399',bg:'#050e1e'},
+  {n:'Phantom Green',     p:'#041a0e',p2:'#082918',y:'#00e676',pc:'#69f0ae',g:'#00bfa5',bg:'#020d06'},
+  // ─── Corporate ───
+  {n:'Corporate Blue',    p:'#1e3a5f',p2:'#2a4f82',y:'#fbbf24',pc:'#fcd34d',g:'#4ade80',bg:'#0d1f35'},
+  {n:'Steel Executive',   p:'#1e2832',p2:'#2d3a46',y:'#64b5f6',pc:'#90caf9',g:'#66bb6a',bg:'#0a1018'},
+  {n:'Slate & Crimson',   p:'#1a1f2e',p2:'#262d40',y:'#ef4444',pc:'#f87171',g:'#4ade80',bg:'#0a0d16'},
+  {n:'Pine & Gold',       p:'#1a2e1a',p2:'#243824',y:'#eab308',pc:'#facc15',g:'#86efac',bg:'#080f08'},
+  {n:'Burgundy Legacy',   p:'#2d0a14',p2:'#40101d',y:'#fbbf24',pc:'#fde68a',g:'#6ee7b7',bg:'#140408'},
+  {n:'Oxford Night',      p:'#002147',p2:'#00306a',y:'#c9a84c',pc:'#e0c97a',g:'#4ade80',bg:'#000d1f'},
+  {n:'British Racing',    p:'#002d1f',p2:'#003d28',y:'#d4af37',pc:'#e8d08a',g:'#86efac',bg:'#00110c'},
+  {n:'Gunmetal Electric', p:'#1a1f2e',p2:'#242b3d',y:'#3b82f6',pc:'#60a5fa',g:'#34d399',bg:'#0d1018'},
+  {n:'Espresso & Tan',    p:'#2c1810',p2:'#3d2316',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#120a06'},
+  {n:'Indigo Summit',     p:'#1e1b4b',p2:'#2d2a6b',y:'#818cf8',pc:'#a5b4fc',g:'#4ade80',bg:'#0d0b24'},
+  // ─── Healthcare ───
+  {n:'Medical Blue',      p:'#0e3054',p2:'#164878',y:'#38bdf8',pc:'#7dd3fc',g:'#4ade80',bg:'#06192c'},
+  {n:'Mint Fresh',        p:'#064e3b',p2:'#065f46',y:'#6ee7b7',pc:'#a7f3d0',g:'#34d399',bg:'#021a12'},
+  {n:'Teal & Coral',      p:'#0f3443',p2:'#164e63',y:'#fb923c',pc:'#fdba74',g:'#2dd4bf',bg:'#05161e'},
+  {n:'Lavender Care',     p:'#2e1065',p2:'#3b0764',y:'#c4b5fd',pc:'#ddd6fe',g:'#6ee7b7',bg:'#12052a'},
+  {n:'Sage & Stone',      p:'#1f2d1f',p2:'#2b3d2b',y:'#a3b18a',pc:'#d4cfc8',g:'#52b788',bg:'#0d120d'},
+  {n:'Arctic Blue',       p:'#042f2e',p2:'#064e3b',y:'#5eead4',pc:'#99f6e4',g:'#bef264',bg:'#011210'},
+  {n:'Clean Clinical',    p:'#1e3a5f',p2:'#1e40af',y:'#22c55e',pc:'#86efac',g:'#4ade80',bg:'#0d1f35'},
+  {n:'Sky & Tangerine',   p:'#0c2340',p2:'#0f3460',y:'#fb923c',pc:'#fed7aa',g:'#4ade80',bg:'#05101e'},
+  {n:'Aqua Depths',       p:'#0a2744',p2:'#0e3a62',y:'#22d3ee',pc:'#67e8f9',g:'#34d399',bg:'#04101e'},
+  {n:'Turquoise & Honey', p:'#042f2e',p2:'#065f46',y:'#f59e0b',pc:'#fbbf24',g:'#2dd4bf',bg:'#011210'},
+  // ─── Vibrant ───
+  {n:'Sunset Vibes',      p:'#2d0a2e',p2:'#3d1040',y:'#f97316',pc:'#fb923c',g:'#f472b6',bg:'#180514'},
+  {n:'Neon Dreams',       p:'#1a0533',p2:'#25064a',y:'#facc15',pc:'#fde047',g:'#a855f7',bg:'#0d0219'},
+  {n:'Electric Punch',    p:'#0d0d2b',p2:'#14145a',y:'#ec4899',pc:'#f472b6',g:'#60a5fa',bg:'#050512'},
+  {n:'Coral & Teal',      p:'#1a1a2e',p2:'#16213e',y:'#f87171',pc:'#fca5a5',g:'#2dd4bf',bg:'#0a0a18'},
+  {n:'Amber Forge',       p:'#1c1202',p2:'#2d1d04',y:'#f59e0b',pc:'#fbbf24',g:'#34d399',bg:'#0d0a01'},
+  {n:'Emerald City',      p:'#022c22',p2:'#03543f',y:'#fbbf24',pc:'#fde68a',g:'#10b981',bg:'#010f0c'},
+  {n:'Ruby Night',        p:'#1f0505',p2:'#320808',y:'#fca5a5',pc:'#fecaca',g:'#4ade80',bg:'#0d0202'},
+  {n:'Violet Storm',      p:'#150d2b',p2:'#1e1240',y:'#22d3ee',pc:'#67e8f9',g:'#a78bfa',bg:'#080514'},
+  {n:'Tangerine Dusk',    p:'#1c0d02',p2:'#2e1506',y:'#ea580c',pc:'#f97316',g:'#4ade80',bg:'#0d0601'},
+  {n:'Rose & Dark',       p:'#1f0d16',p2:'#2e1222',y:'#f43f5e',pc:'#fb7185',g:'#34d399',bg:'#0d0609'},
+  // ─── Warm & Earthy ───
+  {n:'Terracotta',        p:'#3d1c08',p2:'#542610',y:'#fb923c',pc:'#fed7aa',g:'#84cc16',bg:'#1a0c04'},
+  {n:'Desert Sand',       p:'#2a2318',p2:'#3d3324',y:'#d97706',pc:'#fbbf24',g:'#86efac',bg:'#110e0a'},
+  {n:'Autumn Harvest',    p:'#2d1507',p2:'#3d1e0b',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#140903'},
+  {n:'Coffee House',      p:'#1e1209',p2:'#2e1c0e',y:'#b45309',pc:'#d97706',g:'#4ade80',bg:'#0d0804'},
+  {n:'Mocha & Caramel',   p:'#2d1b0e',p2:'#3f2615',y:'#c2833b',pc:'#d9a96e',g:'#86efac',bg:'#120b06'},
+  {n:'Golden Mustard',    p:'#1a1200',p2:'#2b1e00',y:'#ca8a04',pc:'#eab308',g:'#4ade80',bg:'#0d0900'},
+  {n:'Olive Grove',       p:'#1a1f0a',p2:'#252d10',y:'#84cc16',pc:'#a3e635',g:'#22c55e',bg:'#0a0d04'},
+  {n:'Warm Slate',        p:'#1e1a24',p2:'#2d2736',y:'#a78bfa',pc:'#c4b5fd',g:'#4ade80',bg:'#0d0b12'},
+  {n:'Papaya Sunrise',    p:'#1f0a08',p2:'#2e100c',y:'#2dd4bf',pc:'#5eead4',g:'#fb923c',bg:'#0d0504'},
+  {n:'Spice Route',       p:'#2d0f00',p2:'#3f1600',y:'#ef4444',pc:'#f87171',g:'#fbbf24',bg:'#140700'}
+];
+
+function applyTheme(t){
+  var r=document.documentElement.style;
+  r.setProperty('--plum',t.p);r.setProperty('--plum2',t.p2);
+  r.setProperty('--yellow',t.y);r.setProperty('--peach',t.pc);
+  r.setProperty('--green',t.g);r.setProperty('--bg',t.bg);
+  P=t.p;P2=t.p2;Y=t.y;PC=t.pc;G=t.g;
+  var dot=document.getElementById('theme-dot');if(dot){dot.style.background=t.y;dot.style.boxShadow='0 0 5px '+t.y+'88';}
+}
+function onThemeChange(){
+  var idx=parseInt(document.getElementById('sel-theme').value)||0;
+  THEME_IDX=idx;applyTheme(THEMES[idx]);onSelChange();
+}
 
 /* ══════════════════════════ STATE ══════════════════════════ */
 var MODE   = 'monthly';
@@ -436,6 +520,26 @@ function show(id){['pg-upload','pg-app'].forEach(function(p){document.getElement
 function goUpload(){show('pg-upload');}
 
 function initApp(){
+  /* Populate theme dropdown with optgroups */
+  var ts=document.getElementById('sel-theme');
+  ts.innerHTML='';
+  var tgroups=[
+    {label:'★ Dark Premium',  start:0,  end:10},
+    {label:'◆ Corporate',     start:10, end:20},
+    {label:'✦ Healthcare',    start:20, end:30},
+    {label:'⚡ Vibrant',      start:30, end:40},
+    {label:'◉ Warm & Earthy', start:40, end:50}
+  ];
+  tgroups.forEach(function(gr){
+    var og=document.createElement('optgroup');og.label=gr.label;
+    for(var i=gr.start;i<gr.end;i++){
+      var o=document.createElement('option');o.value=i;
+      o.textContent=(i+1)+'. '+THEMES[i].n;
+      og.appendChild(o);
+    }
+    ts.appendChild(og);
+  });
+  ts.value='0';
   /* Populate branch dropdown */
   var bs=document.getElementById('sel-branch');
   bs.innerHTML='<option value="all">All Branches</option>';
