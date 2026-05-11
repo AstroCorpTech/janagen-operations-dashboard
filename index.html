@@ -57,12 +57,6 @@ body::before {
   background:rgba(255,188,125,.25);
 }
 
-.up-logo-text {
-  font-size:64px; font-weight:900; letter-spacing:6px; line-height:1;
-  background: linear-gradient(135deg,#ffe066 0%,#FECF00 40%,#ffbc33 100%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  text-align:center;
-}
 .up-tagline {
   font-size:11.5px; font-weight:600; letter-spacing:5px; color:rgba(255,188,125,.55);
   text-transform:uppercase; text-align:center; margin-top:6px; margin-bottom:44px;
@@ -776,13 +770,13 @@ function noteCard(n,week){
     +'<div style="padding:13px 14px;">'
     +(empty?'<div style="font-size:11px;color:'+cSub()+';text-align:center;padding:8px 0;">No notes recorded</div>':'')
     +(n.p.length?'<div style="margin-bottom:10px;border-left:3px solid #ef5350;padding-left:10px;">'
-      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#ef5350;text-transform:uppercase;margin-bottom:6px;">PROBLEMS</div>'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#ef5350;text-transform:uppercase;margin-bottom:6px;">⚠️ PROBLEMS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+pi+'</ul></div>':'')
     +(n.a.length?'<div style="margin-bottom:'+(n.r.length?'10px':'0')+';border-left:3px solid '+Y+';padding-left:10px;">'
-      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+Y+';text-transform:uppercase;margin-bottom:6px;">ACTION POINTS</div>'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+Y+';text-transform:uppercase;margin-bottom:6px;">✅ ACTION POINTS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ai+'</ul></div>':'')
     +(n.r.length?'<div style="border-left:3px solid '+PC+';padding-left:10px;">'
-      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+PC+';text-transform:uppercase;margin-bottom:6px;">REMARKS</div>'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+PC+';text-transform:uppercase;margin-bottom:6px;">💬 REMARKS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ri+'</ul></div>':'')
     +'</div></div>';
 }
@@ -862,7 +856,7 @@ function renderM(m){
   +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 38px 20px;">'+kh+'</div>'
   +'<div style="margin:0 38px 24px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:20px 32px;display:flex;align-items:center;gap:24px;">'
   +'<div style="flex:1;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:4px;">Overall Huddle Completion</div>'
+  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:4px;">🎯 Overall Huddle Completion</div>'
   +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.4);">'+tot.h+' huddles across all branches</div>'
   +'</div>'
   +'<div style="text-align:right;">'
@@ -875,9 +869,9 @@ function renderM(m){
   +'</svg></div>'
   +'<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 38px 24px;">'
   +'<div style="'+cCard()+'">'
-  +secHead('Huddle Attendance — '+md.label)
+  +secHead('🤝 Huddle Attendance — '+md.label)
   +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid '+cBorder()+';gap:14px;">'
-  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin:0 0 0 14px;">PROGRESS</div><div style="min-width:40px;text-align:right;">SCORE</div><div style="min-width:52px;text-align:right;">HUDDLES</div>'
+  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;">PROGRESS</div><div style="min-width:40px;text-align:right;">SCORE</div><div style="min-width:52px;text-align:right;">🤝 HUDDLES</div>'
   +'</div>'+hrows
   +'<div style="display:flex;gap:16px;padding:11px 22px;background:'+cThHead()+';border-top:1px solid '+cBorder()+'">'
   +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+G+';"></div>100%</div>'
@@ -886,18 +880,18 @@ function renderM(m){
   +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+RE+';"></div>&lt;77%</div>'
   +'</div></div>'
   +'<div style="'+cCard()+'">'
-  +secHead('Top Marketing Branches')
+  +secHead('🏆 Top Marketing Branches')
   +topHtml
   +'<div style="padding:12px 16px;font-size:9.5px;color:'+cSub()+';text-align:center;">Ranked by Calls + Flyers + Stickers + Reviews</div>'
   +'</div></div>'
   +'<div style="margin:0 38px 28px;'+cCard()+'">'
-  +secHead('Marketing Activities — '+md.label)
+  +secHead('📊 Marketing Activities — '+md.label)
   +'<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:'+cThHead()+'">'
   +'<th style="padding:11px 18px;font-size:8.5px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-align:left;border-bottom:2px solid '+cBorder()+'">BRANCH</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#3949ab;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">CALLS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#e65100;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">FLYERS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#2e7d32;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">STICKERS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#7b1fa2;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">REVIEWS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#3949ab;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">📞 CALLS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#e65100;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">📄 FLYERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#2e7d32;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">🏷️ STICKERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#7b1fa2;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">⭐ REVIEWS</th>'
   +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:'+cTxt()+';letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">TOTAL</th>'
   +'</tr></thead><tbody>'+mkRows+'</tbody>'
   +'<tfoot><tr style="background:linear-gradient(135deg,'+P+','+P2+');">'
@@ -909,11 +903,11 @@ function renderM(m){
   +'<td style="padding:12px 10px;font-size:14px;font-weight:900;color:'+Y+';text-align:center;">'+tT+'</td>'
   +'</tr></tfoot></table></div>'
   +'<div style="margin:0 38px 30px;">'
-  +secHead('Branch Issues, Action Points &amp; Notes — '+md.label)
+  +secHead('📋 Branch Issues, Action Points &amp; Notes — '+md.label)
   +'<div style="padding:11px 20px;background:'+cAlt(0)+';border-left:4px solid '+Y+';margin-bottom:18px;display:flex;gap:20px;align-items:center;">'
-  +'<span style="font-size:10px;font-weight:700;color:#ef5350;">● Problems</span>'
-  +'<span style="font-size:10px;font-weight:700;color:'+Y+';">● Action Points</span>'
-  +'<span style="font-size:10px;font-weight:700;color:'+PC+';">● Remarks</span>'
+  +'<span style="font-size:10px;font-weight:700;color:#ef5350;">⚠️ Problems</span>'
+  +'<span style="font-size:10px;font-weight:700;color:'+Y+';">✅ Action Points</span>'
+  +'<span style="font-size:10px;font-weight:700;color:'+PC+';">💬 Remarks</span>'
   +'</div>'
   +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'+notesH+'</div></div>'
   +'<div style="margin:0 38px 38px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;">'
@@ -1003,14 +997,14 @@ function renderW(m,w){
 
   /* Attendance */
   +'<div style="margin:0 38px 24px;'+cCard()+'">'
-  +secHead('Huddle Attendance — Week '+w+' · '+wd.dr)
+  +secHead('🤝 Huddle Attendance — Week '+w+' · '+wd.dr)
   +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid '+cBorder()+';gap:14px;">'
-  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin-left:14px;">PROGRESS</div><div>STATUS</div>'
+  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;">PROGRESS</div><div>STATUS</div>'
   +'</div>'+hrows+'</div>'
 
   /* Notes */
   +'<div style="margin:0 38px 30px;">'
-  +secHead('Action Points &amp; Notes — Week '+w+' · '+md.label)
+  +secHead('📝 Action Points &amp; Notes — Week '+w+' · '+md.label)
   +'<div style="padding:11px 20px;background:'+cAlt(0)+';border-left:4px solid '+Y+';margin-bottom:18px;font-size:10.5px;color:'+cSub()+';line-height:1.6;">'
   +'Per-branch action points and issues flagged during Week '+w+' huddle sessions in '+md.label+'.'
   +'</div>'
@@ -1098,20 +1092,20 @@ function renderBranchM(bname,m){
   +'</div>'
   +'<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 38px 24px;">'
   +'<div style="'+cCard()+'">'
-  +secHead('Weekly Breakdown — '+md.label)
+  +secHead('📅 Weekly Breakdown — '+md.label)
   +'<div style="padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">'+weekCards+'</div></div>'
   +'<div style="'+cCard()+'">'
-  +secHead('Marketing Activities')
+  +secHead('📊 Marketing Activities')
   +'<div style="padding:16px 22px;">'+mkRows+'</div></div>'
   +'</div>'
   +'<div style="margin:0 38px 30px;">'
-  +secHead('Issues, Action Points &amp; Remarks — '+bname+' · '+md.label)
+  +secHead('📋 Issues, Action Points &amp; Remarks — '+bname+' · '+md.label)
   +(noNotes
     ?'<div style="padding:40px;text-align:center;color:'+cSub()+';font-size:12px;">No issues or notes recorded for this branch this month.</div>'
     :'<div style="padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'
-      +noteCol('PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
-      +noteCol('ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
-      +noteCol('REMARKS',bn.r,ri,'#fff8f0','#a05a20')
+      +noteCol('⚠️ PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
+      +noteCol('✅ ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
+      +noteCol('💬 REMARKS',bn.r,ri,'#fff8f0','#a05a20')
       +'</div>'
   )
   +'</div>'
@@ -1167,18 +1161,18 @@ function renderBranchW(bname,m,w){
   +'<div style="font-size:10px;color:'+cSub()+';margin-top:8px;">Week '+w+'</div>'
   +'</div>'
   +'<div style="'+cCard()+'">'
-  +secHead('Monthly Overview — '+bname+' · '+md.label)
+  +secHead('🗓️ Monthly Overview — '+bname+' · '+md.label)
   +'<div style="padding:16px;display:flex;gap:12px;">'+wpills+'</div>'
   +'</div>'
   +'</div>'
   +'<div style="margin:0 38px 30px;">'
-  +secHead('Action Points &amp; Notes — '+bname+' · Week '+w)
+  +secHead('📝 Action Points &amp; Notes — '+bname+' · Week '+w)
   +(noNotes
     ?'<div style="padding:40px;text-align:center;color:'+cSub()+';font-size:12px;">No notes, problems, or action points recorded for this week.</div>'
     :'<div style="padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'
-      +noteCol('PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
-      +noteCol('ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
-      +noteCol('REMARKS',bn.r,ri,'#fff8f0','#a05a20')
+      +noteCol('⚠️ PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
+      +noteCol('✅ ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
+      +noteCol('💬 REMARKS',bn.r,ri,'#fff8f0','#a05a20')
       +'</div>'
   )
   +'</div>'
