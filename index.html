@@ -725,7 +725,7 @@ function renderW(m,w){
     var bc=b.h===0?'#EDE8F5':(pct>=80?G:pct>=50?Y:PC);
     var statusBg=b.h===0?'rgba(229,57,53,.1)':'rgba(97,206,112,.12)';
     var statusC=b.h===0?'#c62828':'#1a5e20';
-    var statusTxt=b.h===0?'No Huddle':b.h+' session'+(b.h>1?'s':'');
+    var statusTxt=b.h===0?'No Huddle':b.h+' huddle'+(b.h>1?'s':'');
     return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid #F5F0FC;">'
       +avatar(b.name,34,b.h>0?P:'#EDE8F5',b.h>0?Y:P)
       +'<div style="font-size:11.5px;font-weight:700;color:'+P+';min-width:110px;">'+b.name+'</div>'
