@@ -109,56 +109,38 @@ body::before {
 #up-status { text-align:center; min-height:18px; margin-top:14px; font-size:12.5px; font-weight:600; }
 
 /* ══════════════════════════════════════════════
-   MODE SELECTION PAGE
+   CUSTOM DROPDOWNS
 ══════════════════════════════════════════════ */
-#pg-mode { justify-content:center; padding:60px 20px; }
-
-.mode-pill-badge {
-  display:inline-flex; align-items:center; gap:8px; padding:7px 18px;
-  background:rgba(97,206,112,.1); border:1px solid rgba(97,206,112,.22);
-  border-radius:40px; font-size:11px; font-weight:700; color:#61CE70;
-  margin-bottom:40px; letter-spacing:.3px;
+.sel-group { display:flex; align-items:center; gap:8px; }
+.sel-block { display:flex; flex-direction:column; gap:3px; }
+.sel-lbl {
+  font-size:8px; font-weight:800; letter-spacing:2px; color:#302040;
+  text-transform:uppercase; padding-left:4px;
 }
-.mode-h { font-size:32px; font-weight:900; color:#fff; text-align:center; margin-bottom:8px; }
-.mode-sh { font-size:13px; color:#4d3e66; text-align:center; margin-bottom:50px; }
-
-.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; max-width:680px; width:100%; }
-
-.mode-card {
-  cursor:pointer; border-radius:26px; padding:38px 32px 34px;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.065);
-  box-shadow:0 10px 40px rgba(0,0,0,.28);
-  transition:all .28s cubic-bezier(.4,0,.2,1);
-  position:relative; overflow:hidden;
-  --mx:50%; --my:50%;
+.sel-wrap { position:relative; display:inline-flex; align-items:center; }
+.sel-wrap select {
+  -webkit-appearance:none; appearance:none;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px; color:#b0a0d0;
+  font-family:'Poppins',sans-serif;
+  font-size:12px; font-weight:700;
+  padding:10px 36px 10px 14px;
+  cursor:pointer; outline:none;
+  transition:all .2s ease;
+  min-width:130px;
 }
-.mode-card::after {
-  content:''; position:absolute; inset:0; border-radius:inherit;
-  background:radial-gradient(circle at var(--mx) var(--my), rgba(254,207,0,.1), transparent 55%);
-  opacity:0; transition:opacity .28s; pointer-events:none;
+.sel-wrap select:hover,
+.sel-wrap select:focus {
+  border-color:rgba(254,207,0,.35); color:#fff;
+  background:rgba(255,255,255,.07);
+  box-shadow:0 0 0 3px rgba(254,207,0,.08);
 }
-.mode-card:hover { transform:translateY(-7px); border-color:rgba(254,207,0,.25); box-shadow:0 24px 64px rgba(0,0,0,.4),0 0 0 1px rgba(254,207,0,.12); }
-.mode-card:hover::after { opacity:1; }
-
-.mc-num {
-  font-size:88px; font-weight:900; position:absolute; top:-10px; right:16px;
-  opacity:.04; line-height:1; color:#fff; letter-spacing:-4px; user-select:none;
+.sel-wrap option { background:#1a0d35; color:#fff; }
+.sel-arr {
+  position:absolute; right:12px; pointer-events:none;
+  color:#4d3e66; font-size:9px; font-weight:900;
 }
-.mc-icon {
-  width:58px; height:58px; border-radius:16px; margin-bottom:22px;
-  display:flex; align-items:center; justify-content:center; font-size:26px;
-}
-.mc-icon.y { background:rgba(254,207,0,.12); border:1px solid rgba(254,207,0,.2); }
-.mc-icon.p { background:rgba(255,188,125,.12); border:1px solid rgba(255,188,125,.2); }
-.mc-title { font-size:22px; font-weight:900; color:#fff; margin-bottom:8px; }
-.mc-desc  { font-size:12px; color:#5a4a72; line-height:1.75; margin-bottom:24px; }
-.mc-tags  { display:flex; gap:6px; flex-wrap:wrap; }
-.mc-tag   { padding:4px 11px; border-radius:20px; font-size:9.5px; font-weight:700; letter-spacing:.5px; }
-.mc-tag.y { background:rgba(254,207,0,.1); color:#FECF00; border:1px solid rgba(254,207,0,.18); }
-.mc-tag.p { background:rgba(255,188,125,.1); color:#FFBC7D; border:1px solid rgba(255,188,125,.18); }
-.mc-arrow { position:absolute; bottom:28px; right:28px; font-size:18px; color:rgba(255,255,255,.1); transition:all .25s; }
-.mode-card:hover .mc-arrow { color:var(--yellow); transform:translate(3px,-3px); }
 
 /* ══════════════════════════════════════════════
    APP CHROME
@@ -179,17 +161,6 @@ body::before {
   letter-spacing:3px; text-transform:uppercase; margin-top:2px;
 }
 .vdiv { width:1px; height:30px; background:rgba(255,255,255,.05); flex-shrink:0; }
-.mode-toggle {
-  display:flex; gap:3px; padding:4px;
-  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
-  border-radius:13px;
-}
-.mpill {
-  padding:7px 18px; border-radius:10px; font-size:11.5px; font-weight:700;
-  cursor:pointer; border:none; font-family:inherit;
-  background:transparent; color:#4d3e66; transition:all .18s; letter-spacing:.3px;
-}
-.mpill.active { background:var(--yellow); color:var(--plum); }
 .spacer { flex:1; }
 .ghost-btn {
   padding:8px 18px; border-radius:10px; font-size:11.5px; font-weight:700;
@@ -208,25 +179,6 @@ body::before {
 }
 .dl-btn:hover { transform:translateY(-1px); box-shadow:0 7px 24px rgba(254,207,0,.38); }
 .dl-btn:disabled { opacity:.45; transform:none; cursor:default; }
-
-.tab-strip { width:100%; max-width:1060px; display:flex; align-items:center; gap:7px; margin-bottom:7px; }
-.strip-lbl { font-size:9px; font-weight:800; letter-spacing:2px; color:#302040; text-transform:uppercase; width:54px; flex-shrink:0; }
-.tpill {
-  padding:8px 22px; border-radius:11px; font-size:12px; font-weight:700;
-  cursor:pointer; border:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.025); color:#4d3e66;
-  font-family:inherit; transition:all .18s; white-space:nowrap;
-}
-.tpill:hover { color:#8b75b0; border-color:rgba(255,255,255,.1); }
-.tpill.on {
-  background:var(--plum); color:#fff;
-  border-color:rgba(254,207,0,.25);
-  box-shadow:0 0 0 1px rgba(254,207,0,.12), 0 4px 14px rgba(37,22,50,.4);
-}
-.wpill { font-size:10.5px; padding:7px 15px; }
-.wpill .wn  { font-size:12.5px; font-weight:900; display:block; line-height:1.2; }
-.wpill .wr  { font-size:8.5px; font-weight:500; opacity:.55; display:block; }
-.wpill.on .wr { opacity:.7; }
 
 .info-strip {
   width:100%; max-width:1060px;
@@ -267,72 +219,55 @@ body::before {
   </div>
 </div>
 
-<!-- ══════════ MODE PAGE ══════════ -->
-<div id="pg-mode" class="page">
-  <div class="mode-pill-badge">✓ &nbsp;<span id="mode-fn">File loaded</span></div>
-  <div class="mode-h">Choose Your Report View</div>
-  <div class="mode-sh">How would you like to explore this month's operations data?</div>
-  <div class="mode-grid">
-
-    <div class="mode-card" onclick="enterMode('monthly')">
-      <div class="mc-num">M</div>
-      <div class="mc-icon y">📅</div>
-      <div class="mc-title">Monthly Report</div>
-      <div class="mc-desc">Full-month overview — huddle attendance, marketing activity, top performers and branch-level notes.</div>
-      <div class="mc-tags">
-        <span class="mc-tag y">Feb 2026</span>
-        <span class="mc-tag y">Mar 2026</span>
-        <span class="mc-tag y">Apr 2026</span>
-      </div>
-      <div class="mc-arrow">→</div>
-    </div>
-
-    <div class="mode-card" onclick="enterMode('weekly')">
-      <div class="mc-num">W</div>
-      <div class="mc-icon p">📆</div>
-      <div class="mc-title">Weekly Report</div>
-      <div class="mc-desc">Week-by-week drill-down — track which branches held huddles each week and their specific action points.</div>
-      <div class="mc-tags">
-        <span class="mc-tag p">Week 1</span>
-        <span class="mc-tag p">Week 2</span>
-        <span class="mc-tag p">Week 3</span>
-        <span class="mc-tag p">Week 4</span>
-      </div>
-      <div class="mc-arrow">→</div>
-    </div>
-
-  </div>
-</div>
-
 <!-- ══════════ APP PAGE ══════════ -->
 <div id="pg-app" class="page">
 
   <div class="app-bar">
     <div class="app-wordmark">JANAGEN<small>PHARMACIES · HYD</small></div>
     <div class="vdiv"></div>
-    <div class="mode-toggle">
-      <button class="mpill active" id="pill-m" onclick="switchMode('monthly')">📅 Monthly</button>
-      <button class="mpill"        id="pill-w" onclick="switchMode('weekly')">📆 Weekly</button>
+
+    <!-- Report Type -->
+    <div class="sel-block">
+      <div class="sel-lbl">Report Type</div>
+      <div class="sel-wrap">
+        <select id="sel-mode" onchange="onSelChange()">
+          <option value="monthly">📅 Monthly Report</option>
+          <option value="weekly">📆 Weekly Report</option>
+        </select>
+        <span class="sel-arr">▾</span>
+      </div>
     </div>
+
+    <!-- Month -->
+    <div class="sel-block">
+      <div class="sel-lbl">Month</div>
+      <div class="sel-wrap">
+        <select id="sel-month" onchange="onSelChange()">
+          <option value="Feb">Feb 2026</option>
+          <option value="Mar">Mar 2026</option>
+          <option value="Apr">Apr 2026</option>
+        </select>
+        <span class="sel-arr">▾</span>
+      </div>
+    </div>
+
+    <!-- Week (hidden in monthly mode) -->
+    <div class="sel-block" id="wrap-week" style="display:none">
+      <div class="sel-lbl">Week</div>
+      <div class="sel-wrap">
+        <select id="sel-week" onchange="onSelChange()">
+          <option value="1">Week 1</option>
+          <option value="2">Week 2</option>
+          <option value="3">Week 3</option>
+          <option value="4">Week 4</option>
+        </select>
+        <span class="sel-arr">▾</span>
+      </div>
+    </div>
+
     <div class="spacer"></div>
-    <button class="ghost-btn" onclick="goModeSelect()">← Views</button>
     <button class="ghost-btn" onclick="goUpload()">↺ Reupload</button>
     <button class="dl-btn" id="dlBtn" onclick="downloadDashboard()">⬇ Download</button>
-  </div>
-
-  <div class="tab-strip" id="month-strip">
-    <div class="strip-lbl">MONTH</div>
-    <button class="tpill on" id="tab-Feb" onclick="switchMonth('Feb')">Feb 2026</button>
-    <button class="tpill"    id="tab-Mar" onclick="switchMonth('Mar')">Mar 2026</button>
-    <button class="tpill"    id="tab-Apr" onclick="switchMonth('Apr')">Apr 2026</button>
-  </div>
-
-  <div class="tab-strip" id="week-strip" style="display:none">
-    <div class="strip-lbl">WEEK</div>
-    <button class="tpill wpill on" id="tab-W1" onclick="switchWeek(1)"><span class="wn">W1</span><span class="wr" id="wr1">—</span></button>
-    <button class="tpill wpill"    id="tab-W2" onclick="switchWeek(2)"><span class="wn">W2</span><span class="wr" id="wr2">—</span></button>
-    <button class="tpill wpill"    id="tab-W3" onclick="switchWeek(3)"><span class="wn">W3</span><span class="wr" id="wr3">—</span></button>
-    <button class="tpill wpill"    id="tab-W4" onclick="switchWeek(4)"><span class="wn">W4</span><span class="wr" id="wr4">—</span></button>
   </div>
 
   <div class="info-strip">
@@ -393,8 +328,9 @@ function handleFile(inp){
     try{
       var wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
       parse(wb);
-      document.getElementById('mode-fn').textContent=f.name;
-      show('pg-mode');st.textContent='';
+      initApp();
+      show('pg-app');
+      st.textContent='';
     }catch(er){st.style.color=RE;st.textContent='Error: '+er.message;}
   };
   rd.onerror=function(){st.style.color=RE;st.textContent='Could not read file.';};
@@ -484,37 +420,46 @@ function parse(wb){
 }
 
 /* ══════════════════════════ NAV ══════════════════════════ */
-function show(id){['pg-upload','pg-mode','pg-app'].forEach(function(p){document.getElementById(p).classList.remove('active');});document.getElementById(id).classList.add('active');}
+function show(id){['pg-upload','pg-app'].forEach(function(p){document.getElementById(p).classList.remove('active');});document.getElementById(id).classList.add('active');}
 function goUpload(){show('pg-upload');}
-function goModeSelect(){show('pg-mode');}
 
-function enterMode(mode){
-  MODE=mode;show('pg-app');
-  document.getElementById('pill-m').classList.toggle('active',mode==='monthly');
-  document.getElementById('pill-w').classList.toggle('active',mode==='weekly');
-  document.getElementById('week-strip').style.display=mode==='weekly'?'flex':'none';
-  MONTH='Feb';
-  ['Feb','Mar','Apr'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('on',x==='Feb');});
-  if(mode==='monthly'){renderM('Feb');}
-  else{WEEK=1;updWkTabs('Feb');renderW('Feb',1);}
+function initApp(){
+  /* Set dropdowns to defaults */
+  document.getElementById('sel-mode').value  = 'monthly';
+  document.getElementById('sel-month').value = 'Feb';
+  document.getElementById('sel-week').value  = '1';
+  document.getElementById('wrap-week').style.display = 'none';
+  /* Populate week options with date ranges for Feb */
+  populateWeekOptions('Feb');
+  MODE='monthly'; MONTH='Feb'; WEEK=1;
+  renderM('Feb');
 }
-function switchMode(m){if(m!==MODE)enterMode(m);}
-function switchMonth(m){
-  MONTH=m;
-  ['Feb','Mar','Apr'].forEach(function(x){document.getElementById('tab-'+x).classList.toggle('on',x===m);});
-  if(MODE==='monthly')renderM(m);
-  else{WEEK=1;updWkTabs(m);renderW(m,1);}
-}
-function switchWeek(w){
-  WEEK=w;[1,2,3,4].forEach(function(x){document.getElementById('tab-W'+x).classList.toggle('on',x===w);});
-  renderW(MONTH,w);
-}
-function updWkTabs(m){
-  [1,2,3,4].forEach(function(w){
-    document.getElementById('tab-W'+w).classList.toggle('on',w===1);
+
+function populateWeekOptions(m){
+  var sel=document.getElementById('sel-week');
+  for(var i=0;i<sel.options.length;i++){
+    var w=i+1;
     var wd=WEEK_DATA[m]&&WEEK_DATA[m][w];
-    document.getElementById('wr'+w).textContent=wd?wd.dr:'—';
-  });
+    sel.options[i].text='Week '+w+(wd&&wd.dr!=='—'?' · '+wd.dr:'');
+  }
+}
+
+function onSelChange(){
+  var mode  = document.getElementById('sel-mode').value;
+  var month = document.getElementById('sel-month').value;
+  var week  = parseInt(document.getElementById('sel-week').value)||1;
+
+  MODE=mode; MONTH=month; WEEK=week;
+
+  var showWeek = mode==='weekly';
+  document.getElementById('wrap-week').style.display = showWeek?'flex':'none';
+
+  if(showWeek){
+    populateWeekOptions(month);
+    renderW(month,week);
+  } else {
+    renderM(month);
+  }
 }
 
 /* ══════════════════════════ HELPERS ══════════════════════════ */
@@ -861,14 +806,6 @@ async function downloadDashboard(){
   btn.innerHTML='⬇ Download';btn.disabled=false;
 }
 
-/* ── Mode card spotlight effect ── */
-document.querySelectorAll('.mode-card').forEach(function(card){
-  card.addEventListener('mousemove',function(e){
-    var r=card.getBoundingClientRect();
-    card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-    card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-  });
-});
 </script>
 </body>
 </html>
