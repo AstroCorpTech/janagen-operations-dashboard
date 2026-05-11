@@ -312,63 +312,64 @@ var G  = '#61CE70';  // green
 var RE = '#e53935';  // red
 
 /* ══════════════════════════ THEMES ══════════════════════════ */
+var STYLE='classic';
 var THEME_IDX=0;
 var THEMES=[
-  // ─── Dark Premium ───
-  {n:'JANAGEN Classic',   p:'#251632',p2:'#362048',y:'#FECF00',pc:'#FFBC7D',g:'#61CE70',bg:'#07031a'},
-  {n:'Midnight Ocean',    p:'#0a1628',p2:'#0d2444',y:'#38bdf8',pc:'#7dd3fc',g:'#34d399',bg:'#020a18'},
-  {n:'Forest Night',      p:'#0d2818',p2:'#1a3d26',y:'#84cc16',pc:'#bef264',g:'#22c55e',bg:'#030f08'},
-  {n:'Obsidian Gold',     p:'#1c1c1c',p2:'#2e2e2e',y:'#d4af37',pc:'#f5d97e',g:'#68d391',bg:'#0a0a0a'},
-  {n:'Cosmic Purple',     p:'#1e0a3c',p2:'#2d1455',y:'#c084fc',pc:'#e879f9',g:'#4ade80',bg:'#0d0420'},
-  {n:'Charcoal & Flame',  p:'#1c1c1e',p2:'#2c2c2e',y:'#ff6b35',pc:'#ff9f68',g:'#30d158',bg:'#0a0a0a'},
-  {n:'Deep Teal Night',   p:'#0f2b2b',p2:'#1a3f3f',y:'#2dd4bf',pc:'#5eead4',g:'#a3e635',bg:'#050f0f'},
-  {n:'Rose Gold Night',   p:'#1f0d16',p2:'#301420',y:'#e4a0b0',pc:'#f9c9d0',g:'#6ee7b7',bg:'#0d0609'},
-  {n:'Navy & Electric',   p:'#0f1f3d',p2:'#162d57',y:'#60a5fa',pc:'#93c5fd',g:'#34d399',bg:'#050e1e'},
-  {n:'Phantom Green',     p:'#041a0e',p2:'#082918',y:'#00e676',pc:'#69f0ae',g:'#00bfa5',bg:'#020d06'},
-  // ─── Corporate ───
-  {n:'Corporate Blue',    p:'#1e3a5f',p2:'#2a4f82',y:'#fbbf24',pc:'#fcd34d',g:'#4ade80',bg:'#0d1f35'},
-  {n:'Steel Executive',   p:'#1e2832',p2:'#2d3a46',y:'#64b5f6',pc:'#90caf9',g:'#66bb6a',bg:'#0a1018'},
-  {n:'Slate & Crimson',   p:'#1a1f2e',p2:'#262d40',y:'#ef4444',pc:'#f87171',g:'#4ade80',bg:'#0a0d16'},
-  {n:'Pine & Gold',       p:'#1a2e1a',p2:'#243824',y:'#eab308',pc:'#facc15',g:'#86efac',bg:'#080f08'},
-  {n:'Burgundy Legacy',   p:'#2d0a14',p2:'#40101d',y:'#fbbf24',pc:'#fde68a',g:'#6ee7b7',bg:'#140408'},
-  {n:'Oxford Night',      p:'#002147',p2:'#00306a',y:'#c9a84c',pc:'#e0c97a',g:'#4ade80',bg:'#000d1f'},
-  {n:'British Racing',    p:'#002d1f',p2:'#003d28',y:'#d4af37',pc:'#e8d08a',g:'#86efac',bg:'#00110c'},
-  {n:'Gunmetal Electric', p:'#1a1f2e',p2:'#242b3d',y:'#3b82f6',pc:'#60a5fa',g:'#34d399',bg:'#0d1018'},
-  {n:'Espresso & Tan',    p:'#2c1810',p2:'#3d2316',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#120a06'},
-  {n:'Indigo Summit',     p:'#1e1b4b',p2:'#2d2a6b',y:'#818cf8',pc:'#a5b4fc',g:'#4ade80',bg:'#0d0b24'},
-  // ─── Healthcare ───
-  {n:'Medical Blue',      p:'#0e3054',p2:'#164878',y:'#38bdf8',pc:'#7dd3fc',g:'#4ade80',bg:'#06192c'},
-  {n:'Mint Fresh',        p:'#064e3b',p2:'#065f46',y:'#6ee7b7',pc:'#a7f3d0',g:'#34d399',bg:'#021a12'},
-  {n:'Teal & Coral',      p:'#0f3443',p2:'#164e63',y:'#fb923c',pc:'#fdba74',g:'#2dd4bf',bg:'#05161e'},
-  {n:'Lavender Care',     p:'#2e1065',p2:'#3b0764',y:'#c4b5fd',pc:'#ddd6fe',g:'#6ee7b7',bg:'#12052a'},
-  {n:'Sage & Stone',      p:'#1f2d1f',p2:'#2b3d2b',y:'#a3b18a',pc:'#d4cfc8',g:'#52b788',bg:'#0d120d'},
-  {n:'Arctic Blue',       p:'#042f2e',p2:'#064e3b',y:'#5eead4',pc:'#99f6e4',g:'#bef264',bg:'#011210'},
-  {n:'Clean Clinical',    p:'#1e3a5f',p2:'#1e40af',y:'#22c55e',pc:'#86efac',g:'#4ade80',bg:'#0d1f35'},
-  {n:'Sky & Tangerine',   p:'#0c2340',p2:'#0f3460',y:'#fb923c',pc:'#fed7aa',g:'#4ade80',bg:'#05101e'},
-  {n:'Aqua Depths',       p:'#0a2744',p2:'#0e3a62',y:'#22d3ee',pc:'#67e8f9',g:'#34d399',bg:'#04101e'},
-  {n:'Turquoise & Honey', p:'#042f2e',p2:'#065f46',y:'#f59e0b',pc:'#fbbf24',g:'#2dd4bf',bg:'#011210'},
-  // ─── Vibrant ───
-  {n:'Sunset Vibes',      p:'#2d0a2e',p2:'#3d1040',y:'#f97316',pc:'#fb923c',g:'#f472b6',bg:'#180514'},
-  {n:'Neon Dreams',       p:'#1a0533',p2:'#25064a',y:'#facc15',pc:'#fde047',g:'#a855f7',bg:'#0d0219'},
-  {n:'Electric Punch',    p:'#0d0d2b',p2:'#14145a',y:'#ec4899',pc:'#f472b6',g:'#60a5fa',bg:'#050512'},
-  {n:'Coral & Teal',      p:'#1a1a2e',p2:'#16213e',y:'#f87171',pc:'#fca5a5',g:'#2dd4bf',bg:'#0a0a18'},
-  {n:'Amber Forge',       p:'#1c1202',p2:'#2d1d04',y:'#f59e0b',pc:'#fbbf24',g:'#34d399',bg:'#0d0a01'},
-  {n:'Emerald City',      p:'#022c22',p2:'#03543f',y:'#fbbf24',pc:'#fde68a',g:'#10b981',bg:'#010f0c'},
-  {n:'Ruby Night',        p:'#1f0505',p2:'#320808',y:'#fca5a5',pc:'#fecaca',g:'#4ade80',bg:'#0d0202'},
-  {n:'Violet Storm',      p:'#150d2b',p2:'#1e1240',y:'#22d3ee',pc:'#67e8f9',g:'#a78bfa',bg:'#080514'},
-  {n:'Tangerine Dusk',    p:'#1c0d02',p2:'#2e1506',y:'#ea580c',pc:'#f97316',g:'#4ade80',bg:'#0d0601'},
-  {n:'Rose & Dark',       p:'#1f0d16',p2:'#2e1222',y:'#f43f5e',pc:'#fb7185',g:'#34d399',bg:'#0d0609'},
-  // ─── Warm & Earthy ───
-  {n:'Terracotta',        p:'#3d1c08',p2:'#542610',y:'#fb923c',pc:'#fed7aa',g:'#84cc16',bg:'#1a0c04'},
-  {n:'Desert Sand',       p:'#2a2318',p2:'#3d3324',y:'#d97706',pc:'#fbbf24',g:'#86efac',bg:'#110e0a'},
-  {n:'Autumn Harvest',    p:'#2d1507',p2:'#3d1e0b',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#140903'},
-  {n:'Coffee House',      p:'#1e1209',p2:'#2e1c0e',y:'#b45309',pc:'#d97706',g:'#4ade80',bg:'#0d0804'},
-  {n:'Mocha & Caramel',   p:'#2d1b0e',p2:'#3f2615',y:'#c2833b',pc:'#d9a96e',g:'#86efac',bg:'#120b06'},
-  {n:'Golden Mustard',    p:'#1a1200',p2:'#2b1e00',y:'#ca8a04',pc:'#eab308',g:'#4ade80',bg:'#0d0900'},
-  {n:'Olive Grove',       p:'#1a1f0a',p2:'#252d10',y:'#84cc16',pc:'#a3e635',g:'#22c55e',bg:'#0a0d04'},
-  {n:'Warm Slate',        p:'#1e1a24',p2:'#2d2736',y:'#a78bfa',pc:'#c4b5fd',g:'#4ade80',bg:'#0d0b12'},
-  {n:'Papaya Sunrise',    p:'#1f0a08',p2:'#2e100c',y:'#2dd4bf',pc:'#5eead4',g:'#fb923c',bg:'#0d0504'},
-  {n:'Spice Route',       p:'#2d0f00',p2:'#3f1600',y:'#ef4444',pc:'#f87171',g:'#fbbf24',bg:'#140700'}
+  // ─── 01-10: Premium Cards ───
+  {n:'JANAGEN Classic',   s:'classic',p:'#251632',p2:'#362048',y:'#FECF00',pc:'#FFBC7D',g:'#61CE70',bg:'#07031a'},
+  {n:'Midnight Ocean',    s:'classic',p:'#0a1628',p2:'#0d2444',y:'#38bdf8',pc:'#7dd3fc',g:'#34d399',bg:'#020a18'},
+  {n:'Forest Night',      s:'classic',p:'#0d2818',p2:'#1a3d26',y:'#84cc16',pc:'#bef264',g:'#22c55e',bg:'#030f08'},
+  {n:'Obsidian Gold',     s:'classic',p:'#1c1c1c',p2:'#2e2e2e',y:'#d4af37',pc:'#f5d97e',g:'#68d391',bg:'#0a0a0a'},
+  {n:'Cosmic Purple',     s:'classic',p:'#1e0a3c',p2:'#2d1455',y:'#c084fc',pc:'#e879f9',g:'#4ade80',bg:'#0d0420'},
+  {n:'Charcoal & Flame',  s:'classic',p:'#1c1c1e',p2:'#2c2c2e',y:'#ff6b35',pc:'#ff9f68',g:'#30d158',bg:'#0a0a0a'},
+  {n:'Deep Teal Night',   s:'classic',p:'#0f2b2b',p2:'#1a3f3f',y:'#2dd4bf',pc:'#5eead4',g:'#a3e635',bg:'#050f0f'},
+  {n:'Rose Gold Night',   s:'classic',p:'#1f0d16',p2:'#301420',y:'#e4a0b0',pc:'#f9c9d0',g:'#6ee7b7',bg:'#0d0609'},
+  {n:'Navy & Electric',   s:'classic',p:'#0f1f3d',p2:'#162d57',y:'#60a5fa',pc:'#93c5fd',g:'#34d399',bg:'#050e1e'},
+  {n:'Phantom Green',     s:'classic',p:'#041a0e',p2:'#082918',y:'#00e676',pc:'#69f0ae',g:'#00bfa5',bg:'#020d06'},
+  // ─── 11-20: Dark Panels ───
+  {n:'Corporate Blue',    s:'dark',p:'#1e3a5f',p2:'#2a4f82',y:'#fbbf24',pc:'#fcd34d',g:'#4ade80',bg:'#0d1f35'},
+  {n:'Steel Executive',   s:'dark',p:'#1e2832',p2:'#2d3a46',y:'#64b5f6',pc:'#90caf9',g:'#66bb6a',bg:'#0a1018'},
+  {n:'Slate & Crimson',   s:'dark',p:'#1a1f2e',p2:'#262d40',y:'#ef4444',pc:'#f87171',g:'#4ade80',bg:'#0a0d16'},
+  {n:'Pine & Gold',       s:'dark',p:'#1a2e1a',p2:'#243824',y:'#eab308',pc:'#facc15',g:'#86efac',bg:'#080f08'},
+  {n:'Burgundy Legacy',   s:'dark',p:'#2d0a14',p2:'#40101d',y:'#fbbf24',pc:'#fde68a',g:'#6ee7b7',bg:'#140408'},
+  {n:'Oxford Night',      s:'dark',p:'#002147',p2:'#00306a',y:'#c9a84c',pc:'#e0c97a',g:'#4ade80',bg:'#000d1f'},
+  {n:'British Racing',    s:'dark',p:'#002d1f',p2:'#003d28',y:'#d4af37',pc:'#e8d08a',g:'#86efac',bg:'#00110c'},
+  {n:'Gunmetal Electric', s:'dark',p:'#1a1f2e',p2:'#242b3d',y:'#3b82f6',pc:'#60a5fa',g:'#34d399',bg:'#0d1018'},
+  {n:'Espresso & Tan',    s:'dark',p:'#2c1810',p2:'#3d2316',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#120a06'},
+  {n:'Indigo Summit',     s:'dark',p:'#1e1b4b',p2:'#2d2a6b',y:'#818cf8',pc:'#a5b4fc',g:'#4ade80',bg:'#0d0b24'},
+  // ─── 21-30: Flat Design ───
+  {n:'Medical Blue',      s:'flat',p:'#0e3054',p2:'#164878',y:'#38bdf8',pc:'#7dd3fc',g:'#4ade80',bg:'#06192c'},
+  {n:'Mint Fresh',        s:'flat',p:'#064e3b',p2:'#065f46',y:'#6ee7b7',pc:'#a7f3d0',g:'#34d399',bg:'#021a12'},
+  {n:'Teal & Coral',      s:'flat',p:'#0f3443',p2:'#164e63',y:'#fb923c',pc:'#fdba74',g:'#2dd4bf',bg:'#05161e'},
+  {n:'Lavender Care',     s:'flat',p:'#2e1065',p2:'#3b0764',y:'#c4b5fd',pc:'#ddd6fe',g:'#6ee7b7',bg:'#12052a'},
+  {n:'Sage & Stone',      s:'flat',p:'#1f2d1f',p2:'#2b3d2b',y:'#a3b18a',pc:'#d4cfc8',g:'#52b788',bg:'#0d120d'},
+  {n:'Arctic Blue',       s:'flat',p:'#042f2e',p2:'#064e3b',y:'#5eead4',pc:'#99f6e4',g:'#bef264',bg:'#011210'},
+  {n:'Clean Clinical',    s:'flat',p:'#1e3a5f',p2:'#1e40af',y:'#22c55e',pc:'#86efac',g:'#4ade80',bg:'#0d1f35'},
+  {n:'Sky & Tangerine',   s:'flat',p:'#0c2340',p2:'#0f3460',y:'#fb923c',pc:'#fed7aa',g:'#4ade80',bg:'#05101e'},
+  {n:'Aqua Depths',       s:'flat',p:'#0a2744',p2:'#0e3a62',y:'#22d3ee',pc:'#67e8f9',g:'#34d399',bg:'#04101e'},
+  {n:'Turquoise & Honey', s:'flat',p:'#042f2e',p2:'#065f46',y:'#f59e0b',pc:'#fbbf24',g:'#2dd4bf',bg:'#011210'},
+  // ─── 31-40: Glassmorphism ───
+  {n:'Sunset Vibes',      s:'glass',p:'#2d0a2e',p2:'#3d1040',y:'#f97316',pc:'#fb923c',g:'#f472b6',bg:'#180514'},
+  {n:'Neon Dreams',       s:'glass',p:'#1a0533',p2:'#25064a',y:'#facc15',pc:'#fde047',g:'#a855f7',bg:'#0d0219'},
+  {n:'Electric Punch',    s:'glass',p:'#0d0d2b',p2:'#14145a',y:'#ec4899',pc:'#f472b6',g:'#60a5fa',bg:'#050512'},
+  {n:'Coral & Teal',      s:'glass',p:'#1a1a2e',p2:'#16213e',y:'#f87171',pc:'#fca5a5',g:'#2dd4bf',bg:'#0a0a18'},
+  {n:'Amber Forge',       s:'glass',p:'#1c1202',p2:'#2d1d04',y:'#f59e0b',pc:'#fbbf24',g:'#34d399',bg:'#0d0a01'},
+  {n:'Emerald City',      s:'glass',p:'#022c22',p2:'#03543f',y:'#fbbf24',pc:'#fde68a',g:'#10b981',bg:'#010f0c'},
+  {n:'Ruby Night',        s:'glass',p:'#1f0505',p2:'#320808',y:'#fca5a5',pc:'#fecaca',g:'#4ade80',bg:'#0d0202'},
+  {n:'Violet Storm',      s:'glass',p:'#150d2b',p2:'#1e1240',y:'#22d3ee',pc:'#67e8f9',g:'#a78bfa',bg:'#080514'},
+  {n:'Tangerine Dusk',    s:'glass',p:'#1c0d02',p2:'#2e1506',y:'#ea580c',pc:'#f97316',g:'#4ade80',bg:'#0d0601'},
+  {n:'Rose & Dark',       s:'glass',p:'#1f0d16',p2:'#2e1222',y:'#f43f5e',pc:'#fb7185',g:'#34d399',bg:'#0d0609'},
+  // ─── 41-50: Bold Editorial ───
+  {n:'Terracotta',        s:'bold',p:'#3d1c08',p2:'#542610',y:'#fb923c',pc:'#fed7aa',g:'#84cc16',bg:'#1a0c04'},
+  {n:'Desert Sand',       s:'bold',p:'#2a2318',p2:'#3d3324',y:'#d97706',pc:'#fbbf24',g:'#86efac',bg:'#110e0a'},
+  {n:'Autumn Harvest',    s:'bold',p:'#2d1507',p2:'#3d1e0b',y:'#d97706',pc:'#f59e0b',g:'#84cc16',bg:'#140903'},
+  {n:'Coffee House',      s:'bold',p:'#1e1209',p2:'#2e1c0e',y:'#b45309',pc:'#d97706',g:'#4ade80',bg:'#0d0804'},
+  {n:'Mocha & Caramel',   s:'bold',p:'#2d1b0e',p2:'#3f2615',y:'#c2833b',pc:'#d9a96e',g:'#86efac',bg:'#120b06'},
+  {n:'Golden Mustard',    s:'bold',p:'#1a1200',p2:'#2b1e00',y:'#ca8a04',pc:'#eab308',g:'#4ade80',bg:'#0d0900'},
+  {n:'Olive Grove',       s:'bold',p:'#1a1f0a',p2:'#252d10',y:'#84cc16',pc:'#a3e635',g:'#22c55e',bg:'#0a0d04'},
+  {n:'Warm Slate',        s:'bold',p:'#1e1a24',p2:'#2d2736',y:'#a78bfa',pc:'#c4b5fd',g:'#4ade80',bg:'#0d0b12'},
+  {n:'Papaya Sunrise',    s:'bold',p:'#1f0a08',p2:'#2e100c',y:'#2dd4bf',pc:'#5eead4',g:'#fb923c',bg:'#0d0504'},
+  {n:'Spice Route',       s:'bold',p:'#2d0f00',p2:'#3f1600',y:'#ef4444',pc:'#f87171',g:'#fbbf24',bg:'#140700'}
 ];
 
 function applyTheme(t){
@@ -376,12 +377,67 @@ function applyTheme(t){
   r.setProperty('--plum',t.p);r.setProperty('--plum2',t.p2);
   r.setProperty('--yellow',t.y);r.setProperty('--peach',t.pc);
   r.setProperty('--green',t.g);r.setProperty('--bg',t.bg);
-  P=t.p;P2=t.p2;Y=t.y;PC=t.pc;G=t.g;
+  P=t.p;P2=t.p2;Y=t.y;PC=t.pc;G=t.g;STYLE=t.s;
   var dot=document.getElementById('theme-dot');if(dot){dot.style.background=t.y;dot.style.boxShadow='0 0 5px '+t.y+'88';}
 }
 function onThemeChange(){
   var idx=parseInt(document.getElementById('sel-theme').value)||0;
   THEME_IDX=idx;applyTheme(THEMES[idx]);onSelChange();
+}
+
+/* ── Layout helpers ─────────────────────────────── */
+function dm(){ return STYLE==='dark'||STYLE==='glass'; }
+function cCard(){
+  if(STYLE==='dark') return 'background:'+P2+';border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;';
+  if(STYLE==='glass') return 'background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:20px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.4);';
+  if(STYLE==='flat') return 'background:#fff;border-radius:6px;border:2px solid '+P+';overflow:hidden;';
+  if(STYLE==='bold') return 'background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e8e0f0;box-shadow:0 4px 20px rgba(0,0,0,.06);';
+  return 'background:#fff;border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);';
+}
+function cTxt(){ return dm()?'#fff':P; }
+function cSub(){ return dm()?'rgba(255,255,255,.4)':STYLE==='flat'?'#777':'#C0B0D8'; }
+function cBorder(){ return dm()?'rgba(255,255,255,.05)':STYLE==='flat'?'#e8e8e8':'#F5F0FC'; }
+function cBarBg(){ return dm()?'rgba(255,255,255,.1)':STYLE==='flat'?'#ebebeb':'#EDE8F5'; }
+function cAlt(i){ return dm()?'rgba(255,255,255,.0'+(i%2?'0':'2')+')':i%2===0?'#fff':STYLE==='flat'?'#f9f9f9':'#FAFAFF'; }
+function cThHead(){ return dm()?'rgba(255,255,255,.03)':STYLE==='flat'?'#f4f4f4':'#FAFAFF'; }
+function dashDiv(){
+  var bg=STYLE==='dark'?P:STYLE==='glass'?'transparent':STYLE==='bold'?'#f5f2fb':'#fff';
+  return '<div style="background:'+bg+';font-family:\'Poppins\',sans-serif;">';
+}
+function dashHdr(title,b1,b2){
+  if(STYLE==='flat'){
+    return '<div style="background:'+P+';padding:26px 48px 22px;position:relative;overflow:hidden;">'
+      +'<div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:96px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none;letter-spacing:-4px;">JAN</div>'
+      +'<div style="position:relative;">'
+      +'<div style="font-size:8.5px;font-weight:800;letter-spacing:4px;color:'+Y+';text-transform:uppercase;margin-bottom:8px;">JANAGEN PHARMACIES · HYDERABAD</div>'
+      +'<div style="font-size:36px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:14px;">'+title+'</div>'
+      +'<div style="display:flex;gap:8px;">'
+      +'<div style="background:'+Y+';color:'+P+';padding:6px 20px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
+      +(b2?'<div style="border:1.5px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:4px;font-size:10px;font-weight:600;color:rgba(255,255,255,.7);">'+b2+'</div>':'')
+      +'</div></div></div>';
+  }
+  if(STYLE==='bold'){
+    return '<div style="background:'+Y+';padding:30px 48px 26px;position:relative;overflow:hidden;">'
+      +'<div style="position:absolute;right:-24px;top:-24px;width:190px;height:190px;border-radius:50%;background:rgba(0,0,0,.07);pointer-events:none;"></div>'
+      +'<div style="position:absolute;left:320px;bottom:-36px;width:120px;height:120px;border-radius:50%;background:rgba(0,0,0,.04);pointer-events:none;"></div>'
+      +'<div style="position:relative;">'
+      +'<div style="font-size:8.5px;font-weight:800;letter-spacing:4px;color:'+P+'99;text-transform:uppercase;margin-bottom:8px;">JANAGEN PHARMACIES</div>'
+      +'<div style="font-size:40px;font-weight:900;color:'+P+';line-height:1.05;letter-spacing:-1px;margin-bottom:14px;">'+title+'</div>'
+      +'<div style="display:flex;gap:8px;">'
+      +'<div style="background:'+P+';color:'+Y+';padding:8px 22px;border-radius:8px;font-size:11px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
+      +(b2?'<div style="background:rgba(0,0,0,.1);padding:8px 16px;border-radius:8px;font-size:11px;font-weight:600;color:'+P+'cc;">'+b2+'</div>':'')
+      +'</div></div></div>';
+  }
+  return '<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:36px 48px 32px;text-align:center;position:relative;overflow:hidden;">'
+    +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
+    +'<div style="position:relative;">'
+    +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.55);text-transform:uppercase;margin-bottom:12px;">JANAGEN PHARMACIES · HYDERABAD</div>'
+    +'<div style="font-size:50px;font-weight:900;color:'+Y+';letter-spacing:3px;line-height:1.05;text-shadow:0 0 60px rgba(254,207,0,.2);">'+title+'</div>'
+    +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:16px auto;border-radius:2px;"></div>'
+    +'<div style="display:inline-flex;align-items:center;gap:10px;margin-top:4px;">'
+    +'<div style="background:'+Y+';color:'+P+';padding:9px 28px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">'+b1+'</div>'
+    +(b2?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 20px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);">'+b2+'</div>':'')
+    +'</div></div></div>';
 }
 
 /* ══════════════════════════ STATE ══════════════════════════ */
@@ -524,11 +580,11 @@ function initApp(){
   var ts=document.getElementById('sel-theme');
   ts.innerHTML='';
   var tgroups=[
-    {label:'★ Dark Premium',  start:0,  end:10},
-    {label:'◆ Corporate',     start:10, end:20},
-    {label:'✦ Healthcare',    start:20, end:30},
-    {label:'⚡ Vibrant',      start:30, end:40},
-    {label:'◉ Warm & Earthy', start:40, end:50}
+    {label:'◈ Premium Cards',  start:0,  end:10},
+    {label:'◆ Dark Panels',    start:10, end:20},
+    {label:'✦ Flat Design',    start:20, end:30},
+    {label:'⚡ Glassmorphism', start:30, end:40},
+    {label:'◉ Bold Editorial', start:40, end:50}
   ];
   tgroups.forEach(function(gr){
     var og=document.createElement('optgroup');og.label=gr.label;
@@ -590,6 +646,32 @@ function barC(p){return p===100?G:p>=85?Y:p>=77?PC:RE;}
 function txtC(p){return p===100?'#1a5e20':p>=85?'#7a5f00':p>=77?'#7a4000':'#c62828';}
 
 function secHead(title){
+  if(STYLE==='flat'){
+    return '<div style="background:'+Y+';padding:12px 24px;display:flex;align-items:center;gap:12px;">'
+      +'<div style="width:4px;height:20px;background:'+P+';border-radius:2px;flex-shrink:0;"></div>'
+      +'<span style="font-size:10px;font-weight:900;color:'+P+';letter-spacing:2px;text-transform:uppercase;">'+title+'</span>'
+      +'</div>';
+  }
+  if(STYLE==='dark'){
+    return '<div style="background:'+P2+';padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);">'
+      +'<span style="font-size:10px;font-weight:800;color:'+Y+';letter-spacing:2.5px;text-transform:uppercase;">'+title+'</span>'
+      +'<div style="display:flex;gap:4px;">'
+      +'<div style="width:6px;height:6px;border-radius:50%;background:'+Y+';"></div>'
+      +'<div style="width:6px;height:6px;border-radius:50%;background:'+PC+';opacity:.6;"></div>'
+      +'</div></div>';
+  }
+  if(STYLE==='glass'){
+    return '<div style="background:rgba(255,255,255,.07);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07);">'
+      +'<span style="font-size:10px;font-weight:800;color:'+Y+';letter-spacing:2.5px;text-transform:uppercase;text-shadow:0 0 16px '+Y+'55;">'+title+'</span>'
+      +'<div style="width:48px;height:2px;background:linear-gradient(90deg,'+Y+',transparent);border-radius:1px;"></div>'
+      +'</div>';
+  }
+  if(STYLE==='bold'){
+    return '<div style="background:'+P+';padding:15px 24px;display:flex;align-items:center;gap:14px;">'
+      +'<div style="width:5px;height:26px;background:'+Y+';border-radius:3px;flex-shrink:0;"></div>'
+      +'<span style="font-size:11px;font-weight:900;color:#fff;letter-spacing:3px;text-transform:uppercase;">'+title+'</span>'
+      +'</div>';
+  }
   return '<div style="background:linear-gradient(135deg,'+P+' 0%,'+P2+' 100%);padding:15px 24px;display:flex;align-items:center;justify-content:space-between;">'
     +'<span style="font-size:10px;font-weight:800;color:#fff;letter-spacing:2.5px;text-transform:uppercase;">'+title+'</span>'
     +'<div style="display:flex;gap:4px;">'
@@ -599,7 +681,44 @@ function secHead(title){
     +'</div></div>';
 }
 
-function kpiCard(lbl, val, sub, acColor, icon){
+function kpiCard(lbl,val,sub,acColor,icon){
+  if(STYLE==='dark'){
+    return '<div style="background:'+P2+';border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.06);border-left:3px solid '+acColor+';">'
+      +'<div style="padding:18px 18px 16px;">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">'
+      +'<div style="font-size:8.5px;font-weight:800;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;max-width:80px;line-height:1.3;">'+lbl+'</div>'
+      +'<div style="font-size:16px;opacity:.7;">'+icon+'</div>'
+      +'</div>'
+      +'<div style="font-size:34px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-1px;">'+val+'</div>'
+      +'<div style="font-size:9.5px;color:rgba(255,255,255,.3);margin-top:6px;line-height:1.4;">'+sub+'</div>'
+      +'</div></div>';
+  }
+  if(STYLE==='flat'){
+    return '<div style="background:#fff;border-radius:6px;border-left:5px solid '+acColor+';padding:16px 18px;">'
+      +'<div style="font-size:8px;font-weight:900;color:#999;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;">'+lbl+'</div>'
+      +'<div style="font-size:32px;font-weight:900;color:'+P+';line-height:1;letter-spacing:-1px;margin-bottom:6px;">'+val+'</div>'
+      +'<div style="font-size:9px;color:#aaa;line-height:1.4;">'+sub+'</div>'
+      +'</div>';
+  }
+  if(STYLE==='glass'){
+    return '<div style="background:rgba(255,255,255,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.13);box-shadow:0 4px 24px rgba(0,0,0,.3);">'
+      +'<div style="height:2px;background:'+acColor+';box-shadow:0 0 8px '+acColor+';"></div>'
+      +'<div style="padding:18px 18px 16px;">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">'
+      +'<div style="font-size:8.5px;font-weight:800;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase;max-width:80px;line-height:1.3;">'+lbl+'</div>'
+      +'<div style="font-size:16px;opacity:.8;">'+icon+'</div>'
+      +'</div>'
+      +'<div style="font-size:34px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-1px;text-shadow:0 0 20px '+Y+'55;">'+val+'</div>'
+      +'<div style="font-size:9.5px;color:rgba(255,255,255,.35);margin-top:6px;line-height:1.4;">'+sub+'</div>'
+      +'</div></div>';
+  }
+  if(STYLE==='bold'){
+    return '<div style="background:'+P+';border-radius:12px;padding:22px 18px;">'
+      +'<div style="font-size:8px;font-weight:900;color:rgba(255,255,255,.5);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;">'+icon+' '+lbl+'</div>'
+      +'<div style="font-size:36px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-1px;margin-bottom:8px;">'+val+'</div>'
+      +'<div style="font-size:9px;color:rgba(255,255,255,.45);line-height:1.4;">'+sub+'</div>'
+      +'</div>';
+  }
   return '<div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(37,22,50,.10);border:1px solid #EDE8F5;">'
     +'<div style="height:4px;background:'+acColor+';"></div>'
     +'<div style="padding:18px 18px 16px;">'
@@ -612,27 +731,29 @@ function kpiCard(lbl, val, sub, acColor, icon){
     +'</div></div>';
 }
 
-function noteCard(n, week){
-  var pi=n.p.map(function(x){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
-  var ai=n.a.map(function(x){return'<li style="font-size:10.5px;color:'+P+';line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
-  var ri=n.r.map(function(x){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+function noteCard(n,week){
+  var pc=dm()?'#ff8a80':'#b71c1c';var ac=dm()?Y:P;var rc=dm()?PC:'#7a4000';
+  var cb=dm()?P2:'#fff';var cbr=dm()?'rgba(255,255,255,.07)':'#EDE8F5';
+  var pi=n.p.map(function(x){return'<li style="font-size:10.5px;color:'+pc+';line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+  var ai=n.a.map(function(x){return'<li style="font-size:10.5px;color:'+ac+';line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
+  var ri=n.r.map(function(x){return'<li style="font-size:10.5px;color:'+rc+';line-height:1.65;margin-bottom:4px;padding-left:4px;">'+x+'</li>';}).join('');
   var empty=!n.p.length&&!n.a.length&&!n.r.length;
   var badge=week?('<span style="background:'+(week.h>0?'rgba(97,206,112,.15)':'rgba(229,57,53,.12)')+';color:'+(week.h>0?'#1a5e20':'#c62828')+';font-size:8px;font-weight:800;padding:2px 8px;border-radius:10px;">'+(week.h>0?week.h+' huddle'+(week.h>1?'s':''):'No Huddle')+'</span>'):'';
-  return '<div style="background:#fff;border-radius:14px;border:1px solid #EDE8F5;overflow:hidden;box-shadow:0 2px 12px rgba(37,22,50,.07);">'
+  return '<div style="background:'+cb+';border-radius:14px;border:1px solid '+cbr+';overflow:hidden;box-shadow:'+(dm()?'none':'0 2px 12px rgba(37,22,50,.07)')+'">'
     +'<div style="background:linear-gradient(135deg,'+P+','+P2+');padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">'
     +'<div style="display:flex;align-items:center;gap:8px;">'+avatar(n.name,26,Y,P)+'<span style="font-size:10.5px;font-weight:800;color:#fff;letter-spacing:.8px;text-transform:uppercase;">'+n.name+'</span></div>'
     +(badge||'<div style="width:14px;height:3px;background:'+Y+';border-radius:2px;"></div>')
     +'</div>'
     +'<div style="padding:13px 14px;">'
-    +(empty?'<div style="font-size:11px;color:#ddd;text-align:center;padding:8px 0;">No notes recorded</div>':'')
+    +(empty?'<div style="font-size:11px;color:'+cSub()+';text-align:center;padding:8px 0;">No notes recorded</div>':'')
     +(n.p.length?'<div style="margin-bottom:10px;border-left:3px solid #ef5350;padding-left:10px;">'
       +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#ef5350;text-transform:uppercase;margin-bottom:6px;">PROBLEMS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+pi+'</ul></div>':'')
     +(n.a.length?'<div style="margin-bottom:'+(n.r.length?'10px':'0')+'";border-left:3px solid '+Y+';padding-left:10px;">'
-      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#9a7f00;text-transform:uppercase;margin-bottom:6px;">ACTION POINTS</div>'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+Y+';text-transform:uppercase;margin-bottom:6px;">ACTION POINTS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ai+'</ul></div>':'')
     +(n.r.length?'<div style="border-left:3px solid '+PC+';padding-left:10px;">'
-      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#a05a20;text-transform:uppercase;margin-bottom:6px;">REMARKS</div>'
+      +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+PC+';text-transform:uppercase;margin-bottom:6px;">REMARKS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ri+'</ul></div>':'')
     +'</div></div>';
 }
@@ -657,46 +778,30 @@ function renderM(m){
   /* Huddle rows */
   var hrows=br.slice().sort(function(a,b){return b.h-a.h;}).map(function(b){
     var pct=Math.round(b.h/maxH*100);
-    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid #F5F0FC;">'
+    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid '+cBorder()+'">'
       +avatar(b.name,34,P,Y)
-      +'<div style="font-size:11.5px;font-weight:700;color:'+P+';min-width:110px;">'+b.name+'</div>'
-      +'<div style="flex:1;background:#EDE8F5;height:11px;border-radius:6px;overflow:hidden;">'
+      +'<div style="font-size:11.5px;font-weight:700;color:'+cTxt()+';min-width:110px;">'+b.name+'</div>'
+      +'<div style="flex:1;background:'+cBarBg()+';height:11px;border-radius:6px;overflow:hidden;">'
       +'<div style="width:'+pct+'%;height:100%;background:'+barC(pct)+';border-radius:6px;"></div></div>'
       +'<div style="font-size:12px;font-weight:800;color:'+txtC(pct)+';min-width:40px;text-align:right;">'+pct+'%</div>'
-      +'<div style="font-size:10.5px;color:#C0B0D8;min-width:52px;text-align:right;">'+b.h+'/'+maxH+'</div>'
+      +'<div style="font-size:10.5px;color:'+cSub()+';min-width:52px;text-align:right;">'+b.h+'/'+maxH+'</div>'
       +'</div>';
   }).join('');
 
   /* Top 3 */
   var top3=br.slice().filter(function(b){return b.c+b.fl+b.st+b.rv>0;}).sort(function(a,b){return(b.c+b.fl+b.st+b.rv)-(a.c+a.fl+a.st+a.rv);}).slice(0,3);
-  var topStyles=[{bg:Y,fg:P,nr:'#7a5f00',lbl:'🥇'},{bg:P2,fg:'#fff',nr:Y,lbl:'🥈'},{bg:'#f5e8d8',fg:P,nr:'#7a4000',lbl:'🥉'}];
-  var topHtml=top3.length>0?top3.map(function(b,i){
-    var tot2=b.c+b.fl+b.st+b.rv;var s=topStyles[i];
-    return '<div style="margin:10px 16px 0;background:#FAFAFF;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;border:1px solid #EDE8F5;">'
-      +'<div style="font-size:26px;flex-shrink:0;">'+s.lbl+'</div>'
-      +avatar(b.name,38,s.bg,s.fg)
-      +'<div style="flex:1;">'
-      +'<div style="font-size:13px;font-weight:800;color:'+P+';">'+b.name+'</div>'
-      +'<div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">'
-      +'<span style="font-size:10px;color:#5c6bc0;font-weight:600;">Calls: '+b.c+'</span>'
-      +'<span style="font-size:10px;color:#e65100;font-weight:600;">Flyers: '+b.fl+'</span>'
-      +'<span style="font-size:10px;color:#2e7d32;font-weight:600;">Stickers: '+b.st+'</span>'
-      +'<span style="font-size:10px;color:#7b1fa2;font-weight:600;">Reviews: '+b.rv+'</span>'
-      +'</div></div>'
-      +'<div style="font-size:24px;font-weight:900;color:'+s.nr+';">'+tot2+'</div></div>';
-  }).join(''):('<div style="padding:28px;text-align:center;color:#D0C0E8;font-size:12px;">Marketing data not yet reported for this month</div>');
 
   /* Marketing table */
   var mkRows=br.slice().sort(function(a,b){return(b.c+b.fl+b.st+b.rv)-(a.c+a.fl+a.st+a.rv);}).map(function(b,i){
-    var tot2=b.c+b.fl+b.st+b.rv;var bg=i%2===0?'#fff':'#FAFAFF';
-    return '<tr style="background:'+bg+';">'
-      +'<td style="padding:10px 18px;font-size:11.5px;font-weight:700;color:'+P+';border-bottom:1px solid #F0EAF8;">'
+    var tot2=b.c+b.fl+b.st+b.rv;
+    return '<tr style="background:'+cAlt(i)+';">'
+      +'<td style="padding:10px 18px;font-size:11.5px;font-weight:700;color:'+cTxt()+';border-bottom:1px solid '+cBorder()+';">'
       +'<div style="display:flex;align-items:center;gap:8px;">'+avatar(b.name,28,P,Y)+b.name+'</div></td>'
-      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#3949ab;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.c||dash)+'</td>'
-      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#e65100;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.fl||dash)+'</td>'
-      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#2e7d32;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.st||dash)+'</td>'
-      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#7b1fa2;text-align:center;border-bottom:1px solid #F0EAF8;">'+(b.rv||dash)+'</td>'
-      +'<td style="padding:10px 12px;font-size:12px;font-weight:900;color:'+(tot2>0?P:'#ccc')+';text-align:center;border-bottom:1px solid #F0EAF8;">'+(tot2>0?tot2:dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#3949ab;text-align:center;border-bottom:1px solid '+cBorder()+';">'+(b.c||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#e65100;text-align:center;border-bottom:1px solid '+cBorder()+';">'+(b.fl||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#2e7d32;text-align:center;border-bottom:1px solid '+cBorder()+';">'+(b.st||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:11.5px;font-weight:700;color:#7b1fa2;text-align:center;border-bottom:1px solid '+cBorder()+';">'+(b.rv||dash)+'</td>'
+      +'<td style="padding:10px 12px;font-size:12px;font-weight:900;color:'+(tot2>0?cTxt():'#ccc')+';text-align:center;border-bottom:1px solid '+cBorder()+';">'+(tot2>0?tot2:dash)+'</td>'
       +'</tr>';
   }).join('');
 
@@ -705,77 +810,66 @@ function renderM(m){
   var tT=md.hasMk?(tot.c+tot.fl+tot.st+tot.rv).toLocaleString():dash;
 
   var notesH=notes.map(function(n){return noteCard(n,null);}).join('');
+  var topStyles=[{bg:Y,fg:P,nr:'#7a5f00',lbl:'🥇'},{bg:P2,fg:'#fff',nr:Y,lbl:'🥈'},{bg:dm()?'rgba(255,255,255,.08)':'#f5e8d8',fg:dm()?'#fff':P,nr:dm()?PC:'#7a4000',lbl:'🥉'}];
+  var topHtml=top3.length>0?top3.map(function(b,i){
+    var tot2=b.c+b.fl+b.st+b.rv;var s=topStyles[i];
+    return '<div style="margin:10px 16px 0;background:'+cAlt(0)+';border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;border:1px solid '+cBorder()+'">'
+      +'<div style="font-size:26px;flex-shrink:0;">'+s.lbl+'</div>'
+      +avatar(b.name,38,s.bg,s.fg)
+      +'<div style="flex:1;">'
+      +'<div style="font-size:13px;font-weight:800;color:'+cTxt()+';">'+b.name+'</div>'
+      +'<div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">'
+      +'<span style="font-size:10px;color:#5c6bc0;font-weight:600;">Calls: '+b.c+'</span>'
+      +'<span style="font-size:10px;color:#e65100;font-weight:600;">Flyers: '+b.fl+'</span>'
+      +'<span style="font-size:10px;color:#2e7d32;font-weight:600;">Stickers: '+b.st+'</span>'
+      +'<span style="font-size:10px;color:#7b1fa2;font-weight:600;">Reviews: '+b.rv+'</span>'
+      +'</div></div>'
+      +'<div style="font-size:24px;font-weight:900;color:'+s.nr+';">'+tot2+'</div></div>';
+  }).join(''):('<div style="padding:28px;text-align:center;color:'+cSub()+';font-size:12px;">Marketing data not yet reported for this month</div>');
 
   document.getElementById('dashboard').innerHTML=
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
-
-  /* ── HEADER ── */
-  +'<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:36px 48px 32px;text-align:center;position:relative;overflow:hidden;">'
-  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
-  +'<div style="position:relative;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.55);text-transform:uppercase;margin-bottom:12px;">JANAGEN PHARMACIES · HYDERABAD</div>'
-  +'<div style="font-size:50px;font-weight:900;color:'+Y+';letter-spacing:3px;line-height:1.05;text-shadow:0 0 60px rgba(254,207,0,.2);">TOGETHER WE ACHIEVE</div>'
-  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:16px auto;border-radius:2px;"></div>'
-  +'<div style="display:inline-flex;align-items:center;gap:10px;margin-top:4px;">'
-  +'<div style="background:'+Y+';color:'+P+';padding:9px 28px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">BRANCH OPERATIONS REPORT</div>'
-  +'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 20px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);">'+md.label.toUpperCase()+'</div>'
-  +'</div></div></div>'
-
-  /* ── KPIs ── */
+  dashDiv()
+  +dashHdr('TOGETHER WE ACHIEVE','BRANCH OPERATIONS REPORT',md.label.toUpperCase())
   +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 38px 20px;">'+kh+'</div>'
-
-  /* ── OVERALL HUDDLE BANNER ── */
   +'<div style="margin:0 38px 24px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:20px 32px;display:flex;align-items:center;gap:24px;">'
   +'<div style="flex:1;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,188,125,.65);text-transform:uppercase;margin-bottom:4px;">Overall Huddle Completion</div>'
-  +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.5);">'+tot.h+' sessions across all branches</div>'
+  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:4px;">Overall Huddle Completion</div>'
+  +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.4);">'+tot.h+' sessions across all branches</div>'
   +'</div>'
   +'<div style="text-align:right;">'
   +'<div style="font-size:52px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-2px;">'+ovPct+'%</div>'
-  +'<div style="font-size:10.5px;color:rgba(255,188,125,.6);margin-top:2px;">'+tot.h+' / '+(br.length*maxH)+' max sessions</div>'
+  +'<div style="font-size:10.5px;color:rgba(255,255,255,.45);margin-top:2px;">'+tot.h+' / '+(br.length*maxH)+' max</div>'
   +'</div>'
-  +'<div style="width:100px;">'
-  +'<svg viewBox="0 0 36 36" style="width:100px;height:100px;transform:rotate(-90deg);">'
-  +'<circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>'
+  +'<svg viewBox="0 0 36 36" style="width:90px;height:90px;transform:rotate(-90deg);flex-shrink:0;">'
+  +'<circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3"/>'
   +'<circle cx="18" cy="18" r="15.9" fill="none" stroke="'+Y+'" stroke-width="3" stroke-dasharray="'+ovPct+' '+(100-ovPct)+'" stroke-linecap="round"/>'
-  +'</svg>'
-  +'</div>'
-  +'</div>'
-
-  /* ── MAIN GRID ── */
+  +'</svg></div>'
   +'<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 38px 24px;">'
-
-  /* Attendance */
-  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="'+cCard()+'">'
   +secHead('Huddle Attendance — '+md.label)
-  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:#C0B0D8;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #F5F0FC;gap:14px;">'
-  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin:0 0 0 14px;">PROGRESS</div><div style="min-width:40px;text-align:right;">SCORE</div><div style="min-width:52px;text-align:right;">SESSIONS</div>'
+  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid '+cBorder()+';gap:14px;">'
+  +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin:0 0 0 14px;">PROGRESS</div><div style="min-width:40px;text-align:right;">SCORE</div><div style="min-width:52px;text-align:right;">HUDDLES</div>'
   +'</div>'+hrows
-  +'<div style="display:flex;gap:16px;padding:11px 22px;background:#FAFAFF;border-top:1px solid #F0EAF8;">'
-  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+G+';"></div>100%</div>'
-  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+Y+';"></div>85–99%</div>'
-  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+PC+';"></div>77–84%</div>'
-  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:#666;"><div style="width:10px;height:10px;border-radius:50%;background:'+RE+';"></div>&lt;77%</div>'
+  +'<div style="display:flex;gap:16px;padding:11px 22px;background:'+cThHead()+';border-top:1px solid '+cBorder()+'">'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+G+';"></div>100%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+Y+';"></div>85–99%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+PC+';"></div>77–84%</div>'
+  +'<div style="display:flex;align-items:center;gap:5px;font-size:9.5px;color:'+cSub()+';"><div style="width:10px;height:10px;border-radius:50%;background:'+RE+';"></div>&lt;77%</div>'
   +'</div></div>'
-
-  /* Top performers */
-  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="'+cCard()+'">'
   +secHead('Top Marketing Branches')
   +topHtml
-  +'<div style="padding:12px 16px;font-size:9.5px;color:#D0C0E8;text-align:center;">Ranked by Calls + Flyers + Stickers + Reviews</div>'
-  +'</div>'
-  +'</div>'
-
-  /* ── MARKETING TABLE ── */
-  +'<div style="margin:0 38px 28px;border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="padding:12px 16px;font-size:9.5px;color:'+cSub()+';text-align:center;">Ranked by Calls + Flyers + Stickers + Reviews</div>'
+  +'</div></div>'
+  +'<div style="margin:0 38px 28px;'+cCard()+'">'
   +secHead('Marketing Activities — '+md.label)
-  +'<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#FAFAFF;">'
-  +'<th style="padding:11px 18px;font-size:8.5px;font-weight:800;color:#999;letter-spacing:2px;text-align:left;border-bottom:2px solid #EDE8F5;">BRANCH</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#3949ab;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">CALLS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#e65100;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">FLYERS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#2e7d32;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">STICKERS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#7b1fa2;letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">REVIEWS</th>'
-  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:'+P+';letter-spacing:1.5px;text-align:center;border-bottom:2px solid #EDE8F5;">TOTAL</th>'
+  +'<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:'+cThHead()+'">'
+  +'<th style="padding:11px 18px;font-size:8.5px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-align:left;border-bottom:2px solid '+cBorder()+'">BRANCH</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#3949ab;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">CALLS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#e65100;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">FLYERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#2e7d32;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">STICKERS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:#7b1fa2;letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">REVIEWS</th>'
+  +'<th style="padding:11px 10px;font-size:8.5px;font-weight:800;color:'+cTxt()+';letter-spacing:1.5px;text-align:center;border-bottom:2px solid '+cBorder()+'">TOTAL</th>'
   +'</tr></thead><tbody>'+mkRows+'</tbody>'
   +'<tfoot><tr style="background:linear-gradient(135deg,'+P+','+P2+');">'
   +'<td style="padding:12px 18px;font-size:12.5px;font-weight:800;color:'+Y+';">TOTAL</td>'
@@ -785,26 +879,31 @@ function renderM(m){
   +'<td style="padding:12px 10px;font-size:12px;font-weight:800;color:#fff;text-align:center;">'+tR+'</td>'
   +'<td style="padding:12px 10px;font-size:14px;font-weight:900;color:'+Y+';text-align:center;">'+tT+'</td>'
   +'</tr></tfoot></table></div>'
-
-  /* ── NOTES ── */
   +'<div style="margin:0 38px 30px;">'
   +secHead('Branch Issues, Action Points &amp; Notes — '+md.label)
-  +'<div style="padding:11px 20px;background:#FAFAFF;border-left:4px solid '+Y+';margin-bottom:18px;display:flex;gap:20px;align-items:center;">'
-  +'<span style="font-size:10px;font-weight:700;color:#c62828;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:#ef5350;display:inline-block;"></span>Problems</span>'
-  +'<span style="font-size:10px;font-weight:700;color:#9a7f00;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:'+Y+';display:inline-block;"></span>Action Points</span>'
-  +'<span style="font-size:10px;font-weight:700;color:#a05a20;display:flex;align-items:center;gap:5px;"><span style="width:8px;height:8px;border-radius:50%;background:'+PC+';display:inline-block;"></span>Remarks</span>'
+  +'<div style="padding:11px 20px;background:'+cAlt(0)+';border-left:4px solid '+Y+';margin-bottom:18px;display:flex;gap:20px;align-items:center;">'
+  +'<span style="font-size:10px;font-weight:700;color:#ef5350;">● Problems</span>'
+  +'<span style="font-size:10px;font-weight:700;color:'+Y+';">● Action Points</span>'
+  +'<span style="font-size:10px;font-weight:700;color:'+PC+';">● Remarks</span>'
   +'</div>'
   +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'+notesH+'</div></div>'
-
-  /* ── FOOTER ── */
   +'<div style="margin:0 38px 38px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:24px 32px;display:flex;align-items:center;gap:20px;">'
-  +'<div style="width:52px;height:52px;border-radius:14px;background:rgba(254,207,0,.12);border:1px solid rgba(254,207,0,.25);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">📈</div>'
-  +'<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+Y+';">THANK YOU TEAM!</div><div style="font-size:12px;color:rgba(255,188,125,.75);margin-top:3px;">Great effort across all branches — let\'s keep building momentum!</div></div>'
-  +'<div style="text-align:right;">'
-  +'<div style="font-size:26px;font-weight:900;color:'+Y+';letter-spacing:3px;">JANAGEN</div>'
-  +'<div style="font-size:8.5px;color:rgba(255,188,125,.45);letter-spacing:3px;margin-top:2px;">PHARMACIES · HYDERABAD</div>'
-  +'</div></div>'
-  +'</div>';
+  +'<div style="width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">📈</div>'
+  +'<div style="flex:1;"><div style="font-size:18px;font-weight:900;color:'+Y+';">THANK YOU TEAM!</div><div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:3px;">Great effort across all branches — let\'s keep building momentum!</div></div>'
+  +'<div style="text-align:right;"><div style="font-size:26px;font-weight:900;color:'+Y+';letter-spacing:3px;">JANAGEN</div><div style="font-size:8.5px;color:rgba(255,255,255,.35);letter-spacing:3px;margin-top:2px;">PHARMACIES · HYDERABAD</div></div>'
+  +'</div></div>';
+}
+
+/* ──────────── HUDDLE ROW (shared) ──────────── */
+function huddleRow(bname,pct,score,extra){
+  return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid '+cBorder()+'">'
+    +avatar(bname,34,P,Y)
+    +'<div style="font-size:11.5px;font-weight:700;color:'+cTxt()+';min-width:110px;">'+bname+'</div>'
+    +'<div style="flex:1;background:'+cBarBg()+';height:11px;border-radius:6px;overflow:hidden;">'
+    +'<div style="width:'+pct+'%;height:100%;background:'+barC(pct)+';border-radius:6px;"></div></div>'
+    +'<div style="font-size:12px;font-weight:800;color:'+txtC(pct)+';min-width:40px;text-align:right;">'+pct+'%</div>'
+    +(extra||'')
+    +'</div>';
 }
 
 /* ══════════════════════════ RENDER WEEKLY ══════════════════════════ */
@@ -815,11 +914,12 @@ function renderW(m,w){
   document.getElementById('ctrl-sub').textContent='12 branches · weekly drill-down';
 
   if(!wd.hasData){
-    document.getElementById('dashboard').innerHTML='<div style="background:#fff;border-radius:24px;padding:90px 40px;text-align:center;">'
-      +'<div style="width:80px;height:80px;border-radius:20px;background:#FAFAFF;border:1px solid #EDE8F5;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;">📭</div>'
-      +'<div style="font-size:22px;font-weight:800;color:'+P+';margin-bottom:10px;">No weekly data for this period</div>'
-      +'<div style="font-size:13px;color:#c0b0d8;line-height:1.7;">Date-level records were not logged for this week.<br>Switch to <strong style="color:'+P+'">Monthly view</strong> for '+md.label+' summary.</div>'
-      +'</div>';
+    document.getElementById('dashboard').innerHTML=dashDiv()
+      +'<div style="border-radius:24px;padding:90px 40px;text-align:center;">'
+      +'<div style="width:80px;height:80px;border-radius:20px;background:'+cThHead()+';border:1px solid '+cBorder()+';display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px;">📭</div>'
+      +'<div style="font-size:22px;font-weight:800;color:'+cTxt()+';margin-bottom:10px;">No weekly data for this period</div>'
+      +'<div style="font-size:13px;color:'+cSub()+';line-height:1.7;">Date-level records were not logged for this week.<br>Switch to <strong style="color:'+cTxt()+'">Monthly view</strong> for '+md.label+' summary.</div>'
+      +'</div></div>';
     return;
   }
 
@@ -836,23 +936,23 @@ function renderW(m,w){
   /* Week progress pills */
   var wpills=[1,2,3,4].map(function(x){
     var xd=WEEK_DATA[m][x];var isA=x===w;
-    return '<div style="flex:1;padding:12px 10px;border-radius:12px;text-align:center;background:'+(isA?P:'transparent')+';border:1px solid '+(isA?'rgba(254,207,0,.3)':'#EDE8F5')+';">'
-      +'<div style="font-size:13px;font-weight:900;color:'+(isA?Y:'#C0B0D8')+';">W'+x+'</div>'
-      +'<div style="font-size:9px;color:'+(isA?PC:'#D0C0E0')+';margin-top:3px;">'+(xd&&xd.dr!=='—'?xd.dr:'—')+'</div>'
+    return '<div style="flex:1;padding:12px 10px;border-radius:12px;text-align:center;background:'+(isA?P:'transparent')+';border:1px solid '+(isA?'rgba(254,207,0,.3)':cBorder())+';">'
+      +'<div style="font-size:13px;font-weight:900;color:'+(isA?Y:cSub())+';">W'+x+'</div>'
+      +'<div style="font-size:9px;color:'+(isA?PC:cSub())+';margin-top:3px;">'+(xd&&xd.dr!=='—'?xd.dr:'—')+'</div>'
       +'</div>';
   }).join('');
 
   /* Attendance rows */
   var hrows=br.slice().sort(function(a,b){return b.h-a.h;}).map(function(b){
     var pct=maxH>0?Math.round(b.h/maxH*100):0;
-    var bc=b.h===0?'#EDE8F5':(pct>=80?G:pct>=50?Y:PC);
+    var bc=b.h===0?cBarBg():(pct>=80?G:pct>=50?Y:PC);
     var statusBg=b.h===0?'rgba(229,57,53,.1)':'rgba(97,206,112,.12)';
     var statusC=b.h===0?'#c62828':'#1a5e20';
     var statusTxt=b.h===0?'No Huddle':b.h+' huddle'+(b.h>1?'s':'');
-    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid #F5F0FC;">'
-      +avatar(b.name,34,b.h>0?P:'#EDE8F5',b.h>0?Y:P)
-      +'<div style="font-size:11.5px;font-weight:700;color:'+P+';min-width:110px;">'+b.name+'</div>'
-      +'<div style="flex:1;background:#EDE8F5;height:11px;border-radius:6px;overflow:hidden;">'
+    return '<div style="display:flex;align-items:center;gap:14px;padding:11px 22px;border-bottom:1px solid '+cBorder()+'">'
+      +avatar(b.name,34,b.h>0?P:cBarBg(),b.h>0?Y:cSub())
+      +'<div style="font-size:11.5px;font-weight:700;color:'+cTxt()+';min-width:110px;">'+b.name+'</div>'
+      +'<div style="flex:1;background:'+cBarBg()+';height:11px;border-radius:6px;overflow:hidden;">'
       +'<div style="width:'+(b.h>0?pct:0)+'%;height:100%;background:'+bc+';border-radius:6px;"></div></div>'
       +'<span style="font-size:9.5px;font-weight:700;color:'+statusC+';background:'+statusBg+';padding:3px 12px;border-radius:20px;white-space:nowrap;">'+statusTxt+'</span>'
       +'</div>';
@@ -861,39 +961,28 @@ function renderW(m,w){
   var notesH=wn.map(function(n){var bh=br.find(function(b){return b.name===n.name;})||{h:0};return noteCard(n,bh);}).join('');
 
   document.getElementById('dashboard').innerHTML=
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
-
-  /* Header */
-  +'<div style="background:linear-gradient(135deg,'+P+',#1a0d30);padding:34px 48px 30px;text-align:center;position:relative;overflow:hidden;">'
-  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
-  +'<div style="position:relative;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.5);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · WEEKLY DRILL-DOWN</div>'
-  +'<div style="font-size:46px;font-weight:900;color:'+Y+';letter-spacing:2px;line-height:1.05;">WEEK '+w+' REPORT</div>'
-  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:14px auto;border-radius:2px;"></div>'
-  +'<div style="display:inline-flex;align-items:center;gap:10px;">'
-  +'<div style="background:'+Y+';color:'+P+';padding:9px 26px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">'+md.label.toUpperCase()+'</div>'
-  +(wd.dr!=='—'?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 18px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);">'+wd.dr+'</div>':'')
-  +'</div></div></div>'
+  dashDiv()
+  +dashHdr('WEEK '+w+' REPORT',md.label.toUpperCase(),wd.dr!=='—'?wd.dr:null)
 
   /* Week progress bar */
-  +'<div style="margin:24px 38px 0;background:#FAFAFF;border-radius:14px;border:1px solid #EDE8F5;padding:18px 22px;">'
-  +'<div style="font-size:8px;font-weight:800;letter-spacing:2.5px;color:#C0B0D8;text-transform:uppercase;margin-bottom:14px;">MONTH PROGRESS — '+md.label+'</div>'
+  +'<div style="margin:24px 38px 0;background:'+cAlt(0)+';border-radius:14px;border:1px solid '+cBorder()+';padding:18px 22px;">'
+  +'<div style="font-size:8px;font-weight:800;letter-spacing:2.5px;color:'+cSub()+';text-transform:uppercase;margin-bottom:14px;">MONTH PROGRESS — '+md.label+'</div>'
   +'<div style="display:flex;gap:10px;">'+wpills+'</div></div>'
 
   /* KPIs */
   +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:22px 38px 20px;">'+kh+'</div>'
 
   /* Attendance */
-  +'<div style="margin:0 38px 24px;border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="margin:0 38px 24px;'+cCard()+'">'
   +secHead('Huddle Attendance — Week '+w+' · '+wd.dr)
-  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:#C0B0D8;letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid #F5F0FC;gap:14px;">'
+  +'<div style="display:flex;padding:9px 22px;font-size:8px;font-weight:800;color:'+cSub()+';letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid '+cBorder()+';gap:14px;">'
   +'<div style="width:34px;flex-shrink:0;"></div><div style="min-width:110px;">BRANCH</div><div style="flex:1;margin-left:14px;">PROGRESS</div><div>STATUS</div>'
   +'</div>'+hrows+'</div>'
 
   /* Notes */
   +'<div style="margin:0 38px 30px;">'
   +secHead('Action Points &amp; Notes — Week '+w+' · '+md.label)
-  +'<div style="padding:11px 20px;background:#FAFAFF;border-left:4px solid '+Y+';margin-bottom:18px;font-size:10.5px;color:#8a7aaa;line-height:1.6;">'
+  +'<div style="padding:11px 20px;background:'+cAlt(0)+';border-left:4px solid '+Y+';margin-bottom:18px;font-size:10.5px;color:'+cSub()+';line-height:1.6;">'
   +'Per-branch action points and issues flagged during Week '+w+' huddle sessions in '+md.label+'.'
   +'</div>'
   +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'+notesH+'</div></div>'
@@ -926,17 +1015,17 @@ function renderBranchM(bname,m){
 
   var weekCards=weeks.map(function(wk){
     var pct=Math.round(wk.h/maxWH*100);
-    var bc=wk.h===0?'#EDE8F5':(pct===100?G:Y);
+    var bc=wk.h===0?cBarBg():(pct===100?G:Y);
     var statusC=wk.h===0?'#c62828':'#1a5e20';
     var statusBg=wk.h===0?'rgba(229,57,53,.1)':'rgba(97,206,112,.12)';
-    return '<div style="background:#fff;border-radius:12px;border:1px solid #EDE8F5;padding:16px;box-shadow:0 2px 8px rgba(37,22,50,.06);">'
+    return '<div style="'+cCard()+';padding:16px;">'
       +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
-      +'<span style="font-size:11px;font-weight:800;color:'+P+';">W'+wk.w+'</span>'
-      +'<span style="font-size:9px;color:#C0B0D8;">'+(wk.dr||'—')+'</span>'
+      +'<span style="font-size:11px;font-weight:800;color:'+cTxt()+';">W'+wk.w+'</span>'
+      +'<span style="font-size:9px;color:'+cSub()+';">'+(wk.dr||'—')+'</span>'
       +'</div>'
-      +'<div style="background:#EDE8F5;height:8px;border-radius:4px;overflow:hidden;margin-bottom:10px;">'
+      +'<div style="background:'+cBarBg()+';height:8px;border-radius:4px;overflow:hidden;margin-bottom:10px;">'
       +'<div style="width:'+(wk.h>0?pct:0)+'%;height:100%;background:'+bc+';border-radius:4px;"></div></div>'
-      +'<div style="font-size:26px;font-weight:900;color:'+P+';line-height:1;margin-bottom:6px;">'+wk.h+'</div>'
+      +'<div style="font-size:26px;font-weight:900;color:'+cTxt()+';line-height:1;margin-bottom:6px;">'+wk.h+'</div>'
       +'<span style="font-size:9px;font-weight:700;color:'+statusC+';background:'+statusBg+';padding:2px 9px;border-radius:10px;">'+(wk.h===0?'No Huddle':wk.h+' huddle'+(wk.h>1?'s':''))+'</span>'
       +'</div>';
   }).join('');
@@ -947,39 +1036,31 @@ function renderBranchM(bname,m){
     {lbl:'Stickers',val:bd.st,col:'#2e7d32',icon:'🏷'},
     {lbl:'Google Reviews',val:bd.rv,col:'#7b1fa2',icon:'⭐'}
   ].map(function(row){
-    return '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #F5F0FC;">'
-      +'<div style="width:34px;height:34px;border-radius:9px;background:rgba(37,22,50,.05);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">'+row.icon+'</div>'
-      +'<div style="flex:1;font-size:11px;font-weight:600;color:#8a7aaa;">'+row.lbl+'</div>'
+    return '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid '+cBorder()+';">'
+      +'<div style="width:34px;height:34px;border-radius:9px;background:'+cAlt(1)+';display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">'+row.icon+'</div>'
+      +'<div style="flex:1;font-size:11px;font-weight:600;color:'+cSub()+';">'+row.lbl+'</div>'
       +'<div style="font-size:20px;font-weight:900;color:'+row.col+';">'+(md.hasMk?row.val:dash)+'</div>'
       +'</div>';
   }).join('');
 
-  var pi=bn.p.map(function(x){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
-  var ai=bn.a.map(function(x){return'<li style="font-size:10.5px;color:'+P+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
-  var ri=bn.r.map(function(x){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var pi=bn.p.map(function(x){return'<li style="font-size:10.5px;color:'+(dm()?'#ff8a80':'#b71c1c')+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var ai=bn.a.map(function(x){return'<li style="font-size:10.5px;color:'+cTxt()+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var ri=bn.r.map(function(x){return'<li style="font-size:10.5px;color:'+(dm()?PC:'#7a4000')+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
   var noNotes=!bn.p.length&&!bn.a.length&&!bn.r.length;
 
-  function noteCol(label,items,html,bg,tc){
+  function noteCol(label,items,html,lightBg,tc){
+    var bg=dm()?P2:lightBg;
     return items.length
       ?'<div style="background:'+bg+';border-radius:12px;padding:16px;">'
         +'<div style="font-size:8px;font-weight:800;letter-spacing:2px;color:'+tc+';text-transform:uppercase;margin-bottom:12px;border-left:3px solid '+tc+';padding-left:8px;">'+label+'</div>'
         +'<ul style="padding-left:14px;margin:0;list-style:disc;">'+html+'</ul></div>'
-      :'<div style="background:#FAFAFF;border-radius:12px;border:1px solid #EDE8F5;padding:16px;display:flex;align-items:center;justify-content:center;">'
-        +'<span style="font-size:11px;color:#D0C0E8;">No '+label.toLowerCase()+'</span></div>';
+      :'<div style="background:'+cAlt(0)+';border-radius:12px;border:1px solid '+cBorder()+';padding:16px;display:flex;align-items:center;justify-content:center;">'
+        +'<span style="font-size:11px;color:'+cSub()+';">No '+label.toLowerCase()+'</span></div>';
   }
 
   document.getElementById('dashboard').innerHTML=
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
-  +'<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:36px 48px 32px;text-align:center;position:relative;overflow:hidden;">'
-  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
-  +'<div style="position:relative;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.55);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · BRANCH DRILL-DOWN</div>'
-  +'<div style="font-size:48px;font-weight:900;color:'+Y+';letter-spacing:3px;line-height:1.05;">'+bname.toUpperCase()+'</div>'
-  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:14px auto;border-radius:2px;"></div>'
-  +'<div style="display:inline-flex;align-items:center;gap:10px;margin-top:4px;">'
-  +'<div style="background:'+Y+';color:'+P+';padding:9px 28px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">MONTHLY REPORT</div>'
-  +'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 20px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.75);">'+md.label.toUpperCase()+'</div>'
-  +'</div></div></div>'
+  dashDiv()
+  +dashHdr(bname.toUpperCase(),'MONTHLY REPORT',md.label.toUpperCase())
   +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 38px 20px;">'
   +kpiCard('Total Huddles',bd.h,bd.h+' / '+md.maxH+' target',Y,'🤝')
   +kpiCard('Attendance',attPct+'%',attPct===100?'Perfect attendance':attPct>=85?'On track':'Needs attention',barC(attPct),'📊')
@@ -987,17 +1068,17 @@ function renderBranchM(bname,m){
   +kpiCard('Google Reviews',md.hasMk?bd.rv:dash,md.mkNote,'#7b1fa2','⭐')
   +'</div>'
   +'<div style="display:grid;grid-template-columns:3fr 2fr;gap:18px;padding:0 38px 24px;">'
-  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="'+cCard()+'">'
   +secHead('Weekly Breakdown — '+md.label)
   +'<div style="padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">'+weekCards+'</div></div>'
-  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="'+cCard()+'">'
   +secHead('Marketing Activities')
   +'<div style="padding:16px 22px;">'+mkRows+'</div></div>'
   +'</div>'
   +'<div style="margin:0 38px 30px;">'
   +secHead('Issues, Action Points &amp; Remarks — '+bname+' · '+md.label)
   +(noNotes
-    ?'<div style="padding:40px;text-align:center;color:#D0C0E8;font-size:12px;">No issues or notes recorded for this branch this month.</div>'
+    ?'<div style="padding:40px;text-align:center;color:'+cSub()+';font-size:12px;">No issues or notes recorded for this branch this month.</div>'
     :'<div style="padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'
       +noteCol('PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
       +noteCol('ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
@@ -1026,45 +1107,37 @@ function renderBranchW(bname,m,w){
     var xd=WEEK_DATA[m][x];
     var xbd=xd.branches.find(function(b){return b.name===bname;})||{h:0};
     var isA=x===w;
-    return'<div style="flex:1;padding:14px 10px;border-radius:12px;text-align:center;background:'+(isA?P:'#FAFAFF')+';border:1px solid '+(isA?'rgba(254,207,0,.3)':'#EDE8F5')+';">'
-      +'<div style="font-size:22px;font-weight:900;color:'+(isA?Y:xbd.h>0?P:'#D0C0E0')+';">'+xbd.h+'</div>'
-      +'<div style="font-size:9px;font-weight:700;color:'+(isA?PC:'#C0B0D8')+';margin-top:3px;">WEEK '+x+'</div>'
-      +'<div style="font-size:8px;color:'+(isA?'rgba(255,188,125,.6)':'#D0C0E0')+';margin-top:2px;">'+(xd.dr||'—')+'</div>'
+    return'<div style="flex:1;padding:14px 10px;border-radius:12px;text-align:center;background:'+(isA?P:cAlt(0))+';border:1px solid '+(isA?'rgba(254,207,0,.3)':cBorder())+';">'
+      +'<div style="font-size:22px;font-weight:900;color:'+(isA?Y:xbd.h>0?cTxt():cSub())+';">'+xbd.h+'</div>'
+      +'<div style="font-size:9px;font-weight:700;color:'+(isA?PC:cSub())+';margin-top:3px;">WEEK '+x+'</div>'
+      +'<div style="font-size:8px;color:'+(isA?'rgba(255,188,125,.6)':cSub())+';margin-top:2px;">'+(xd.dr||'—')+'</div>'
       +'</div>';
   }).join('');
 
-  var pi=bn.p.map(function(x){return'<li style="font-size:10.5px;color:#b71c1c;line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
-  var ai=bn.a.map(function(x){return'<li style="font-size:10.5px;color:'+P+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
-  var ri=bn.r.map(function(x){return'<li style="font-size:10.5px;color:#7a4000;line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var pi=bn.p.map(function(x){return'<li style="font-size:10.5px;color:'+(dm()?'#ff8a80':'#b71c1c')+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var ai=bn.a.map(function(x){return'<li style="font-size:10.5px;color:'+cTxt()+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
+  var ri=bn.r.map(function(x){return'<li style="font-size:10.5px;color:'+(dm()?PC:'#7a4000')+';line-height:1.7;margin-bottom:5px;">'+x+'</li>';}).join('');
 
-  function noteCol(label,items,html,bg,tc){
+  function noteCol(label,items,html,lightBg,tc){
+    var bg=dm()?P2:lightBg;
     return items.length
       ?'<div style="background:'+bg+';border-radius:12px;padding:16px;">'
         +'<div style="font-size:8px;font-weight:800;letter-spacing:2px;color:'+tc+';text-transform:uppercase;margin-bottom:12px;border-left:3px solid '+tc+';padding-left:8px;">'+label+'</div>'
         +'<ul style="padding-left:14px;margin:0;list-style:disc;">'+html+'</ul></div>'
-      :'<div style="background:#FAFAFF;border-radius:12px;border:1px solid #EDE8F5;padding:16px;display:flex;align-items:center;justify-content:center;">'
-        +'<span style="font-size:11px;color:#D0C0E8;">No '+label.toLowerCase()+'</span></div>';
+      :'<div style="background:'+cAlt(0)+';border-radius:12px;border:1px solid '+cBorder()+';padding:16px;display:flex;align-items:center;justify-content:center;">'
+        +'<span style="font-size:11px;color:'+cSub()+';">No '+label.toLowerCase()+'</span></div>';
   }
 
   document.getElementById('dashboard').innerHTML=
-  '<div style="background:#fff;font-family:\'Poppins\',sans-serif;">'
-  +'<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:34px 48px 30px;text-align:center;position:relative;overflow:hidden;">'
-  +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
-  +'<div style="position:relative;">'
-  +'<div style="font-size:9.5px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.5);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · WEEKLY DRILL-DOWN</div>'
-  +'<div style="font-size:46px;font-weight:900;color:'+Y+';letter-spacing:2px;line-height:1.05;">'+bname.toUpperCase()+'</div>'
-  +'<div style="width:60px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:14px auto;border-radius:2px;"></div>'
-  +'<div style="display:inline-flex;align-items:center;gap:10px;">'
-  +'<div style="background:'+Y+';color:'+P+';padding:9px 26px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:2.5px;">WEEK '+w+' · '+md.label.toUpperCase()+'</div>'
-  +(wd.dr!=='—'?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:9px 18px;border-radius:9px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);">'+wd.dr+'</div>':'')
-  +'</div></div></div>'
+  dashDiv()
+  +dashHdr(bname.toUpperCase(),'WEEK '+w+' · '+md.label.toUpperCase(),wd.dr!=='—'?wd.dr:null)
   +'<div style="display:grid;grid-template-columns:1fr 3fr;gap:18px;padding:24px 38px;">'
-  +'<div style="border-radius:16px;border:1px solid '+(hadHuddle?'rgba(97,206,112,.3)':'rgba(229,57,53,.2)')+';background:'+(hadHuddle?'rgba(97,206,112,.05)':'rgba(229,57,53,.04)')+';display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;text-align:center;">'
+  +'<div style="'+cCard()+';border:1px solid '+(hadHuddle?'rgba(97,206,112,.3)':'rgba(229,57,53,.2)')+';display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;text-align:center;">'
   +'<div style="font-size:56px;margin-bottom:14px;">'+(hadHuddle?'✅':'❌')+'</div>'
   +'<div style="font-size:16px;font-weight:800;color:'+(hadHuddle?'#1a5e20':'#c62828')+';">'+(hadHuddle?bd.h+' Huddle'+(bd.h>1?'s':'')+' Done':'No Huddle')+'</div>'
-  +'<div style="font-size:10px;color:#C0B0D8;margin-top:8px;">Week '+w+'</div>'
+  +'<div style="font-size:10px;color:'+cSub()+';margin-top:8px;">Week '+w+'</div>'
   +'</div>'
-  +'<div style="border-radius:16px;overflow:hidden;border:1px solid #EDE8F5;box-shadow:0 2px 16px rgba(37,22,50,.08);">'
+  +'<div style="'+cCard()+'">'
   +secHead('Monthly Overview — '+bname+' · '+md.label)
   +'<div style="padding:16px;display:flex;gap:12px;">'+wpills+'</div>'
   +'</div>'
@@ -1072,7 +1145,7 @@ function renderBranchW(bname,m,w){
   +'<div style="margin:0 38px 30px;">'
   +secHead('Action Points &amp; Notes — '+bname+' · Week '+w)
   +(noNotes
-    ?'<div style="padding:40px;text-align:center;color:#D0C0E8;font-size:12px;">No notes, problems, or action points recorded for this week.</div>'
+    ?'<div style="padding:40px;text-align:center;color:'+cSub()+';font-size:12px;">No notes, problems, or action points recorded for this week.</div>'
     :'<div style="padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">'
       +noteCol('PROBLEMS',bn.p,pi,'#fff5f5','#ef5350')
       +noteCol('ACTION POINTS',bn.a,ai,'#fffde7','#9a7f00')
