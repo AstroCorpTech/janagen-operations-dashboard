@@ -757,7 +757,7 @@ function noteCard(n,week){
     +(n.p.length?'<div style="margin-bottom:10px;border-left:3px solid #ef5350;padding-left:10px;">'
       +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:#ef5350;text-transform:uppercase;margin-bottom:6px;">PROBLEMS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+pi+'</ul></div>':'')
-    +(n.a.length?'<div style="margin-bottom:'+(n.r.length?'10px':'0')+'";border-left:3px solid '+Y+';padding-left:10px;">'
+    +(n.a.length?'<div style="margin-bottom:'+(n.r.length?'10px':'0')+';border-left:3px solid '+Y+';padding-left:10px;">'
       +'<div style="font-size:7.5px;font-weight:800;letter-spacing:2px;color:'+Y+';text-transform:uppercase;margin-bottom:6px;">ACTION POINTS</div>'
       +'<ul style="padding-left:10px;margin:0;list-style:disc;">'+ai+'</ul></div>':'')
     +(n.r.length?'<div style="border-left:3px solid '+PC+';padding-left:10px;">'
@@ -842,7 +842,7 @@ function renderM(m){
   +'<div style="margin:0 38px 24px;background:linear-gradient(135deg,'+P+','+P2+');border-radius:16px;padding:20px 32px;display:flex;align-items:center;gap:24px;">'
   +'<div style="flex:1;">'
   +'<div style="font-size:9.5px;font-weight:800;letter-spacing:2.5px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:4px;">Overall Huddle Completion</div>'
-  +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.4);">'+tot.h+' sessions across all branches</div>'
+  +'<div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.4);">'+tot.h+' huddles across all branches</div>'
   +'</div>'
   +'<div style="text-align:right;">'
   +'<div style="font-size:52px;font-weight:900;color:'+Y+';line-height:1;letter-spacing:-2px;">'+ovPct+'%</div>'
