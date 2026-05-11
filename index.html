@@ -405,55 +405,61 @@ function dashDiv(){
   return '<div style="background:'+bg+';font-family:\'Poppins\',sans-serif;">';
 }
 function dashHdr(title,b1,b2){
-  /* Logo cropped to show badge: object-fit:cover zooms in on the centered badge */
-  var logoBox='<div style="width:148px;height:52px;flex-shrink:0;overflow:hidden;border-radius:10px;">'
+  /* Logo cropped to badge — object-fit:cover fills 148×52 container, zooming into center badge */
+  var logoBox='<div style="width:148px;height:52px;overflow:hidden;border-radius:10px;flex-shrink:0;">'
     +'<img src="'+LOGO_SRC+'" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div>';
-  /* Bold style: logo on plum background since header is yellow */
   var logoPlum='<div style="background:'+P+';border-radius:12px;padding:6px 8px;flex-shrink:0;">'
-    +'<div style="width:128px;height:44px;overflow:hidden;border-radius:6px;">'
+    +'<div style="width:130px;height:46px;overflow:hidden;border-radius:6px;">'
     +'<img src="'+LOGO_SRC+'" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"></div></div>';
+
   if(STYLE==='flat'){
-    return '<div style="background:'+P+';padding:22px 44px 20px;position:relative;overflow:hidden;">'
+    return '<div style="background:'+P+';padding:24px 44px 22px;position:relative;overflow:hidden;">'
       +'<div style="position:absolute;right:40px;top:50%;transform:translateY(-50%);font-size:96px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none;letter-spacing:-4px;">JAN</div>'
-      +'<div style="position:relative;display:flex;align-items:center;gap:20px;">'
-      +logoBox
-      +'<div style="width:1px;height:44px;background:rgba(255,255,255,.15);flex-shrink:0;"></div>'
-      +'<div style="flex:1;">'
-      +'<div style="font-size:8px;font-weight:800;letter-spacing:4px;color:'+Y+';text-transform:uppercase;margin-bottom:6px;">JANAGEN PHARMACIES · HYDERABAD</div>'
-      +'<div style="font-size:30px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:12px;">'+title+'</div>'
-      +'<div style="display:flex;gap:8px;">'
-      +'<div style="background:'+Y+';color:'+P+';padding:5px 18px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
-      +(b2?'<div style="border:1.5px solid rgba(255,255,255,.25);padding:5px 14px;border-radius:4px;font-size:10px;font-weight:600;color:rgba(255,255,255,.7);">'+b2+'</div>':'')
-      +'</div></div></div></div>';
+      +'<div style="position:relative;display:flex;align-items:center;">'
+      /* left col: logo */
+      +'<div style="width:176px;flex-shrink:0;">'+logoBox+'</div>'
+      /* center col: content */
+      +'<div style="flex:1;text-align:center;">'
+      +'<div style="font-size:8px;font-weight:800;letter-spacing:4px;color:'+Y+';text-transform:uppercase;margin-bottom:7px;">JANAGEN PHARMACIES · HYDERABAD</div>'
+      +'<div style="font-size:34px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:13px;">'+title+'</div>'
+      +'<div style="display:inline-flex;gap:8px;">'
+      +'<div style="background:'+Y+';color:'+P+';padding:6px 20px;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
+      +(b2?'<div style="border:1.5px solid rgba(255,255,255,.25);padding:6px 15px;border-radius:4px;font-size:10px;font-weight:600;color:rgba(255,255,255,.7);">'+b2+'</div>':'')
+      +'</div></div>'
+      /* right col: spacer mirrors left so center is truly centered */
+      +'<div style="width:176px;flex-shrink:0;"></div>'
+      +'</div></div>';
   }
   if(STYLE==='bold'){
     return '<div style="background:'+Y+';padding:24px 44px 22px;position:relative;overflow:hidden;">'
       +'<div style="position:absolute;right:-24px;top:-24px;width:190px;height:190px;border-radius:50%;background:rgba(0,0,0,.07);pointer-events:none;"></div>'
       +'<div style="position:absolute;left:320px;bottom:-36px;width:120px;height:120px;border-radius:50%;background:rgba(0,0,0,.04);pointer-events:none;"></div>'
-      +'<div style="position:relative;display:flex;align-items:center;gap:18px;">'
-      +logoPlum
-      +'<div style="flex:1;">'
-      +'<div style="font-size:8px;font-weight:800;letter-spacing:4px;color:'+P+'99;text-transform:uppercase;margin-bottom:6px;">JANAGEN PHARMACIES</div>'
-      +'<div style="font-size:32px;font-weight:900;color:'+P+';line-height:1.05;letter-spacing:-0.5px;margin-bottom:12px;">'+title+'</div>'
-      +'<div style="display:flex;gap:8px;">'
-      +'<div style="background:'+P+';color:'+Y+';padding:7px 20px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
-      +(b2?'<div style="background:rgba(0,0,0,.1);padding:7px 14px;border-radius:8px;font-size:10.5px;font-weight:600;color:'+P+'cc;">'+b2+'</div>':'')
-      +'</div></div></div></div>';
+      +'<div style="position:relative;display:flex;align-items:center;">'
+      +'<div style="width:176px;flex-shrink:0;">'+logoPlum+'</div>'
+      +'<div style="flex:1;text-align:center;">'
+      +'<div style="font-size:8px;font-weight:800;letter-spacing:4px;color:'+P+'99;text-transform:uppercase;margin-bottom:7px;">JANAGEN PHARMACIES</div>'
+      +'<div style="font-size:36px;font-weight:900;color:'+P+';line-height:1.05;letter-spacing:-0.5px;margin-bottom:13px;">'+title+'</div>'
+      +'<div style="display:inline-flex;gap:8px;">'
+      +'<div style="background:'+P+';color:'+Y+';padding:7px 22px;border-radius:8px;font-size:10.5px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
+      +(b2?'<div style="background:rgba(0,0,0,.1);padding:7px 15px;border-radius:8px;font-size:10.5px;font-weight:600;color:'+P+'cc;">'+b2+'</div>':'')
+      +'</div></div>'
+      +'<div style="width:176px;flex-shrink:0;"></div>'
+      +'</div></div>';
   }
-  /* Classic / Dark / Glass */
-  return '<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:24px 44px 22px;position:relative;overflow:hidden;">'
+  /* Classic / Dark / Glass — 3-col: logo | centered content | spacer */
+  return '<div style="background:linear-gradient(135deg,'+P+' 0%,#1a0d30 100%);padding:30px 44px 28px;position:relative;overflow:hidden;">'
     +'<div style="position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none;"></div>'
-    +'<div style="position:relative;display:flex;align-items:center;gap:20px;">'
-    +logoBox
-    +'<div style="width:1px;height:44px;background:rgba(255,255,255,.1);flex-shrink:0;"></div>'
-    +'<div style="flex:1;">'
-    +'<div style="font-size:8px;font-weight:800;letter-spacing:4px;color:rgba(255,188,125,.5);text-transform:uppercase;margin-bottom:6px;">JANAGEN PHARMACIES · HYDERABAD</div>'
-    +'<div style="font-size:30px;font-weight:900;color:'+Y+';letter-spacing:2px;line-height:1.1;text-shadow:0 0 40px rgba(254,207,0,.2);">'+title+'</div>'
-    +'</div>'
-    +'<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">'
-    +'<div style="background:'+Y+';color:'+P+';padding:7px 20px;border-radius:9px;font-size:10.5px;font-weight:800;letter-spacing:2px;">'+b1+'</div>'
-    +(b2?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:6px 14px;border-radius:9px;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.7);">'+b2+'</div>':'')
-    +'</div>'
+    +'<div style="position:relative;display:flex;align-items:center;">'
+    +'<div style="width:176px;flex-shrink:0;">'+logoBox+'</div>'
+    +'<div style="flex:1;text-align:center;">'
+    +'<div style="font-size:9px;font-weight:800;letter-spacing:5px;color:rgba(255,188,125,.55);text-transform:uppercase;margin-bottom:10px;">JANAGEN PHARMACIES · HYDERABAD</div>'
+    +'<div style="font-size:42px;font-weight:900;color:'+Y+';letter-spacing:3px;line-height:1.05;text-shadow:0 0 60px rgba(254,207,0,.2);">'+title+'</div>'
+    +'<div style="width:54px;height:3px;background:linear-gradient(90deg,'+PC+','+Y+');margin:14px auto 12px;border-radius:2px;"></div>'
+    +'<div style="display:inline-flex;align-items:center;gap:10px;">'
+    +'<div style="background:'+Y+';color:'+P+';padding:8px 26px;border-radius:9px;font-size:10.5px;font-weight:800;letter-spacing:2.5px;">'+b1+'</div>'
+    +(b2?'<div style="border:1.5px solid rgba(254,207,0,.28);padding:8px 18px;border-radius:9px;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.75);">'+b2+'</div>':'')
+    +'</div></div>'
+    +'<div style="width:176px;flex-shrink:0;"></div>'
     +'</div></div>';
 }
 
