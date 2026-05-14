@@ -6,7 +6,7 @@
 <title>JANAGEN — Operations Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root {
   --plum:   #251632;
@@ -28,7 +28,7 @@ body {
 /* ─── ANIMATED BG ORBS ─────────────────── */
 .bg-orb {
   position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-  filter: blur(100px); will-change: transform;
+  filter: blur(110px); will-change: transform;
   animation: orbDrift var(--dur,22s) ease-in-out infinite alternate;
 }
 @keyframes orbDrift {
@@ -38,82 +38,205 @@ body {
 .bg-grid {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
   background-size: 44px 44px;
-  animation: gridBreath 12s ease-in-out infinite alternate;
+  animation: gridBreath 14s ease-in-out infinite alternate;
 }
-@keyframes gridBreath { from{opacity:.45} to{opacity:.9} }
+@keyframes gridBreath { from{opacity:.3} to{opacity:.75} }
 .bg-scan {
   position: fixed; left:0; right:0; top:-220px; height:220px; z-index:0; pointer-events:none;
-  background: linear-gradient(to bottom,transparent,rgba(120,40,200,.05),transparent);
-  animation: scanLine 9s linear infinite;
+  background: linear-gradient(to bottom,transparent,rgba(254,207,0,.025),transparent);
+  animation: scanLine 11s linear infinite;
 }
 @keyframes scanLine { from{top:-220px} to{top:100vh} }
 
+/* ─── Vignette overlay ─────────────────── */
+.bg-vignette {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(2,1,10,.65) 100%);
+}
+
 /* ─── PAGE SYSTEM ─────────────────── */
 .page { display:none; min-height:100vh; flex-direction:column; align-items:center; position:relative; z-index:1; }
-.page.active { display:flex; }
+.page.active { display:flex; animation: pageFadeIn .5s cubic-bezier(.4,0,.2,1) both; }
+@keyframes pageFadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
 /* ══════════════════════════════════════════════
    UPLOAD PAGE
 ══════════════════════════════════════════════ */
-#pg-upload { justify-content:center; padding:60px 20px; gap:0; }
+#pg-upload { justify-content:center; padding:60px 20px 50px; gap:0; }
 
+/* ─── Eyebrow pill ─────────────────── */
 .up-eyebrow {
-  display:flex; align-items:center; gap:8px; margin-bottom:30px;
-  font-size:12px; font-weight:700; letter-spacing:3px; color:rgba(255,188,125,.5);
+  display:inline-flex; align-items:center; gap:10px; margin-bottom:36px;
+  font-size:11px; font-weight:700; letter-spacing:4px; color:rgba(255,188,125,.6);
   text-transform:uppercase;
+  background: rgba(255,188,125,.06);
+  border: 1px solid rgba(255,188,125,.14);
+  border-radius: 100px; padding: 7px 20px;
 }
-.up-eyebrow::before,.up-eyebrow::after {
-  content:''; display:block; height:1px; width:30px;
-  background:rgba(255,188,125,.25);
+.up-eyebrow-dot {
+  width:5px; height:5px; border-radius:50%;
+  background: #FFBC7D;
+  box-shadow: 0 0 8px rgba(255,188,125,.8);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+
+/* ─── Hero wordmark ─────────────────── */
+.up-hero-wordmark {
+  font-family: 'Playfair Display', 'Poppins', serif;
+  font-size: 72px; font-weight: 900; letter-spacing: 12px;
+  line-height: 1; text-align: center;
+  background: linear-gradient(135deg, #c8a400 0%, #fecf00 35%, #fff7c2 50%, #fecf00 65%, #c8a400 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 4s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 40px rgba(254,207,0,.18));
+}
+@keyframes goldShimmer {
+  from { background-position: 0% 50%; }
+  to   { background-position: 100% 50%; }
 }
 
+/* ─── Decorative rule ─────────────────── */
+.up-rule {
+  display: flex; align-items: center; gap: 14px;
+  width: 320px; margin: 18px auto 14px;
+}
+.up-rule-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(254,207,0,.4), transparent);
+}
+.up-rule-diamond {
+  width: 6px; height: 6px; background: #FECF00;
+  transform: rotate(45deg);
+  box-shadow: 0 0 10px rgba(254,207,0,.6);
+}
+
+.up-hero-sub {
+  font-size: 11px; font-weight: 700; letter-spacing: 5px;
+  color: rgba(255,188,125,.45); text-transform: uppercase; text-align: center;
+}
+
+/* ─── Tagline ─────────────────── */
 .up-tagline {
-  font-size:13.5px; font-weight:600; letter-spacing:5px; color:rgba(255,188,125,.55);
-  text-transform:uppercase; text-align:center; margin-top:6px; margin-bottom:44px;
+  font-size: 13px; font-weight: 500; letter-spacing: 1px;
+  color: rgba(255,255,255,.28); text-align: center;
+  margin: 20px 0 38px;
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
 }
 
+/* ─── Stats badges ─────────────────── */
+.up-stats {
+  display: flex; align-items: center; gap: 0; margin-bottom: 38px;
+}
+.up-stat {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 24px;
+}
+.up-stat-val {
+  font-size: 22px; font-weight: 900; color: #FECF00;
+  letter-spacing: -0.5px; line-height: 1;
+}
+.up-stat-lbl {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 2px;
+  color: rgba(255,188,125,.4); text-transform: uppercase; margin-top: 3px;
+}
+.up-stat-div {
+  width: 1px; height: 32px;
+  background: linear-gradient(180deg, transparent, rgba(255,188,125,.2), transparent);
+}
+
+/* ─── Upload card ─────────────────── */
 .up-card {
   width:100%; max-width:460px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:28px; padding:44px 44px 38px;
-  box-shadow:0 32px 80px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+  background: linear-gradient(145deg, rgba(37,22,50,.7), rgba(7,3,26,.8));
+  border: 1px solid rgba(254,207,0,.12);
+  border-top: 1px solid rgba(255,255,255,.1);
+  border-radius: 28px; padding: 44px 44px 38px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 60px rgba(254,207,0,.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative; overflow: hidden;
 }
+.up-card::before {
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(254,207,0,.5), transparent);
+}
+
+/* ─── Drop zone ─────────────────── */
 .up-zone {
-  border:2px dashed rgba(254,207,0,.2); border-radius:18px;
-  padding:40px 24px; text-align:center; cursor:pointer; margin-bottom:22px;
-  transition:all .25s ease; position:relative; overflow:hidden;
+  border: 1.5px dashed rgba(254,207,0,.22); border-radius: 18px;
+  padding: 40px 24px; text-align: center; cursor: pointer; margin-bottom: 22px;
+  transition: all .3s cubic-bezier(.4,0,.2,1); position: relative; overflow: hidden;
 }
 .up-zone::before {
-  content:''; position:absolute; inset:0; border-radius:16px;
-  background:radial-gradient(circle at 50% 50%,rgba(254,207,0,.06),transparent 70%);
-  opacity:0; transition:.3s;
+  content: ''; position: absolute; inset: 0; border-radius: 16px;
+  background: radial-gradient(circle at 50% 50%, rgba(254,207,0,.07), transparent 70%);
+  opacity: 0; transition: .35s;
 }
-.up-zone:hover { border-color:rgba(254,207,0,.5); }
-.up-zone:hover::before { opacity:1; }
-.up-zone-icon {
-  width:60px; height:60px; margin:0 auto 14px;
-  background:rgba(254,207,0,.1); border:1px solid rgba(254,207,0,.18);
-  border-radius:16px; display:flex; align-items:center; justify-content:center;
-  font-size:26px;
+.up-zone:hover {
+  border-color: rgba(254,207,0,.55);
+  box-shadow: 0 0 0 4px rgba(254,207,0,.05), inset 0 0 20px rgba(254,207,0,.03);
+  transform: translateY(-1px);
 }
-.up-zone-title { font-size:17px; font-weight:700; color:#fff; margin-bottom:5px; }
-.up-zone-sub   { font-size:13px; color:#4d3e66; }
+.up-zone:hover::before { opacity: 1; }
 
-.up-cta {
-  width:100%; padding:16px; border:none; border-radius:14px; cursor:pointer;
-  font-family:inherit; font-size:16px; font-weight:800; letter-spacing:.8px;
-  background:linear-gradient(135deg,#c8a400,#fecf00 50%,#ffe566);
-  color:var(--plum);
-  box-shadow:0 8px 30px rgba(254,207,0,.3), 0 2px 8px rgba(0,0,0,.2);
-  transition:all .2s ease;
+.up-zone-icon {
+  width: 64px; height: 64px; margin: 0 auto 16px;
+  background: linear-gradient(135deg, rgba(254,207,0,.15), rgba(254,207,0,.07));
+  border: 1px solid rgba(254,207,0,.22);
+  border-radius: 18px; display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 8px 24px rgba(254,207,0,.1);
+  transition: transform .3s ease;
 }
-.up-cta:hover { transform:translateY(-2px); box-shadow:0 12px 38px rgba(254,207,0,.42); }
-.up-hint { text-align:center; font-size:12px; color:#322444; margin-top:14px; letter-spacing:.3px; }
+.up-zone:hover .up-zone-icon { transform: scale(1.08) rotate(-3deg); }
+
+.up-zone-title { font-size: 16px; font-weight: 700; color: rgba(255,255,255,.9); margin-bottom: 6px; }
+.up-zone-sub   { font-size: 12.5px; color: rgba(255,255,255,.2); letter-spacing: .3px; }
+
+/* ─── CTA button ─────────────────── */
+.up-cta {
+  width: 100%; padding: 17px; border: none; border-radius: 14px; cursor: pointer;
+  font-family: inherit; font-size: 15px; font-weight: 800; letter-spacing: 1px;
+  background: linear-gradient(135deg, #c8a400 0%, #fecf00 45%, #ffe87a 70%, #fecf00 100%);
+  background-size: 200% 100%;
+  color: var(--plum);
+  box-shadow: 0 8px 32px rgba(254,207,0,.35), 0 2px 8px rgba(0,0,0,.2);
+  transition: all .25s cubic-bezier(.4,0,.2,1);
+  position: relative; overflow: hidden;
+}
+.up-cta::after {
+  content: '';
+  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+  transition: left .5s ease;
+}
+.up-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 42px rgba(254,207,0,.48); background-position: 100% 0; }
+.up-cta:hover::after { left: 100%; }
+.up-cta:active { transform: translateY(0); }
+
+.up-hint { text-align:center; font-size:11.5px; color:rgba(255,255,255,.15); margin-top:16px; letter-spacing:.3px; }
+.up-hint strong { color: rgba(255,188,125,.45); }
 #up-status { text-align:center; min-height:18px; margin-top:14px; font-size:12.5px; font-weight:600; }
+
+/* ─── Footer tagline ─────────────────── */
+.up-footer {
+  margin-top: 44px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+  color: rgba(255,255,255,.1); text-transform: uppercase; text-align: center;
+}
 
 /* ══════════════════════════════════════════════
    CUSTOM DROPDOWNS
@@ -121,14 +244,14 @@ body {
 .sel-group { display:flex; align-items:center; gap:8px; }
 .sel-block { display:flex; flex-direction:column; gap:3px; }
 .sel-lbl {
-  font-size:10px; font-weight:800; letter-spacing:2px; color:#302040;
+  font-size:10px; font-weight:800; letter-spacing:2px; color:rgba(255,255,255,.2);
   text-transform:uppercase; padding-left:4px;
 }
 .sel-wrap { position:relative; display:inline-flex; align-items:center; }
 .sel-wrap select {
   -webkit-appearance:none; appearance:none;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
   border-radius:12px; color:#b0a0d0;
   font-family:'Poppins',sans-serif;
   font-size:13px; font-weight:700;
@@ -139,124 +262,201 @@ body {
 }
 .sel-wrap select:hover,
 .sel-wrap select:focus {
-  border-color:rgba(254,207,0,.35); color:#fff;
-  background:rgba(255,255,255,.07);
-  box-shadow:0 0 0 3px rgba(254,207,0,.08);
+  border-color:rgba(254,207,0,.4); color:#fff;
+  background:rgba(255,255,255,.08);
+  box-shadow:0 0 0 3px rgba(254,207,0,.07);
 }
 .sel-wrap option { background:#1a0d35; color:#fff; }
 .sel-arr {
   position:absolute; right:12px; pointer-events:none;
-  color:#4d3e66; font-size:9px; font-weight:900;
+  color:rgba(255,255,255,.25); font-size:9px; font-weight:900;
 }
 
 /* ══════════════════════════════════════════════
-   APP CHROME
+   APP CHROME — sticky glassmorphism bar
 ══════════════════════════════════════════════ */
-#pg-app { padding:0 20px 64px; align-items:center; }
+#pg-app { padding:0; align-items:center; }
+
+.app-bar-wrap {
+  position: sticky; top: 0; z-index: 100;
+  width: 100%; display: flex; justify-content: center;
+  background: rgba(7,3,26,.82);
+  backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+  border-bottom: 1px solid rgba(254,207,0,.1);
+  box-shadow: 0 4px 30px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.04);
+}
 
 .app-bar {
   width:100%; max-width:1060px;
-  display:flex; align-items:center; gap:12px; padding:22px 0 18px;
+  display:flex; align-items:center; gap:12px; padding:16px 0 14px;
 }
 .app-wordmark {
   display:flex; flex-direction:column;
-  font-size:24px; font-weight:900; letter-spacing:2.5px; color:var(--yellow);
+  font-size:22px; font-weight:900; letter-spacing:3px;
+  background: linear-gradient(90deg, #c8a400, #fecf00, #ffe87a);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height:1; flex-shrink:0; margin-right:6px;
 }
 .app-wordmark small {
-  font-size:10px; font-weight:600; color:rgba(255,188,125,.45);
+  font-size:9.5px; font-weight:600; color:rgba(255,188,125,.4);
   letter-spacing:3px; text-transform:uppercase; margin-top:2px;
+  -webkit-text-fill-color: rgba(255,188,125,.4);
 }
-.vdiv { width:1px; height:30px; background:rgba(255,255,255,.05); flex-shrink:0; }
+.vdiv { width:1px; height:28px; background: rgba(255,255,255,.06); flex-shrink:0; }
 .spacer { flex:1; }
 .ghost-btn {
   padding:8px 18px; border-radius:10px; font-size:11.5px; font-weight:700;
   cursor:pointer; font-family:inherit;
-  border:1px solid rgba(255,255,255,.07); background:transparent; color:#4d3e66;
-  transition:all .18s;
+  border:1px solid rgba(255,255,255,.07); background:transparent; color:rgba(255,255,255,.25);
+  transition:all .2s ease;
 }
-.ghost-btn:hover { color:var(--peach); border-color:rgba(255,188,125,.28); }
+.ghost-btn:hover { color:var(--peach); border-color:rgba(255,188,125,.3); background:rgba(255,188,125,.05); }
 .dl-btn {
   padding:9px 24px; border-radius:10px; font-size:12px; font-weight:800;
   cursor:pointer; font-family:inherit; letter-spacing:.5px;
-  background:linear-gradient(135deg,#c8a400,#fecf00);
+  background:linear-gradient(135deg,#c8a400,#fecf00 60%,#ffe87a);
   border:none; color:var(--plum);
-  box-shadow:0 4px 18px rgba(254,207,0,.28);
-  transition:all .18s;
+  box-shadow:0 4px 20px rgba(254,207,0,.32);
+  transition:all .2s ease;
+  position: relative; overflow: hidden;
 }
-.dl-btn:hover { transform:translateY(-1px); box-shadow:0 7px 24px rgba(254,207,0,.38); }
-.dl-btn:disabled { opacity:.45; transform:none; cursor:default; }
+.dl-btn::after {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background: linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  transition: left .4s ease;
+}
+.dl-btn:hover { transform:translateY(-1px); box-shadow:0 8px 28px rgba(254,207,0,.42); }
+.dl-btn:hover::after { left:100%; }
+.dl-btn:disabled { opacity:.4; transform:none; cursor:default; }
 
+/* ─── Info strip ─────────────────── */
 .info-strip {
-  width:100%; max-width:1060px;
+  width:100%;
   display:flex; justify-content:space-between; align-items:center;
-  padding:9px 20px; margin-bottom:22px;
-  background:rgba(255,255,255,.018);
-  border:1px solid rgba(255,255,255,.04); border-radius:11px;
+  padding:10px 22px; margin: 18px 0 22px;
+  background: linear-gradient(90deg, rgba(37,22,50,.5), rgba(54,32,72,.35));
+  border:1px solid rgba(254,207,0,.08);
+  border-left: 3px solid rgba(254,207,0,.4);
+  border-radius:12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
 }
-.info-strip-l { font-size:13px; font-weight:700; color:#5a4a72; }
-.info-strip-l strong { color:#8b75b0; }
-.info-strip-r { font-size:12px; color:#2e2040; }
+.info-strip-l { font-size:13px; font-weight:700; color:rgba(255,255,255,.35); }
+.info-strip-l strong { color:rgba(255,255,255,.65); }
+.info-strip-r { font-size:11.5px; color:rgba(255,255,255,.2); letter-spacing:.5px; }
 
+/* ─── Dashboard container ─────────────────── */
 #dashboard {
-  width:1060px; background:#fff; border-radius:24px;
-  box-shadow:0 28px 90px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);
+  width:100%; background:#fff; border-radius:20px;
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.05),
+    0 0 60px rgba(254,207,0,.05);
   font-family:'Poppins',sans-serif;
-  animation:rise .4s cubic-bezier(.4,0,.2,1) both;
+  animation:rise .45s cubic-bezier(.4,0,.2,1) both;
 }
-@keyframes rise { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes rise { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 </style>
 </head>
 <body>
 
 <!-- ── Animated background layers ── -->
-<div class="bg-orb" style="width:720px;height:720px;background:radial-gradient(circle,rgba(120,40,200,.18),transparent 70%);left:-320px;top:-260px;--dur:20s;--tx:130px;--ty:110px;--ts:1.15;"></div>
-<div class="bg-orb" style="width:620px;height:620px;background:radial-gradient(circle,rgba(254,207,0,.09),transparent 70%);right:-220px;top:-100px;--dur:28s;--tx:-100px;--ty:160px;--ts:1.1;"></div>
-<div class="bg-orb" style="width:520px;height:520px;background:radial-gradient(circle,rgba(55,20,90,.3),transparent 70%);left:8%;bottom:-180px;--dur:24s;--tx:100px;--ty:-90px;--ts:1.25;"></div>
-<div class="bg-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(100,30,180,.14),transparent 70%);right:4%;top:38%;--dur:33s;--tx:-75px;--ty:55px;--ts:1.12;"></div>
-<div class="bg-orb" style="width:300px;height:300px;background:radial-gradient(circle,rgba(254,207,0,.07),transparent 70%);left:40%;top:12%;--dur:18s;--tx:-90px;--ty:-65px;--ts:1.3;"></div>
-<div class="bg-orb" style="width:240px;height:240px;background:radial-gradient(circle,rgba(97,206,112,.06),transparent 70%);right:22%;bottom:8%;--dur:15s;--tx:65px;--ty:-80px;--ts:1.2;"></div>
+<div class="bg-orb" style="width:800px;height:800px;background:radial-gradient(circle,rgba(120,40,200,.16),transparent 70%);left:-360px;top:-280px;--dur:20s;--tx:130px;--ty:110px;--ts:1.15;"></div>
+<div class="bg-orb" style="width:680px;height:680px;background:radial-gradient(circle,rgba(254,207,0,.08),transparent 70%);right:-250px;top:-120px;--dur:28s;--tx:-100px;--ty:160px;--ts:1.1;"></div>
+<div class="bg-orb" style="width:560px;height:560px;background:radial-gradient(circle,rgba(55,20,90,.28),transparent 70%);left:8%;bottom:-200px;--dur:24s;--tx:100px;--ty:-90px;--ts:1.25;"></div>
+<div class="bg-orb" style="width:440px;height:440px;background:radial-gradient(circle,rgba(100,30,180,.12),transparent 70%);right:4%;top:38%;--dur:33s;--tx:-75px;--ty:55px;--ts:1.12;"></div>
+<div class="bg-orb" style="width:320px;height:320px;background:radial-gradient(circle,rgba(254,207,0,.06),transparent 70%);left:40%;top:12%;--dur:18s;--tx:-90px;--ty:-65px;--ts:1.3;"></div>
+<div class="bg-orb" style="width:260px;height:260px;background:radial-gradient(circle,rgba(97,206,112,.05),transparent 70%);right:22%;bottom:8%;--dur:15s;--tx:65px;--ty:-80px;--ts:1.2;"></div>
 <div class="bg-grid"></div>
 <div class="bg-scan"></div>
+<div class="bg-vignette"></div>
 
 <!-- ══════════ UPLOAD PAGE ══════════ -->
 <div id="pg-upload" class="page active">
-  <div class="up-eyebrow">JANAGEN PHARMACIES · HYDERABAD</div>
-  <div style="margin-bottom:34px;text-align:center;">
-    <div style="display:inline-flex;flex-direction:column;align-items:center;gap:0;">
-      <!-- Medical cross badge -->
-      <div style="position:relative;width:58px;height:58px;margin:0 auto 18px;filter:drop-shadow(0 4px 26px rgba(254,207,0,.55));">
-        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:18px;height:58px;background:linear-gradient(180deg,#ffe566,#FECF00,#c8a400);border-radius:6px;"></div>
-        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:18px;background:linear-gradient(90deg,#ffe566,#FECF00,#c8a400);border-radius:6px;"></div>
-        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:58px;background:rgba(255,255,255,.22);border-radius:3px;"></div>
-      </div>
-      <!-- Wordmark -->
-      <div style="font-size:46px;font-weight:900;letter-spacing:7px;color:#FECF00;line-height:1;text-shadow:0 0 55px rgba(254,207,0,.22),0 2px 14px rgba(0,0,0,.55);">JANAGEN</div>
-      <!-- Divider rule -->
-      <div style="width:260px;height:2px;background:linear-gradient(90deg,transparent,rgba(254,207,0,.35),transparent);margin:13px 0 10px;"></div>
-      <!-- Subtitle -->
-      <div style="font-size:11.5px;font-weight:700;letter-spacing:4.5px;color:rgba(255,188,125,.48);text-transform:uppercase;">PHARMACIES · HYDERABAD</div>
+
+  <!-- Eyebrow pill -->
+  <div class="up-eyebrow">
+    <span class="up-eyebrow-dot"></span>
+    JANAGEN PHARMACIES · HYDERABAD
+  </div>
+
+  <!-- Medical cross + Wordmark hero -->
+  <div style="text-align:center;margin-bottom:10px;">
+    <!-- Medical cross with halo ring -->
+    <div style="position:relative;width:72px;height:72px;margin:0 auto 22px;">
+      <!-- Outer rotating halo -->
+      <div style="position:absolute;inset:-10px;border-radius:50%;border:1.5px dashed rgba(254,207,0,.25);animation:haloSpin 12s linear infinite;"></div>
+      <!-- Inner glow ring -->
+      <div style="position:absolute;inset:-3px;border-radius:50%;border:1px solid rgba(254,207,0,.18);box-shadow:0 0 20px rgba(254,207,0,.12);"></div>
+      <!-- Cross vertical -->
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:20px;height:64px;background:linear-gradient(180deg,#ffe87a,#FECF00,#c8a400);border-radius:7px;filter:drop-shadow(0 4px 18px rgba(254,207,0,.6));"></div>
+      <!-- Cross horizontal -->
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:20px;background:linear-gradient(90deg,#ffe87a,#FECF00,#c8a400);border-radius:7px;filter:drop-shadow(0 4px 18px rgba(254,207,0,.6));"></div>
+      <!-- Shine -->
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:6px;height:64px;background:rgba(255,255,255,.2);border-radius:4px;pointer-events:none;"></div>
+    </div>
+
+    <!-- Shimmer wordmark using class -->
+    <div class="up-hero-wordmark">JANAGEN</div>
+
+    <!-- Decorative rule with diamond -->
+    <div class="up-rule">
+      <div class="up-rule-line"></div>
+      <div class="up-rule-diamond"></div>
+      <div class="up-rule-line"></div>
+    </div>
+
+    <!-- Sub-label -->
+    <div class="up-hero-sub">PHARMACIES · HYDERABAD</div>
+  </div>
+
+  <!-- Italic tagline -->
+  <div class="up-tagline">Operational Intelligence, Delivered.</div>
+
+  <!-- Stats badges -->
+  <div class="up-stats">
+    <div class="up-stat">
+      <div class="up-stat-val">12</div>
+      <div class="up-stat-lbl">Branches</div>
+    </div>
+    <div class="up-stat-div"></div>
+    <div class="up-stat">
+      <div class="up-stat-val">HYD</div>
+      <div class="up-stat-lbl">Hyderabad</div>
+    </div>
+    <div class="up-stat-div"></div>
+    <div class="up-stat">
+      <div class="up-stat-val">100%</div>
+      <div class="up-stat-lbl">Generics</div>
     </div>
   </div>
-  <div class="up-tagline">Operations Intelligence Dashboard</div>
+
+  <!-- Upload card -->
   <div class="up-card">
     <div class="up-zone" onclick="document.getElementById('xi').click()">
       <div class="up-zone-icon">📊</div>
       <div class="up-zone-title">Drop your Huddle Excel here</div>
-      <div class="up-zone-sub">Click to browse · .xlsx supported</div>
+      <div class="up-zone-sub">Click to browse &nbsp;·&nbsp; .xlsx supported</div>
     </div>
-    <button class="up-cta" onclick="document.getElementById('xi').click()">⬆&nbsp; Select Excel File</button>
-    <div class="up-hint">Required file: <strong style="color:rgba(255,188,125,.7);">HUDDLE PICTURES POST CHECK LIST.xlsx</strong></div>
+    <button class="up-cta" onclick="document.getElementById('xi').click()">Upload Excel File</button>
+    <div class="up-hint">Required file: <strong>HUDDLE PICTURES POST CHECK LIST.xlsx</strong></div>
     <div id="up-status"></div>
     <div id="up-err-detail" style="display:none;margin-top:14px;background:rgba(229,57,53,.08);border:1px solid rgba(229,57,53,.25);border-radius:12px;padding:14px 16px;font-size:12px;color:#ff8a80;line-height:1.7;"></div>
   </div>
+
+  <!-- Footer -->
+  <div class="up-footer">JANAGEN PHARMACIES &nbsp;·&nbsp; OPERATIONS INTELLIGENCE</div>
+
 </div>
+
+<style>
+@keyframes haloSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+</style>
 
 <!-- ══════════ APP PAGE ══════════ -->
 <div id="pg-app" class="page">
 
-  <div id="upload-banner" style="display:none;width:100%;max-width:900px;margin:18px auto 0;padding:12px 22px;background:linear-gradient(90deg,rgba(25,220,130,.13),rgba(25,220,130,.07));border:1px solid rgba(25,220,130,.35);border-radius:12px;font-size:13px;font-weight:700;color:#19dc82;letter-spacing:.3px;transition:opacity .6s;"></div>
-
+  <div class="app-bar-wrap">
   <div class="app-bar">
     <div class="app-wordmark">JANAGEN<small>PHARMACIES · HYD</small></div>
     <div class="vdiv"></div>
@@ -326,13 +526,19 @@ body {
     <button class="ghost-btn" onclick="goUpload()">↺ Reupload</button>
     <button class="dl-btn" id="dlBtn" onclick="downloadDashboard()">⬇ Download</button>
   </div>
-
-  <div class="info-strip">
-    <div class="info-strip-l"><strong id="ctrl-title">Branch Operations Report</strong></div>
-    <div class="info-strip-r" id="ctrl-sub">12 branches · JANAGEN Pharmacies</div>
   </div>
 
-  <div id="dashboard"></div>
+  <!-- Content area below sticky bar -->
+  <div style="width:100%;max-width:1060px;padding:0 0 64px;">
+    <div id="upload-banner" style="display:none;margin:18px 0 0;padding:12px 22px;background:linear-gradient(90deg,rgba(25,220,130,.13),rgba(25,220,130,.07));border:1px solid rgba(25,220,130,.35);border-radius:12px;font-size:13px;font-weight:700;color:#19dc82;letter-spacing:.3px;transition:opacity .6s;"></div>
+
+    <div class="info-strip">
+      <div class="info-strip-l"><strong id="ctrl-title">Branch Operations Report</strong></div>
+      <div class="info-strip-r" id="ctrl-sub">12 branches · JANAGEN Pharmacies</div>
+    </div>
+
+    <div id="dashboard"></div>
+  </div>
 </div>
 
 <input type="file" id="xi" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this)">
