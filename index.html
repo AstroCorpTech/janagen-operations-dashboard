@@ -26,11 +26,18 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   PARTICLE CANVAS
+═══════════════════════════════════════ */
+#particles-canvas {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
    ANIMATED BACKGROUND
 ═══════════════════════════════════════ */
 .bg-orb {
   position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-  filter: blur(120px); will-change: transform;
+  filter: blur(130px); will-change: transform;
   animation: orbDrift var(--dur,22s) ease-in-out infinite alternate;
 }
 @keyframes orbDrift {
@@ -40,22 +47,40 @@ body {
 .bg-grid {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background:
-    linear-gradient(rgba(254,207,0,.012) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(254,207,0,.012) 1px,transparent 1px);
-  background-size: 52px 52px;
-  animation: gridBreath 16s ease-in-out infinite alternate;
+    linear-gradient(rgba(254,207,0,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(254,207,0,.014) 1px,transparent 1px);
+  background-size: 56px 56px;
+  animation: gridBreath 14s ease-in-out infinite alternate;
 }
-@keyframes gridBreath { from{opacity:.2} to{opacity:.7} }
+@keyframes gridBreath { from{opacity:.15} to{opacity:.65} }
 .bg-scan {
-  position: fixed; left:0; right:0; top:-180px; height:180px; z-index:0; pointer-events:none;
-  background: linear-gradient(to bottom,transparent,rgba(254,207,0,.018),transparent);
-  animation: scanLine 13s linear infinite;
+  position: fixed; left:0; right:0; top:-200px; height:200px; z-index:0; pointer-events:none;
+  background: linear-gradient(to bottom,transparent,rgba(254,207,0,.03),rgba(254,207,0,.015),transparent);
+  animation: scanLine 10s linear infinite;
 }
-@keyframes scanLine { from{top:-180px} to{top:110vh} }
+@keyframes scanLine { from{top:-200px} to{top:110vh} }
 .bg-vignette {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, rgba(3,1,12,.75) 100%);
+  background: radial-gradient(ellipse 75% 65% at 50% 50%, transparent 25%, rgba(3,1,12,.82) 100%);
 }
+
+/* ═══════════════════════════════════════
+   STAGGER REVEAL ANIMATIONS
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  animation: revealUp .75s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes revealUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.d1 { animation-delay:.08s; }
+.d2 { animation-delay:.18s; }
+.d3 { animation-delay:.28s; }
+.d4 { animation-delay:.40s; }
+.d5 { animation-delay:.52s; }
+.d6 { animation-delay:.65s; }
 
 /* ═══════════════════════════════════════
    PAGE SYSTEM
@@ -88,54 +113,87 @@ body {
 }
 @keyframes dotPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.6)} }
 
-/* Hero cross */
+/* Hero cross — triple ring neon */
 .up-cross-wrap {
-  position: relative; width: 80px; height: 80px; margin: 0 auto 26px;
+  position: relative; width: 86px; height: 86px; margin: 0 auto 30px;
 }
+/* Outermost ring — slow spin */
 .up-cross-halo-outer {
-  position: absolute; inset: -14px; border-radius: 50%;
-  border: 1.5px dashed rgba(254,207,0,.2);
-  animation: haloSpin 16s linear infinite;
+  position: absolute; inset: -22px; border-radius: 50%;
+  border: 1px dashed rgba(254,207,0,.22);
+  animation: haloSpin 20s linear infinite;
 }
+/* Middle ring — counter-spin */
+.up-cross-halo-mid {
+  position: absolute; inset: -10px; border-radius: 50%;
+  border: 1.5px dashed rgba(254,207,0,.35);
+  animation: haloSpin 9s linear infinite reverse;
+}
+/* Inner ring — breathing glow */
 .up-cross-halo-inner {
-  position: absolute; inset: -5px; border-radius: 50%;
-  border: 1px solid rgba(254,207,0,.15);
-  box-shadow: 0 0 24px rgba(254,207,0,.1), inset 0 0 24px rgba(254,207,0,.04);
-  animation: haloGlow 3s ease-in-out infinite alternate;
+  position: absolute; inset: -2px; border-radius: 50%;
+  border: 1px solid rgba(254,207,0,.22);
+  animation: haloGlow 2.8s ease-in-out infinite alternate;
 }
-@keyframes haloGlow { from{box-shadow:0 0 18px rgba(254,207,0,.08)} to{box-shadow:0 0 36px rgba(254,207,0,.18)} }
+/* Aura behind cross */
+.up-cross-aura {
+  position: absolute; inset: -28px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(254,207,0,.14) 0%, transparent 70%);
+  animation: auraBreath 3s ease-in-out infinite alternate;
+}
+@keyframes haloGlow {
+  from { box-shadow:0 0 20px rgba(254,207,0,.12), inset 0 0 12px rgba(254,207,0,.06); opacity:.7; }
+  to   { box-shadow:0 0 48px rgba(254,207,0,.32), inset 0 0 24px rgba(254,207,0,.12); opacity:1; }
+}
+@keyframes auraBreath {
+  from { transform:scale(.85); opacity:.5; }
+  to   { transform:scale(1.15); opacity:1; }
+}
+@keyframes haloSpin { to { transform: rotate(360deg); } }
+
 .up-cross-v {
   position: absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width: 22px; height: 72px;
-  background: linear-gradient(180deg,#fff5b0,#FECF00 40%,#c8a400);
-  border-radius: 8px;
-  box-shadow: 0 0 30px rgba(254,207,0,.55), 0 0 60px rgba(254,207,0,.2);
+  width: 24px; height: 78px;
+  background: linear-gradient(180deg,#fffbd4,#FECF00 35%,#e6b800 65%,#c8a400);
+  border-radius: 9px;
+  box-shadow:
+    0 0 24px rgba(254,207,0,.7),
+    0 0 48px rgba(254,207,0,.35),
+    0 0 80px rgba(254,207,0,.15);
 }
 .up-cross-h {
   position: absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width: 72px; height: 22px;
-  background: linear-gradient(90deg,#fff5b0,#FECF00 40%,#c8a400);
-  border-radius: 8px;
-  box-shadow: 0 0 30px rgba(254,207,0,.55), 0 0 60px rgba(254,207,0,.2);
+  width: 78px; height: 24px;
+  background: linear-gradient(90deg,#fffbd4,#FECF00 35%,#e6b800 65%,#c8a400);
+  border-radius: 9px;
+  box-shadow:
+    0 0 24px rgba(254,207,0,.7),
+    0 0 48px rgba(254,207,0,.35),
+    0 0 80px rgba(254,207,0,.15);
 }
 .up-cross-shine {
   position: absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-  width: 7px; height: 72px;
-  background: rgba(255,255,255,.18); border-radius: 4px;
+  width: 7px; height: 78px;
+  background: linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,.05));
+  border-radius: 4px;
 }
-@keyframes haloSpin { to { transform: rotate(360deg); } }
 
 /* Hero wordmark */
 .up-hero-wordmark {
   font-family: 'Playfair Display', 'Poppins', serif;
-  font-size: 78px; font-weight: 900; letter-spacing: 14px;
+  font-size: 88px; font-weight: 900; letter-spacing: 16px;
   line-height: 1; text-align: center;
-  background: linear-gradient(135deg, #a07800 0%, #d4a000 20%, #fecf00 38%, #fff8cc 50%, #fecf00 62%, #d4a000 80%, #a07800 100%);
-  background-size: 250% 100%;
+  background: linear-gradient(135deg,
+    #8a6500 0%, #c8a000 15%,
+    #fecf00 32%, #fff5c0 48%,
+    #fecf00 64%, #c8a000 80%,
+    #8a6500 100%);
+  background-size: 280% 100%;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: goldShimmer 5s ease-in-out infinite alternate;
-  padding-right: 14px; /* compensate letter-spacing on last char */
+  animation: goldShimmer 4.5s ease-in-out infinite alternate;
+  padding-right: 16px;
+  filter: drop-shadow(0 0 50px rgba(254,207,0,.12));
 }
 @keyframes goldShimmer {
   0%   { background-position: 0% 0; }
@@ -199,34 +257,49 @@ body {
   background: linear-gradient(180deg, transparent, rgba(255,188,125,.18), transparent);
 }
 
-/* Upload card */
+/* Upload card — pulsing gold glow border */
 .up-card {
-  width: 100%; max-width: 480px;
-  background: linear-gradient(160deg, rgba(40,24,58,.75) 0%, rgba(10,4,28,.85) 100%);
-  border: 1px solid rgba(254,207,0,.11);
-  border-radius: 26px;
-  padding: 40px 42px 36px;
+  width: 100%; max-width: 490px;
+  background: linear-gradient(160deg, rgba(44,26,64,.8) 0%, rgba(8,3,22,.9) 100%);
+  border: 1px solid rgba(254,207,0,.13);
+  border-radius: 28px;
+  padding: 42px 44px 38px;
   box-shadow:
-    0 50px 120px rgba(0,0,0,.65),
+    0 60px 140px rgba(0,0,0,.7),
     0 0 0 1px rgba(255,255,255,.04),
-    inset 0 1px 0 rgba(255,255,255,.07);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 60px rgba(254,207,0,.05);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
   position: relative; overflow: hidden;
+  animation: cardGlow 4s ease-in-out infinite alternate;
 }
-/* Gold top edge glow */
+@keyframes cardGlow {
+  from { box-shadow:
+    0 60px 140px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 40px rgba(254,207,0,.04); }
+  to   { box-shadow:
+    0 60px 140px rgba(0,0,0,.7),
+    0 0 0 1px rgba(255,255,255,.04),
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 80px rgba(254,207,0,.1),
+    0 0 120px rgba(254,207,0,.04); }
+}
+/* Top gold beam */
 .up-card::before {
   content: '';
   position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 55%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(254,207,0,.6), transparent);
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(254,207,0,.7), transparent);
 }
-/* Subtle radial glow inside */
+/* Inner radial gold glow */
 .up-card::after {
   content: '';
-  position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
-  width: 240px; height: 240px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(254,207,0,.04), transparent 70%);
+  position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(254,207,0,.06), transparent 65%);
   pointer-events: none;
 }
 
@@ -248,28 +321,38 @@ body {
   box-shadow: 0 0 20px rgba(254,207,0,.08);
 }
 
-/* Drop zone — animated dashed border */
+/* Drop zone — marching ants animated border */
 .up-zone {
   position: relative; border-radius: 18px; overflow: hidden;
-  padding: 38px 24px; text-align: center; cursor: pointer; margin-bottom: 20px;
-  transition: all .3s cubic-bezier(.4,0,.2,1);
-  background: rgba(255,255,255,.02);
+  padding: 40px 24px; text-align: center; cursor: pointer; margin-bottom: 22px;
+  transition: all .3s cubic-bezier(.22,1,.36,1);
+  background: rgba(255,255,255,.025);
 }
-/* Animated SVG dashed border via outline trick */
+/* SVG marching ants border */
 .up-zone::before {
   content: '';
   position: absolute; inset: 0; border-radius: 18px;
-  border: 1.5px dashed rgba(254,207,0,.2);
-  transition: all .3s;
+  border: 2px dashed rgba(254,207,0,.25);
+  background-image: repeating-linear-gradient(
+    90deg, rgba(254,207,0,.22) 0, rgba(254,207,0,.22) 8px, transparent 8px, transparent 16px
+  );
+  background-size: 200% 0; /* only show on edges */
+  animation: marchAnts 3s linear infinite;
+  transition: border-color .3s;
 }
+@keyframes marchAnts {
+  from { border-dash-offset: 0; }
+  to   { border-dash-offset: -32px; }
+}
+/* Fallback glow on hover */
 .up-zone::after {
   content: '';
   position: absolute; inset: 0; border-radius: 16px;
-  background: radial-gradient(circle at 50% 60%, rgba(254,207,0,.06), transparent 65%);
+  background: radial-gradient(circle at 50% 55%, rgba(254,207,0,.07), transparent 65%);
   opacity: 0; transition: opacity .35s;
 }
-.up-zone:hover { transform: translateY(-2px); }
-.up-zone:hover::before { border-color: rgba(254,207,0,.5); box-shadow: inset 0 0 0 4px rgba(254,207,0,.03); }
+.up-zone:hover { transform: translateY(-3px); }
+.up-zone:hover::before { border-color: rgba(254,207,0,.6); }
 .up-zone:hover::after { opacity: 1; }
 
 .up-zone-icon {
@@ -295,31 +378,56 @@ body {
   font-size: 12px; color: rgba(255,255,255,.22); letter-spacing: .3px;
 }
 
-/* CTA button */
+/* CTA button — ripple + magnetic glow */
 .up-cta {
-  width: 100%; padding: 17px; border: none; border-radius: 14px; cursor: pointer;
-  font-family: inherit; font-size: 14.5px; font-weight: 800; letter-spacing: 1.2px;
+  width: 100%; padding: 18px; border: none; border-radius: 14px; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 900; letter-spacing: 2px;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #b89000 0%, #e6b800 30%, #fecf00 55%, #ffe87a 72%, #fecf00 100%);
-  background-size: 220% 100%;
-  color: #251632;
-  box-shadow: 0 6px 28px rgba(254,207,0,.38), 0 2px 6px rgba(0,0,0,.25);
-  transition: all .28s cubic-bezier(.4,0,.2,1);
+  background: linear-gradient(135deg, #a07000 0%, #d4a000 20%, #fecf00 45%, #fff07a 62%, #fecf00 78%, #d4a000 100%);
+  background-size: 240% 100%;
+  color: #1a0e2e;
+  box-shadow:
+    0 6px 32px rgba(254,207,0,.42),
+    0 2px 8px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.3);
+  transition: all .28s cubic-bezier(.22,1,.36,1);
   position: relative; overflow: hidden;
 }
+/* Shine sweep */
 .up-cta::before {
   content: '';
-  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
-  transition: left .55s ease;
+  position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+  transition: left .6s ease;
+}
+/* Bottom inner highlight */
+.up-cta::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: rgba(255,255,255,.2);
 }
 .up-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(254,207,0,.52), 0 4px 12px rgba(0,0,0,.25);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    0 18px 50px rgba(254,207,0,.58),
+    0 6px 16px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.3);
   background-position: 100% 0;
 }
-.up-cta:hover::before { left: 100%; }
-.up-cta:active { transform: translateY(0); box-shadow: 0 4px 16px rgba(254,207,0,.3); }
+.up-cta:hover::before { left: 120%; }
+.up-cta:active { transform: translateY(0) scale(.99); box-shadow: 0 4px 18px rgba(254,207,0,.35); }
+
+/* Ripple span injected by JS */
+.ripple {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,.3);
+  transform: scale(0);
+  animation: rippleAnim .6s linear;
+  pointer-events: none;
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
 
 .up-hint {
   text-align: center; font-size: 11px; color: rgba(255,255,255,.14);
@@ -373,6 +481,35 @@ body {
 ═══════════════════════════════════════ */
 #pg-app { padding:0; align-items:center; }
 #pg-sales { padding:0; align-items:center; }
+#pg-sales-fill { padding:0; align-items:center; }
+
+/* ─── REVIEW FORM ─────────────────── */
+.rev-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:20px 22px; }
+.rev-grid-5 { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; padding:20px 22px; }
+.rev-field  { display:flex; flex-direction:column; gap:6px; }
+.rev-label  { font-size:9.5px; font-weight:700; letter-spacing:1.5px; color:rgba(255,255,255,.3); text-transform:uppercase; }
+.rev-inp {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:10px; padding:10px 13px; color:#fff;
+  font-family:inherit; font-size:13px; font-weight:600; outline:none;
+  transition:border-color .2s; width:100%; box-sizing:border-box;
+}
+.rev-inp:focus { border-color:rgba(254,207,0,.4); }
+.rev-inp::placeholder { color:rgba(255,255,255,.2); }
+.rev-inp.ai-filled { border-color:rgba(97,206,112,.3); }
+.rev-br-row {
+  display:flex; align-items:center; gap:14px;
+  padding:10px 22px; border-bottom:1px solid rgba(255,255,255,.04);
+}
+.rev-br-name { font-size:12px; font-weight:700; color:rgba(255,255,255,.65); min-width:148px; flex-shrink:0; }
+.rev-pct-inp {
+  width:72px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:8px; padding:7px 10px; color:#FECF00;
+  font-family:inherit; font-size:13px; font-weight:700; text-align:right; outline:none;
+  transition:border-color .2s; box-sizing:border-box;
+}
+.rev-pct-inp:focus { border-color:rgba(254,207,0,.4); }
+.rev-pct-inp.ai-filled { border-color:rgba(97,206,112,.3); color:#61CE70; }
 
 .app-bar-wrap {
   position: sticky; top: 0; z-index: 100;
@@ -569,13 +706,16 @@ body {
 </head>
 <body>
 
+<!-- ── Particle canvas ── -->
+<canvas id="particles-canvas"></canvas>
+
 <!-- ── Animated background layers ── -->
-<div class="bg-orb" style="width:800px;height:800px;background:radial-gradient(circle,rgba(120,40,200,.16),transparent 70%);left:-360px;top:-280px;--dur:20s;--tx:130px;--ty:110px;--ts:1.15;"></div>
-<div class="bg-orb" style="width:680px;height:680px;background:radial-gradient(circle,rgba(254,207,0,.08),transparent 70%);right:-250px;top:-120px;--dur:28s;--tx:-100px;--ty:160px;--ts:1.1;"></div>
-<div class="bg-orb" style="width:560px;height:560px;background:radial-gradient(circle,rgba(55,20,90,.28),transparent 70%);left:8%;bottom:-200px;--dur:24s;--tx:100px;--ty:-90px;--ts:1.25;"></div>
-<div class="bg-orb" style="width:440px;height:440px;background:radial-gradient(circle,rgba(100,30,180,.12),transparent 70%);right:4%;top:38%;--dur:33s;--tx:-75px;--ty:55px;--ts:1.12;"></div>
-<div class="bg-orb" style="width:320px;height:320px;background:radial-gradient(circle,rgba(254,207,0,.06),transparent 70%);left:40%;top:12%;--dur:18s;--tx:-90px;--ty:-65px;--ts:1.3;"></div>
-<div class="bg-orb" style="width:260px;height:260px;background:radial-gradient(circle,rgba(97,206,112,.05),transparent 70%);right:22%;bottom:8%;--dur:15s;--tx:65px;--ty:-80px;--ts:1.2;"></div>
+<div class="bg-orb" style="width:900px;height:900px;background:radial-gradient(circle,rgba(100,30,180,.18),transparent 70%);left:-400px;top:-300px;--dur:22s;--tx:150px;--ty:130px;--ts:1.12;"></div>
+<div class="bg-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(254,207,0,.1),transparent 70%);right:-280px;top:-140px;--dur:30s;--tx:-120px;--ty:180px;--ts:1.08;"></div>
+<div class="bg-orb" style="width:580px;height:580px;background:radial-gradient(circle,rgba(60,15,100,.3),transparent 70%);left:6%;bottom:-220px;--dur:26s;--tx:110px;--ty:-100px;--ts:1.22;"></div>
+<div class="bg-orb" style="width:460px;height:460px;background:radial-gradient(circle,rgba(90,20,160,.14),transparent 70%);right:3%;top:35%;--dur:35s;--tx:-80px;--ty:60px;--ts:1.1;"></div>
+<div class="bg-orb" style="width:340px;height:340px;background:radial-gradient(circle,rgba(254,207,0,.07),transparent 70%);left:38%;top:10%;--dur:19s;--tx:-100px;--ty:-70px;--ts:1.28;"></div>
+<div class="bg-orb" style="width:280px;height:280px;background:radial-gradient(circle,rgba(97,206,112,.06),transparent 70%);right:20%;bottom:6%;--dur:16s;--tx:70px;--ty:-90px;--ts:1.18;"></div>
 <div class="bg-grid"></div>
 <div class="bg-scan"></div>
 <div class="bg-vignette"></div>
@@ -584,16 +724,18 @@ body {
 <div id="pg-upload" class="page active">
 
   <!-- Eyebrow pill -->
-  <div class="up-eyebrow">
+  <div class="up-eyebrow reveal d1">
     <span class="up-eyebrow-dot"></span>
     JANAGEN PHARMACIES &nbsp;·&nbsp; HYDERABAD
   </div>
 
   <!-- Hero: medical cross + wordmark -->
-  <div style="text-align:center;margin-bottom:12px;">
-    <!-- Medical cross badge -->
+  <div class="reveal d2" style="text-align:center;margin-bottom:14px;">
+    <!-- Medical cross — triple ring neon -->
     <div class="up-cross-wrap">
+      <div class="up-cross-aura"></div>
       <div class="up-cross-halo-outer"></div>
+      <div class="up-cross-halo-mid"></div>
       <div class="up-cross-halo-inner"></div>
       <div class="up-cross-v"></div>
       <div class="up-cross-h"></div>
@@ -614,12 +756,12 @@ body {
   </div>
 
   <!-- Tagline -->
-  <div class="up-tagline">Operational Intelligence, Delivered with Precision.</div>
+  <div class="up-tagline reveal d3">Operational Intelligence, Delivered with Precision.</div>
 
   <!-- Stats strip -->
-  <div class="up-stats">
+  <div class="up-stats reveal d4">
     <div class="up-stat">
-      <div class="up-stat-val">12</div>
+      <div class="up-stat-val" data-count="12">12</div>
       <div class="up-stat-lbl">Branches</div>
     </div>
     <div class="up-stat-div"></div>
@@ -629,13 +771,13 @@ body {
     </div>
     <div class="up-stat-div"></div>
     <div class="up-stat">
-      <div class="up-stat-val">100%</div>
+      <div class="up-stat-val" data-count="100">100%</div>
       <div class="up-stat-lbl">Generics</div>
     </div>
   </div>
 
   <!-- Upload card -->
-  <div class="up-card">
+  <div class="up-card reveal d5">
 
     <!-- Mode tabs -->
     <div class="up-mode-tabs">
@@ -808,6 +950,76 @@ body {
     <div id="sales-dash"></div>
   </div>
 
+</div>
+
+<!-- ══════════ SALES REVIEW/FILL PAGE ══════════ -->
+<div id="pg-sales-fill" class="page">
+
+  <div class="app-bar-wrap">
+  <div class="app-bar">
+    <div class="app-wordmark">JANAGEN<small>PHARMACIES · HYD</small></div>
+    <div class="vdiv"></div>
+    <div class="ab-tabs">
+      <button class="ab-tab active" id="fill-ab-sales" onclick="setAppTab('sales')">📈 Sales</button>
+      <button class="ab-tab" id="fill-ab-huddle" onclick="setAppTab('huddle')">📊 Huddle</button>
+    </div>
+    <div class="spacer"></div>
+    <button class="ghost-btn" onclick="showSalesUpload()">↑ Upload another</button>
+    <button class="dl-btn" onclick="generateFromReview()">✓ Generate Dashboard</button>
+  </div>
+  </div>
+
+  <div style="width:100%;max-width:1060px;padding:0 0 80px;">
+
+    <div class="s-page-hdr">
+      <div>
+        <div class="s-eyebrow">REVIEW &amp; FILL</div>
+        <div class="s-title">Edit Extracted Data</div>
+      </div>
+      <div style="font-size:12px;color:rgba(97,206,112,.75);background:rgba(97,206,112,.08);border:1px solid rgba(97,206,112,.2);padding:8px 16px;border-radius:10px;font-weight:600;">
+        ✦ Green fields were auto-read &nbsp;·&nbsp; Fill in any missing values below
+      </div>
+    </div>
+
+    <!-- Date/Period -->
+    <div class="s-card">
+      <div class="s-br-hdr">PERIOD &amp; DATE RANGE</div>
+      <div class="rev-grid-2">
+        <div class="rev-field">
+          <span class="rev-label">Date Range</span>
+          <input class="rev-inp" id="rev-dateRange" placeholder="e.g. 01-5-2026 TO 13-5-2026">
+        </div>
+        <div class="rev-field">
+          <span class="rev-label">Period / Month</span>
+          <input class="rev-inp" id="rev-period" placeholder="e.g. May 2026">
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI fields -->
+    <div class="s-card">
+      <div class="s-br-hdr">PERFORMANCE METRICS</div>
+      <div class="rev-grid-5">
+        <div class="rev-field"><span class="rev-label">Target (₹)</span><input class="rev-inp" id="rev-target" placeholder="1,13,94,000"></div>
+        <div class="rev-field"><span class="rev-label">Achieved (₹)</span><input class="rev-inp" id="rev-achieved" placeholder="22,08,628"></div>
+        <div class="rev-field"><span class="rev-label">Total Bills</span><input class="rev-inp" id="rev-bills" placeholder="11,494"></div>
+        <div class="rev-field"><span class="rev-label">Avg Bill (₹)</span><input class="rev-inp" id="rev-avg" type="number" placeholder="192" min="0"></div>
+        <div class="rev-field"><span class="rev-label">Overall %</span><input class="rev-inp" id="rev-overall" type="number" placeholder="72" min="0" max="100"></div>
+      </div>
+    </div>
+
+    <!-- Branch % inputs -->
+    <div class="s-card">
+      <div class="s-br-hdr">BRANCH ACHIEVEMENT %</div>
+      <div id="rev-branches"></div>
+      <div style="padding:16px 22px;">
+        <button onclick="generateFromReview()" style="width:100%;padding:15px;border:none;border-radius:14px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:800;letter-spacing:.8px;background:linear-gradient(135deg,#c8a400,#fecf00 50%,#ffe87a);color:#251632;box-shadow:0 8px 28px rgba(254,207,0,.3);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+          ✓ &nbsp; Generate Sales Dashboard
+        </button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <input type="file" id="xi" accept=".xlsx,.xls" style="display:none" onchange="handleFile(this)">
@@ -1297,7 +1509,7 @@ function parse(wb){
 }
 
 /* ══════════════════════════ NAV ══════════════════════════ */
-function show(id){['pg-upload','pg-app','pg-sales'].forEach(function(p){var el=document.getElementById(p);if(el)el.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function show(id){['pg-upload','pg-app','pg-sales','pg-sales-fill'].forEach(function(p){var el=document.getElementById(p);if(el)el.classList.remove('active');});document.getElementById(id).classList.add('active');}
 function goUpload(){show('pg-upload');}
 
 function initApp(){
@@ -1996,19 +2208,19 @@ function setSalesStatus(msg, color) {
   if (el) { el.textContent = msg; el.style.color = color || '#FECF00'; }
 }
 
-/* ── App-bar tab switcher (used on both pg-app and pg-sales) ────── */
+/* ── App-bar tab switcher (used on pg-app, pg-sales, pg-sales-fill) ────── */
 function setAppTab(tab) {
-  // Update all Sales/Huddle tab pills across both pages
-  ['app-ab-sales','sales-ab-sales'].forEach(function(id){
+  // Update all Sales/Huddle tab pills across all pages
+  ['app-ab-sales','sales-ab-sales','fill-ab-sales'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.classList.toggle('active', tab==='sales');
   });
-  ['app-ab-huddle','sales-ab-huddle'].forEach(function(id){
+  ['app-ab-huddle','sales-ab-huddle','fill-ab-huddle'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.classList.toggle('active', tab==='huddle');
   });
 
   if (tab === 'sales') {
     if (!SALES_DATA) { showSalesUpload(); }
-    else { show('pg-sales'); }
+    else { show('pg-sales'); renderSalesDash(SALES_DATA); }
   } else {
     // Back to huddle: show dashboard if data loaded, else upload page
     var hasHuddle = MONTH_DATA && Object.keys(MONTH_DATA).length > 0;
@@ -2045,19 +2257,14 @@ function handleSalesImage(inp) {
       setSalesStatus('Sending to Gemini AI…', 'rgba(255,255,255,.55)');
       callGemini(b64, mimeType, key).then(function(data) {
         SALES_DATA = data;
-        show('pg-sales');
-        renderSalesDash(data);
+        renderSalesReview(data);
       }).catch(function(err) {
-        setSalesStatus('AI error: ' + err.message, '#ff8a80');
-        SALES_DATA = {};
-        show('pg-sales');
-        renderSalesDash({});
+        setSalesStatus('AI error: ' + err.message + ' — fill data manually below', '#ff8a80');
+        renderSalesReview({});
       });
     } else {
-      // No key — show empty dashboard
-      SALES_DATA = {};
-      show('pg-sales');
-      renderSalesDash({});
+      // No key — open review form empty for manual entry
+      renderSalesReview({});
     }
   };
   reader.readAsDataURL(file);
@@ -2165,6 +2372,77 @@ function renderSalesDash(data) {
   document.getElementById('sales-dash').innerHTML = html;
 }
 
+/* ── Render Review/Fill form ────────────────── */
+function renderSalesReview(data) {
+  var d = data || {};
+
+  function setField(id, val) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (val !== null && val !== undefined && val !== '' && val !== 0) {
+      el.value = val;
+      el.classList.add('ai-filled');
+    } else {
+      el.value = '';
+      el.classList.remove('ai-filled');
+    }
+  }
+
+  setField('rev-dateRange', d.dateRange || '');
+  setField('rev-period',    d.period    || '');
+  setField('rev-target',    d.target    || '');
+  setField('rev-achieved',  d.achieved  || '');
+  setField('rev-bills',     d.bills     || '');
+  setField('rev-avg',       d.avg       || '');
+  setField('rev-overall',   d.overall   || '');
+
+  // Build branch input rows
+  var brMap = {};
+  (d.branches || []).forEach(function(b) { brMap[b.name] = b.pct; });
+
+  var brHTML = SALES_BRANCHES.map(function(name) {
+    var pct = brMap[name] !== undefined ? brMap[name] : '';
+    var aiClass = pct !== '' ? ' ai-filled' : '';
+    var safeId = 'rev-br-' + name.replace(/\s+/g, '-');
+    return '<div class="rev-br-row">'
+      + '<div class="rev-br-name">' + name + '</div>'
+      + '<input class="rev-pct-inp' + aiClass + '" id="' + safeId + '" type="number" value="' + pct + '" min="0" max="100" placeholder="0">'
+      + '<span style="font-size:11px;color:rgba(255,255,255,.25);">%</span>'
+      + (aiClass ? '<span style="font-size:9px;color:rgba(97,206,112,.6);font-weight:700;letter-spacing:1px;">AI</span>' : '')
+      + '</div>';
+  }).join('');
+
+  document.getElementById('rev-branches').innerHTML = brHTML;
+  show('pg-sales-fill');
+}
+
+/* ── Build dashboard from review form ────────────────── */
+function generateFromReview() {
+  function gv(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+  function gn(id) { var v = parseFloat(gv(id)); return isNaN(v) ? 0 : v; }
+
+  var branches = SALES_BRANCHES.map(function(name) {
+    var el = document.getElementById('rev-br-' + name.replace(/\s+/g, '-'));
+    var pct = el ? (parseFloat(el.value) || 0) : 0;
+    return {name: name, pct: pct};
+  });
+
+  var data = {
+    dateRange: gv('rev-dateRange'),
+    period:    gv('rev-period'),
+    target:    gv('rev-target')   || null,
+    achieved:  gv('rev-achieved') || null,
+    bills:     gv('rev-bills')    || null,
+    avg:       gv('rev-avg')      || null,
+    overall:   gn('rev-overall'),
+    branches:  branches
+  };
+
+  SALES_DATA = data;
+  show('pg-sales');
+  renderSalesDash(data);
+}
+
 /* ── Download Sales Dashboard ────────────────── */
 async function downloadSalesDash() {
   var btn = document.getElementById('dlSalesBtn');
@@ -2188,6 +2466,94 @@ async function downloadSalesDash() {
   btn.innerHTML = '↓ Download'; btn.disabled = false;
 }
 
+</script>
+
+<!-- ══════════════════════════════════════════
+     VISUAL EFFECTS — particles · ripple · counter
+══════════════════════════════════════════ -->
+<script>
+/* ── Particle Field ──────────────────────────── */
+(function(){
+  var c=document.getElementById('particles-canvas');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var W,H,pts=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  for(var i=0;i<90;i++){
+    pts.push({
+      x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28,
+      r:Math.random()*1.4+.4,
+      a:Math.random()*.55+.1
+    });
+  }
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+      if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(254,207,0,'+p.a+')';
+      ctx.fill();
+      /* connections */
+      for(var j=i+1;j<pts.length;j++){
+        var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){
+          ctx.beginPath();
+          ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y);
+          ctx.strokeStyle='rgba(254,207,0,'+((1-d/130)*.055)+')';
+          ctx.lineWidth=.6; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ── Ripple on .up-cta ──────────────────────── */
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('.up-cta');
+  if(!btn)return;
+  var r=document.createElement('span');
+  var rect=btn.getBoundingClientRect();
+  var sz=Math.max(rect.width,rect.height);
+  r.className='ripple';
+  r.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+(e.clientY-rect.top-sz/2)+'px;left:'+(e.clientX-rect.left-sz/2)+'px;';
+  btn.appendChild(r);
+  setTimeout(function(){r.remove();},650);
+});
+
+/* ── Animated stat counters ──────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    var target=parseInt(el.getAttribute('data-count'));
+    var suffix=el.textContent.replace(/[0-9]/g,'');
+    var start=0,dur=1200,step=16;
+    var timer=setInterval(function(){
+      start+=Math.ceil(target/Math.ceil(dur/step));
+      if(start>=target){start=target;clearInterval(timer);}
+      el.textContent=start+suffix;
+    },step);
+  });
+});
+
+/* ── Magnetic hover on buttons ───────────────── */
+document.querySelectorAll('.up-cta,.dl-btn').forEach(function(btn){
+  btn.addEventListener('mousemove',function(e){
+    var r=btn.getBoundingClientRect();
+    var x=(e.clientX-r.left-r.width/2)/r.width*10;
+    var y=(e.clientY-r.top-r.height/2)/r.height*6;
+    btn.style.transform='translateY(-2px) translate('+x+'px,'+y+'px) scale(1.01)';
+  });
+  btn.addEventListener('mouseleave',function(){
+    btn.style.transform='';
+  });
+});
 </script>
 </body>
 </html>
